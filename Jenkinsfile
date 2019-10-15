@@ -27,9 +27,9 @@ pipeline {
              stage('Build') {
                steps {
                  //echo "Building Chatter"
-                 //sh 'mvn -f Development/Chatter/pom.xml install'
+                 //sh 'mvn -f Development/pom.xml install'
                  echo "Building ChatServer"
-                 sh 'mvn -f Development/ChatServer/pom.xml compile'
+                 sh 'mvn -f Development/pom.xml compile'
                }
    } // build
    stage('SonarQube') {
@@ -40,8 +40,8 @@ pipeline {
      }
      steps {
       withSonarQubeEnv('SonarQube') {
-        sh 'mvn -f Development/ChatServer/pom.xml clean install'
-        sh 'mvn -f Development/ChatServer/pom.xml sonar:sonar -Dsonar.projectKey=${jobBaseName} -Dsonar.projectName=${jobBaseName}'
+        sh 'mvn -f Development/pom.xml clean install'
+        sh 'mvn -f Development/pom.xml sonar:sonar -Dsonar.projectKey=${jobBaseName} -Dsonar.projectName=${jobBaseName}'
       }
 
       sh 'sleep 30'
@@ -59,35 +59,14 @@ pipeline {
 } //SONAR
 }
 } //stage 
-
-stage('Master Branch Tasks') {
-  when {
-   branch 'master'
- }
- agent any
- steps {
-   echo "Building ChatServer"
-   sh 'mvn -f Development/ChatServer/pom.xml install:install-file'
-   sh 'mvn -f Development/ChatServer/pom.xml package -Dmaven.test.skip=true'          
-
-   script {
-    def json = readJSON file:'config.json'
-    sh 'cd ${WORKSPACE}'
-    sh "chmod 400 ${json.server[0].PEM}"
-     sh "scp -oStrictHostKeyChecking=no -i ${json.server[0].PEM} Development/ChatServer/target/${json.server[0].JARNAME} ${json.server[0].user}@${json.server[0].DNS}:${json.server[0].directory}"
-    sh "ssh -oStrictHostKeyChecking=no -i ${json.server[0].PEM} ${json.server[0].user}@${json.server[0].DNS}  pkill java &"
-    sh "ssh -oStrictHostKeyChecking=no -i ${json.server[0].PEM} ${json.server[0].user}@${json.server[0].DNS}  nohup java -jar ${json.server[0].directory}/${json.server[0].JARNAME} >nohup.out 2>&1 &"
-                 } //script
-               }
-             }
 } // STAGES
 
  post {      
      success {
-            slackSend (baseUrl: "https://neufse.slack.com/services/hooks/jenkins-ci/", token: "jHKhvlzpfJfdid8M32rjHQFd", channel: "#team-5-f19", color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME}")
+            slackSend (baseUrl: "https://neufse.slack.com/services/hooks/jenkins-ci/", token: "vezIfvvVtbW6MEDWZJbV0Ruy", channel: "#team-5-f19", color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME}")
             }
    failure {  
-         slackSend (baseUrl: "https://neufse.slack.com/services/hooks/jenkins-ci/", token: "jHKhvlzpfJfdid8M32rjHQFd", channel: "#team-5-f19", color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME}")
+         slackSend (baseUrl: "https://neufse.slack.com/services/hooks/jenkins-ci/", token: "vezIfvvVtbW6MEDWZJbV0Ruy", channel: "#team-5-f19", color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME}")
          }
    }
 } //pipeline
