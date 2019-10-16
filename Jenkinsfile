@@ -17,7 +17,7 @@ pipeline {
      }
      agent {
       docker {
-        image 'maven:3-alpine'
+        image 'cschockaert/docker-npm-maven:latest'
         args '-v m2_repos:/root/.m2'
                 } //docker
             } // agent
