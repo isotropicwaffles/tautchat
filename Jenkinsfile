@@ -1,6 +1,6 @@
 pipeline {
  environment {
-   jobBaseName = "${env.JOB_NAME}".split('/').first()
+   jobBaseName = "${env.JOB_NAME}".split("/").getAt(1..1).toString().replaceAll('\\[','').replaceAll('\\]','')
  }
  options {
   timeout(time: 10, unit: 'MINUTES') 
@@ -17,7 +17,7 @@ pipeline {
      }
      agent {
       docker {
-        image 'maven:3-alpine'
+        image 'cschockaert/docker-npm-maven:latest'
         args '-v m2_repos:/root/.m2'
                 } //docker
             } // agent
@@ -59,7 +59,28 @@ pipeline {
 } //SONAR
 }
 } //stage 
+
+stage('Master Branch Tasks') {
+  when {
+   branch 'master'
+ }
+ agent any
+ steps {
+   echo "Building ChatServer"
+   sh 'mvn -f Development/pom.xml package -Dmaven.test.skip=true'          
+
+   script {
+    def json = readJSON file:'config.json'
+    sh 'cd ${WORKSPACE}'
+    sh "chmod 400 ${json.server[0].PEM}"
+    sh "scp -oStrictHostKeyChecking=no -i ${json.server[0].PEM} Development/target/${json.server[0].JARNAME} ${json.server[0].user}@${json.server[0].DNS}:${json.server[0].directory}"
+    sh "ssh -oStrictHostKeyChecking=no -i ${json.server[0].PEM} ${json.server[0].user}@${json.server[0].DNS}  pkill java &"
+    sh "ssh -oStrictHostKeyChecking=no -i ${json.server[0].PEM} ${json.server[0].user}@${json.server[0].DNS}  nohup java -jar ${json.server[0].directory}/${json.server[0].JARNAME} >nohup.out 2>&1 &"
+                 } //script
+               }
+             }
 } // STAGES
+
 
  post {      
      success {
