@@ -1,6 +1,6 @@
 pipeline {
  environment {
-   jobBaseName = "${env.JOB_NAME}".split('/').first()
+   jobBaseName = "${env.JOB_NAME}".split("/").getAt(1..1).toString().replaceAll('\\[','').replaceAll('\\]','')
  }
  options {
   timeout(time: 10, unit: 'MINUTES') 
