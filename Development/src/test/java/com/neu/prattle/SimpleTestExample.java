@@ -69,6 +69,7 @@ public class SimpleTestExample {
 	}
 	
 	// This method to sets that user.equals is false if fed a non User object 
+	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void notEqualObjectTest(){
 		User user = new User();
@@ -80,7 +81,6 @@ public class SimpleTestExample {
 	@Test
 	public void createUserConterollerFailTest(){
 		UserController controller = new UserController();
-		Response okayStatus= Response.ok().build();
 		Response failure409 = Response.status(409).build();
 				
 		controller.createUserAccount(new User("Jack"));
