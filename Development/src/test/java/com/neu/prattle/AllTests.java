@@ -1,4 +1,4 @@
-package SimpleTestExample;
+package com.neu.prattle;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
