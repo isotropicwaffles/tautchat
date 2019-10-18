@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,17 +25,27 @@ import com.neu.prattle.model.User;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
-
-import javax.ws.rs.core.Response;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;import javax.ws.rs.core.Response;
 import javax.websocket.EndpointConfig;
+import javax.websocket.RemoteEndpoint;
 
+
+@RunWith(MockitoJUnitRunner.class)
 public class SimpleTestExample {
 
 	private UserService as;
+	private ChatEndpoint chat;
+
 	
 	@Before
 	public void setUp() {
 		as = UserServiceImpl.getInstance();
+        chat = new ChatEndpoint();
+
 	}
 	
 	
@@ -135,11 +146,26 @@ public class SimpleTestExample {
 
 	}
 	
-	// This method tests getClasses function
+	// This method indirectly tests the session calls since this function is basically a black box due to 
+	// the session logic
 	@Test
-	public void endPointChatTest() throws EncodeException{
-		ChatEndpoint chat = new ChatEndpoint();
+	public void endPointChatTest() throws EncodeException, IOException{
 
+        Session session = Mockito.mock(Session.class);
+        RemoteEndpoint.Basic remote = Mockito.mock(RemoteEndpoint.Basic.class);
+
+        Mockito.when(session.getId()).thenReturn("5");
+
+        Mockito.when(session.getBasicRemote()).thenReturn(remote);
+        //There should be no session calls
+        Mockito.verify(session, Mockito.times(0)).getBasicRemote();
+
+        //There should be one session call for someone who exists already
+		chat.onOpen(session, "Mark");
+        Mockito.verify(session, Mockito.times(1)).getBasicRemote();
+        //There should be another session call for someone who isn't a user for the error message
+		chat.onOpen(session, "jack");
+        Mockito.verify(session, Mockito.times(2)).getBasicRemote();
 
 	}
 	
