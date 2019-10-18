@@ -1,4 +1,4 @@
-package SimpleTestExample.java;
+package SimpleTestExample;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
