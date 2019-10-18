@@ -26,11 +26,9 @@ import com.neu.prattle.model.User;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;import javax.ws.rs.core.Response;
-import javax.websocket.EndpointConfig;
+import org.mockito.runners.MockitoJUnitRunner;
+import javax.ws.rs.core.Response;
 import javax.websocket.RemoteEndpoint;
 
 
@@ -150,6 +148,7 @@ public class SimpleTestExample {
 	// the session logic
 	@Test
 	public void endPointChatTest() throws EncodeException, IOException{
+		as.addUser(new User("Nick"));
 
         Session session = Mockito.mock(Session.class);
         RemoteEndpoint.Basic remote = Mockito.mock(RemoteEndpoint.Basic.class);
@@ -164,7 +163,7 @@ public class SimpleTestExample {
 		chat.onOpen(session, "Mark");
         Mockito.verify(session, Mockito.times(1)).getBasicRemote();
         //There should be another session call for someone who isn't a user for the error message
-		chat.onOpen(session, "jack");
+		chat.onOpen(session, "Nick");
         Mockito.verify(session, Mockito.times(2)).getBasicRemote();
 
 	}
