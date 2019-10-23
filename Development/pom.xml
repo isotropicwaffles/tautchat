@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -70,12 +71,7 @@
 			<version>3.9.0.Final</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
-		</dependency>
+		
 	</dependencies>
 	<properties>
 		<javax.websocket-api.version>1.1</javax.websocket-api.version>
@@ -129,17 +125,17 @@
 									<!--
                                      Sets the path to the file which contains the execution data.
                                     -->
-									<dataFile>target/jacoco.exec</dataFile>
-									<!--
+                           <dataFile>target/jacoco.exec</dataFile>
+                           <!--
                                      Sets the output directory for the code coverage report.
                                     -->
-									<outputDirectory>target/jacoco-ut</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                           <outputDirectory>target/jacoco-ut</outputDirectory>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
 </project>
