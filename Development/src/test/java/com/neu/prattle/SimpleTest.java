@@ -26,6 +26,7 @@ import com.neu.prattle.model.User;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import javax.ws.rs.core.Response;
@@ -33,7 +34,7 @@ import javax.websocket.RemoteEndpoint;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleTestExample {
+public class SimpleTest {
 
 	private UserService as;
 	private ChatEndpoint chat;
@@ -151,6 +152,8 @@ public class SimpleTestExample {
 		as.addUser(new User("Nick"));
 
         Session session = Mockito.mock(Session.class);
+        Mockito.when(session.getId()).thenReturn("5");
+
         RemoteEndpoint.Basic remote = Mockito.mock(RemoteEndpoint.Basic.class);
 
         Mockito.when(session.getId()).thenReturn("5");
@@ -165,6 +168,17 @@ public class SimpleTestExample {
         //There should be another session call for someone who isn't a user for the error message
 		chat.onOpen(session, "Nick");
         Mockito.verify(session, Mockito.times(2)).getBasicRemote();
+        
+        
+        //Check that onMessage correctly sets message sent from variable
+        Message message = Mockito.mock(Message.class);
+       	chat.onMessage(session, message);
+        ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(message).setFrom(argument.capture());
+        assertEquals("Nick", argument.getValue());
+        
+        //Check thatto make sure that this function doesn't throw error yet
+        chat.onError(session, new RuntimeException());       
 
 	}
 	
