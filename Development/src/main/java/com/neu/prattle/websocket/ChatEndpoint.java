@@ -18,6 +18,7 @@ import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -71,8 +72,8 @@ public class ChatEndpoint {
             Message error = Message.messageBuilder()
                     .setMessageContent(String.format("User %s could not be found", username))
                     .build();
-
-            session.getBasicRemote().sendObject(error);
+        	RemoteEndpoint.Basic remote = session.getBasicRemote();
+        	remote.sendObject(error);
             return;
         }
 
@@ -105,6 +106,7 @@ public class ChatEndpoint {
         this.session = session;
         chatEndpoints.add(this);
         /* users is a hashmap between session ids and users */
+ 
         users.put(session.getId(), username);
     }
 
@@ -166,8 +168,8 @@ public class ChatEndpoint {
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
                 try {
-                    endpoint.session.getBasicRemote()
-                            .sendObject(message);
+                	RemoteEndpoint.Basic remote = endpoint.session.getBasicRemote();
+                	remote.sendObject(message);
                 } catch (IOException | EncodeException e) {
                 	/* note: in production, who exactly is looking at the console.  This exception's
                 	 *       output should be moved to a logger.

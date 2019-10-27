@@ -1,10 +1,10 @@
 {
 "server":[
  {
-   "DNS": "YOUR-CLOUD-INSTANCE",
+   "DNS": "tautchat.com",
     "user":"ubuntu",
-    "directory":"/home/ubuntu",
-    "JARNAME": "Prattle-0.0.1-SNAPSHOT.jar",
+    "directory":"/usr/local/apache-tomcat9/webapps/",
+    "JARNAME": "java-websocket-0.0.1-SNAPSHOT.war",
     "PEM": "Prattle.pem"
  }
 ]
