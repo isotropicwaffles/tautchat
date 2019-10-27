@@ -32,8 +32,8 @@ import javax.ws.rs.core.Response;
 import javax.websocket.RemoteEndpoint;
 
 
-/*@RunWith(MockitoJUnitRunner.class)*/
-public class SimpleTest {
+@RunWith(MockitoJUnitRunner.class)
+public class SimpleTestExample {
 
 	private UserService as;
 	private ChatEndpoint chat;
@@ -122,7 +122,7 @@ public class SimpleTest {
 
 	}
 	
-	 
+	
 	// This method if decode check works
 	@Test
 	public void willDecodeTest(){

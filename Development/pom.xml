@@ -90,6 +90,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
+				
 				<plugins>
 					<plugin>
 						<groupId>org.jacoco</groupId>
@@ -104,6 +105,12 @@
 							   <goals>
 								   <goal>prepare-agent</goal>
 							   </goals>
+							</execution>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
 							</execution>
 							<execution>
 								<id>report</id>
