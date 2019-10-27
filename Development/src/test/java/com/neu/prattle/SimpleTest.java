@@ -15,6 +15,7 @@ import com.neu.prattle.websocket.ChatEndpoint;
 import com.neu.prattle.websocket.MessageDecoder;
 import com.neu.prattle.websocket.MessageEncoder;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,9 +45,13 @@ public class SimpleTest {
 	public void setUp() {
 		as = UserServiceImpl.getInstance();
         chat = new ChatEndpoint();
-
 	}
 	
+	@After
+	public void destroy() {
+		UserServiceImpl.clear();
+        chat = null;
+	}
 	
 	// This method just tries to add 
 	@Test
@@ -57,6 +62,7 @@ public class SimpleTest {
 	// This method just tries to add 
 	@Test
 	public void getUserTest(){
+	   as.addUser(new User("Mike"));
 		Optional<User> user = as.findUserByName("Mike");
 		assertTrue(user.isPresent());
 	}

@@ -25,17 +25,23 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private static UserService accountService;
+    /***
+     * Variable to store the singleton instance
+     * 
+     */
+    private static UserService accountService = null;
 
-    static {
-        accountService = new UserServiceImpl();
-    }
 
     /**
      * Call this method to return an instance of this service.
      * @return this
      */
     public static UserService getInstance() {
+    	
+    	if (accountService == null) {
+            accountService = new UserServiceImpl();
+    	}
+    	
         return accountService;
     }
 
@@ -61,5 +67,13 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyPresentException(String.format("User already present with name: %s", user.getName()));
 
         userSet.add(user);
+    }
+    
+    /**
+     * Call this method to clear the current instance of this service.
+     * 
+     */
+    public static void clear() {
+        accountService=null;
     }
 }
