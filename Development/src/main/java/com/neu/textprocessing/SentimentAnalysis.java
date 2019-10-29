@@ -85,7 +85,7 @@ public class SentimentAnalysis {
 		if (polarity.get("compound") > POSITIVE_THRESHOLD) {
 			overallSentiment = Sentiment.POSITIVE;	
 			
-		}else if(polarity.get("compound") < Negative_THRESHOLD){
+		}else if(polarity.get("compound") < NEGATIVE_THRESHOLD){
 			overallSentiment = Sentiment.NEGATIVE;
 			
 		}else {
@@ -105,7 +105,7 @@ public class SentimentAnalysis {
 	* Threshold to consider compound polarity negative
 	* 
 	*/
-	public static final float Negative_THRESHOLD = -0.05f;
+	public static final float NEGATIVE_THRESHOLD = -0.05f;
 
 
 	
