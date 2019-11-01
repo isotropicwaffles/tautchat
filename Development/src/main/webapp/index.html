@@ -1,28 +1,31 @@
 <html>
     <head>
-        <title>Chat</title>
+        <title>Taut Chat Login</title>
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
+    
+        		   	<div>  
+         		<label id="login_status"></label>
+         	</div>
+    <div id="parent">
+		<table class="center">
 
-        <table>
             <tr>
                 <td colspan="2">
-                    <input type="text" id="username" placeholder="Username"/>
-                    <button type="button" onclick="connect();" >Connect</button>
+                    <input type="text" id="username_login" placeholder="Username"/>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <textarea readonly="true" rows="10" cols="80" id="log"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" size="51" id="msg" placeholder="Message"/>
-                    <button type="button" onclick="send();" >Send</button>
-                </td>
+ 	           	<td>
+    		    	<button type="button" onclick="login();" >Login</button>
+    		   	</td>
+    		    <td>
+                   	<button type="button"  style="float: right;" onclick="createUser();" >Create</button>
+               </td>
             </tr>
         </table>
+        </div>
     </body>
 
     <script src="websocket.js"></script>
