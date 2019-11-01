@@ -4,6 +4,14 @@ body {
     background-color: #1f1f1f;
 }
 
+textarea {
+    overflow-y: scroll;
+    height: 150px;
+	min-height: 100px;
+	max-height: 200px;
+	resize: vertical;
+}
+
 table.center {
   margin-left:auto; 
   margin-right:auto;

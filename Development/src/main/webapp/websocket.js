@@ -1,6 +1,7 @@
 var ws;
 var username;
 var error_label = document.getElementById("login_status");
+var displayname = document.getElementById("login_name");
 
 
 /* Enumeration for message types service messages
@@ -113,18 +114,18 @@ function processChatMessage(message) {
  */
 function login() {
 	username = document.getElementById("username_login").value;
-
+	document.location.href='/chat.html';
 	// Run this in case they are not already connected to server
-	connect();
+	// connect();
 	
-	// Send user creation request
-    var json = JSON.stringify({
-    	"from": username,
-    	"to": messageTypes.USERSERVICE,
-        "content": userServiceContent.LOGIN
-    });
+	//Send user creation request
+    // var json = JSON.stringify({
+    	// "from": username,
+    	// "to": messageTypes.USERSERVICE,
+        // "content": userServiceContent.LOGIN
+    // });
     
-    ws.send(json);
+    // ws.send(json);
     
 }
 
@@ -134,17 +135,17 @@ function login() {
 function createUser() {
 
 	username = document.getElementById("username_login").value;
+	document.location.href= '/chat.html';
+	// connect();
 
-	connect();
-
-	// Send user creation request
-    var json = JSON.stringify({
-    	"from": username,
-    	"to": messageTypes.USERSERVICE,
-        "content": userServiceContent.USERCREATE
-    });
+	//Send user creation request
+    // var json = JSON.stringify({
+    	// "from": username,
+    	// "to": messageTypes.USERSERVICE,
+        // "content": userServiceContent.USERCREATE
+    // });
     
-    ws.send(json);
+    // ws.send(json);
 
 }
 
