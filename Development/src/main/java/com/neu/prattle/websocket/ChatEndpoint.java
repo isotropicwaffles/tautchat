@@ -164,7 +164,7 @@ public class ChatEndpoint {
      *
      * @param message 
      */
-    private static void broadcast(Message message) {
+    public static void broadcast(Message message) {
         chatEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
                 try {
