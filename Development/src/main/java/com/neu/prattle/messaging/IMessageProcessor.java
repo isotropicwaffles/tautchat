@@ -12,7 +12,7 @@ import com.neu.prattle.model.Message;
 * @version 1.0 11/03/2019
 */
 public interface IMessageProcessor {
-
+	
 	 /**
 	 * This processes the given message
 	 * 

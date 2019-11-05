@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
         return accountService;
     }
 
+    
+    //(TODO) COMPLETE COMMITS
     private Set<User> userSet = new HashSet<>();
 
     /***
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
     }
 
+   //(TODO) COMPLETE COMMITS
     @Override
     public synchronized void addUser(User user) {
         if (userSet.contains(user))

@@ -12,7 +12,7 @@ public enum UserServiceCommands {
 	
 	
     LOGIN("LOGIN"),
-    USERCREATE("USERCREATE"),
+    USER_CREATE("USER_CREATE"),
     SUCCESS_RESPONSE("SUCCESS"),
     FAILURE_RESPONSE("FAILURE");
 

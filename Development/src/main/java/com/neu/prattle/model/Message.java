@@ -29,6 +29,7 @@ public class Message {
                 .toString();
     }
 
+    
     public String getFrom() {
         return from;
     }

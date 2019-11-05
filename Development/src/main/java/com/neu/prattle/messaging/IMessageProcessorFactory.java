@@ -10,13 +10,6 @@ package com.neu.prattle.messaging;
 */
 public interface IMessageProcessorFactory {
 
-	
-	/**
-	* Generates a specific type of message processor from a more general Message processor template.
-	* 
-	* @param TypeOfMessageProcessor messageRouter - the type of message router desired
-	*
-	* @return IMessageProcessor - A message router of the input TypeOfMessageProcessor 
-	*/
-	public IMessageProcessor createMessageProcessor(TypeOfMessageProcessor messageProcessor);
+	//(TODO) COMPLETE COMMITS
+	public IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor);
 }

@@ -18,7 +18,7 @@ const messageTypes = {
  */
 const userServiceContent = {
 	    LOGIN: 'LOGIN',
-	    USERCREATE: 'USER CREATE',
+	    USERCREATE: 'USER_CREATE',
 	    SUCCESS_RESPONSE: 'SUCCESS',
 	    FAILURE_RESPONSE: 'FAILURE'
 }
@@ -35,19 +35,38 @@ const colors = {
  * 
  */
 function connect() {
+	console.log('Checking Socket Connection');
+
 	if (typeof ws === 'undefined') {
 				
-		var host = document.location.host;
-		var pathname = document.location.pathname;
-		
-		ws = new WebSocket("ws://" +host  + pathname + "chat/" + username);
-		
-		ws.onmessage = function(event) {
-		    console.log(event.data);
+				console.log('Connecting to Socket');
 
-		    generalMessageRouter(JSON.parse(event.data));
+    
+	 var host = document.location.host;
+	 var pathname = document.location.pathname;
 		    
-		};
+	ws = new WebSocket("ws://" +host  + pathname + "chat/");
+		
+	ws.onopen = function(){
+		console.log('Connection open!');
+		}
+
+	ws.onclose = function(code) {
+		console.log("websocket closing. Code:", code );
+	}
+	
+	ws.onerror= function(evt){
+		console.log("Websocket Error");
+		console.log("Error Code: ", evt.data);
+	}
+	ws.onmessage = function(event) {
+		console.log('Received Message');
+
+	    console.log(event.data);
+
+	    generalMessageRouter(JSON.parse(event.data));
+	    
+	};
 	}
 }
 
@@ -114,18 +133,17 @@ function processChatMessage(message) {
  */
 function login() {
 	username = document.getElementById("username_login").value;
-	document.location.href='/chat.html';
 	// Run this in case they are not already connected to server
-	// connect();
+	connect();
 	
 	//Send user creation request
-    // var json = JSON.stringify({
-    	// "from": username,
-    	// "to": messageTypes.USERSERVICE,
-        // "content": userServiceContent.LOGIN
-    // });
+    var json = JSON.stringify({
+    	"from": username,
+    	"to": messageTypes.USERSERVICE,
+        "content": userServiceContent.LOGIN + " " + username
+    });
     
-    // ws.send(json);
+    setTimeout(function(){ ws.send(json);},500);
     
 }
 
@@ -135,18 +153,16 @@ function login() {
 function createUser() {
 
 	username = document.getElementById("username_login").value;
-	document.location.href= '/chat.html';
-	// connect();
+	connect();
 
 	//Send user creation request
-    // var json = JSON.stringify({
-    	// "from": username,
-    	// "to": messageTypes.USERSERVICE,
-        // "content": userServiceContent.USERCREATE
-    // });
+    var json = JSON.stringify({
+    	"from": username,
+    	"to": messageTypes.USERSERVICE,
+        "content": userServiceContent.USERCREATE + " " + username
+   });
     
-    // ws.send(json);
-
+    setTimeout(function(){ ws.send(json);},500);
 }
 
 /* Process server response for user login
@@ -157,6 +173,7 @@ function processLoginResponse(message){
 	if (message.content.includes(userServiceContent.SUCCESS_RESPONSE)){
 		//If successful this should run
 		document.location.href='/prattle/chat.html';
+
 	}
 	
 	if (message.content.includes(userServiceContent.FAILURE_RESPONSE)){

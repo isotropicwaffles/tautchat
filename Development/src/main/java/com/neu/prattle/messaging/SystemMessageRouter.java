@@ -11,18 +11,20 @@ import java.util.List;
 * @author Richard Alexander Showalter-Bucher
 * @version 1.0 11/01/2019
 */
-public class GeneralMessageRouter extends AbstractMessageRouter {
+public class SystemMessageRouter extends AbstractMessageRouter {
 
 	//(TODO) COMPLETE COMMITS
-	private static IMessageProcessor instance = new GeneralMessageRouter();
+	private static IMessageProcessor instance = new SystemMessageRouter();
 	
 	//(TODO) COMPLETE COMMITS
-	private GeneralMessageRouter(){
+	private SystemMessageRouter(){
 
 		List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
 
-		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.SYSTEM_MESSAGE_PROCESSOR));
-		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.OUTGOING_MESSAGE_PROCESSOR));
+	
+		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.USER_SERVICE_PROCESSOR));
+		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.SESSION_SERVICE_MESSAGE_PROCESSOR));
+
 		
 		super.setSubMessageProcessors(subMessageProcessors);
 
@@ -31,7 +33,7 @@ public class GeneralMessageRouter extends AbstractMessageRouter {
 	//(TODO) COMPLETE COMMITS
 	public static IMessageProcessor getInstance()  {
 
-		return GeneralMessageRouter.instance;
+		return SystemMessageRouter.instance;
 	}
 
 	

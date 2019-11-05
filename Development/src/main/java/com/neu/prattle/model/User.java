@@ -10,20 +10,25 @@ import java.util.Objects;
  */
 public class User {
 
+	//(TODO) COMPLETE COMMITS
 	public String getName() {
 		return name;
 	}
 
+	//(TODO) COMPLETE COMMITS
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	//(TODO) COMPLETE COMMITS
 	private String name;
 
+	//(TODO) COMPLETE COMMITS
 	public User() {
 
 	}
 
+	//(TODO) COMPLETE COMMITS
     public User(String name) {
         this.name = name;
     }
