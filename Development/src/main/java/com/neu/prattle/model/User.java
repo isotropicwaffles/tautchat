@@ -10,25 +10,39 @@ import java.util.Objects;
  */
 public class User {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	 * Gets the name of user
+	 * @return name - name of user
+	 */
 	public String getName() {
 		return name;
 	}
 
-	//(TODO) COMPLETE COMMITS
+	/*
+	 * Sets the name of the user
+	 * 
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	 * Variable to store name of user
+	 */
 	private String name;
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	 *  Default constructor for user
+	 */
 	public User() {
 
 	}
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	 * Constuctor for user given a user name
+	 * 
+	 * @param name - name of user
+	 */
     public User(String name) {
         this.name = name;
     }

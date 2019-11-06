@@ -65,7 +65,11 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
     }
 
-   //(TODO) COMPLETE COMMITS
+    /**
+ 	*	Adds users to Service 
+	*	
+	*	@param user : user to add
+ 	*/
     @Override
     public synchronized void addUser(User user) {
         if (userSet.contains(user))

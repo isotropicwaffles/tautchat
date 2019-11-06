@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
 *
-* This is a general message process router that routes messages to sub messsage processors
+* This is a system message process router that routes messages to sub messsage processors
 *
 * @author Richard Alexander Showalter-Bucher
 * @version 1.0 11/01/2019

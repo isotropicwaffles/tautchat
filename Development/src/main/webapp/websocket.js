@@ -38,7 +38,7 @@ const messageTypes = {
  */
 const userServiceContent = {
 	    LOGIN: 'LOGIN',
-	    USERCREATE: 'USER_CREATE',
+	    USER_CREATE: 'USER_CREATE',
 	    SUCCESS_RESPONSE: 'SUCCESS',
 	    FAILURE_RESPONSE: 'FAILURE'
 }
@@ -131,7 +131,7 @@ function userServiveMessageRouter(message) {
 	}
 	
 	//  Check if it's a create user response
-	if (message.content.indexOf(userServiceContent.USERCREATE, 0) !==- 1) {
+	if (message.content.indexOf(userServiceContent.USER_CREATE, 0) !==- 1) {
 		//  process chat message
 		processUserCreateResponse(message);
 	}
@@ -160,7 +160,7 @@ function login() {
     var json = JSON.stringify({
     	"from": username,
     	"type": messageTypes.USER_SERVICE,
-		"contentType": userServiceContent.LOGIN
+		"contentType": userServiceContent.LOGIN,
         "content": username
     });
     
@@ -180,7 +180,7 @@ function createUser() {
     var json = JSON.stringify({
     	"from": username,
     	"type": messageTypes.USER_SERVICE,
-		"contentType": userServiceContent.USERCREATE,
+		"contentType": userServiceContent.USER_CREATE,
         "content": username
    });
     

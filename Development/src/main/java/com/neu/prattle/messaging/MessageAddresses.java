@@ -25,15 +25,15 @@ public enum MessageAddresses{
 	/**
 	* Represents group message address
 	*/
-    GROUP_MESSAGE("GROUP_MESSAGE"),//(TODO) Hook up logic for using this
+    GROUP_MESSAGE("GROUP_MESSAGE"),
     /**
 	* Represents a direct message address
 	*/
-	DIRECT_MESSAGE("DIRECT_MESSAGE"), //(TODO) Hook up logic for using this
+	DIRECT_MESSAGE("DIRECT_MESSAGE"), 
     /**
 	* Represents a broadcast message address
 	*/
-	BROADCAST_MESSAGE("BROADCAST_MESSAGE"); //(TODO) Hook up logic for using this
+	BROADCAST_MESSAGE("BROADCAST_MESSAGE"); 
 
 	 /**
 	 * Variable to store string associate with enum

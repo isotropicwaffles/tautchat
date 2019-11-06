@@ -2,7 +2,6 @@ package com.neu.prattle.websocket;
 
 
 import java.io.IOException;
-import java.util.Optional;
 
 import com.neu.prattle.messaging.IMessageProcessor;
 import com.neu.prattle.messaging.MessageAddresses;

@@ -5,7 +5,7 @@ import com.neu.prattle.websocket.OutgoingMessageProcessor;
 import com.neu.prattle.websocket.SessionServiceMessageProcessor;
 
 /**
- * Factory class for creating general and user service message processors
+ * Factory class for creating message processors
  *
  * @author Richard Alexander Showalter-Bucher
  * @version 1.0 11/03/2019

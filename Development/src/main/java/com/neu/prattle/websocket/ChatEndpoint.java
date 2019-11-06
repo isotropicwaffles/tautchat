@@ -27,7 +27,6 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.neu.prattle.messaging.IMessageProcessor;
-import com.neu.prattle.messaging.IMessageProcessorFactory;
 import com.neu.prattle.messaging.MessageProcessorFactory;
 import com.neu.prattle.messaging.TypeOfMessageProcessor;
 import com.neu.prattle.model.Message;

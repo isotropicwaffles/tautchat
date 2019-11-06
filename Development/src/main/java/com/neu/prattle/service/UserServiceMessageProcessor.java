@@ -12,7 +12,6 @@ import com.neu.prattle.messaging.TypeOfMessageProcessor;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
 import com.neu.prattle.websocket.ChatEndpoint;
-import com.neu.prattle.websocket.OutgoingMessageProcessor;
 
 
 /**
@@ -124,7 +123,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	private void processUserCreation(Message message) throws IOException {	
 		Message response;
 
-		String userName = message.getContent().substring((UserServiceCommands.USER_CREATE.label).length() + 1);
+		String userName = message.getContent();
 
 		Optional<User> user = accountService.findUserByName(userName);
 

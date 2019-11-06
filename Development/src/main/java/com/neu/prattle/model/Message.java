@@ -111,6 +111,16 @@ public class Message {
             return this;
         }
 
+        public MessageBuilder setType(String type)    {
+            message.setType(type);
+            return this;
+        }
+        
+        public MessageBuilder setContentType(String contentType)    {
+            message.setContentType(contentType);
+            return this;
+        }
+        
         public MessageBuilder setMessageContent(String content)   {
             message.setContent(content);
             return this;
