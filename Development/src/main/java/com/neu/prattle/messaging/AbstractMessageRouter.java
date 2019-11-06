@@ -9,17 +9,23 @@ import com.neu.prattle.model.Message;
 
 /**
 *
-* This is a general message process router that routes messages to sub messsage processors
+* This is an message process router that routes messages to sub messsage processors
 *
 * @author Richard Alexander Showalter-Bucher
 * @version 1.0 11/01/2019
 */
 public abstract class AbstractMessageRouter implements IMessageProcessor {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	A list of subprocesses of this router
+	*/
 	private List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Sets the sub processes of this router	
+	*
+	*	@param subMessageProcessors: list of message processors to associate with router
+	*/
 	protected void setSubMessageProcessors(List<IMessageProcessor> subMessageProcessors) {	
 
 		this.subMessageProcessors = subMessageProcessors;

@@ -8,8 +8,28 @@ var displayname = document.getElementById("login_name");
  * 
  */
 const messageTypes = {
-	    USERSERVICE: '~USER_SERVICE',
-	    BROADCAST: "",
+	
+	USER_SERVICE: 'USER_SERVICE',
+	/**
+	* Represents Session Service Address
+	*/
+    SESSION_SERVICE: 'SESSION_SERVICE',
+	/**
+	* Represents Group Service Address
+	*/
+    GROUP_SERVICE: 'GROUP_SERVICE',
+	/**
+	* Represents group message address
+	*/
+    GROUP_MESSAGE: 'GROUP_MESSAGE"',//(TODO) Hook up logic for using this
+    /**
+	* Represents a direct message address
+	*/
+	DIRECT_MESSAGE: 'DIRECT_MESSAGE"', //(TODO) Hook up logic for using this
+    /**
+	* Represents a broadcast message address
+	*/
+	BROADCAST_MESSAGE: 'BROADCAST_MESSAGE',
 }
 
 
@@ -88,12 +108,12 @@ function send() {
  * @param json message - json of message
  */
 function generalMessageRouter(message) {
-	if (message.from == messageTypes.USERSERVICE) {
+	if (message.from == messageTypes.USER_SERVICE) {
 		//  process user server message
 		userServiveMessageRouter(message);
 	}
 	
-	if (message.from == messageTypes.BROADCAST) {
+	if (message.from == messageTypes.BROADCAST_MESSAGE) {
 		//  process chat message
 		processChatMessage(message);
 	}
@@ -139,8 +159,9 @@ function login() {
 	//Send user creation request
     var json = JSON.stringify({
     	"from": username,
-    	"to": messageTypes.USERSERVICE,
-        "content": userServiceContent.LOGIN + " " + username
+    	"type": messageTypes.USER_SERVICE,
+		"contentType": userServiceContent.LOGIN
+        "content": username
     });
     
     setTimeout(function(){ ws.send(json);},500);
@@ -158,8 +179,9 @@ function createUser() {
 	//Send user creation request
     var json = JSON.stringify({
     	"from": username,
-    	"to": messageTypes.USERSERVICE,
-        "content": userServiceContent.USERCREATE + " " + username
+    	"type": messageTypes.USER_SERVICE,
+		"contentType": userServiceContent.USERCREATE,
+        "content": username
    });
     
     setTimeout(function(){ ws.send(json);},500);

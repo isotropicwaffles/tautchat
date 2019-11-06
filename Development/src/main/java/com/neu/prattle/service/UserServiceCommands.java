@@ -11,9 +11,21 @@ package com.neu.prattle.service;
 public enum UserServiceCommands {
 	
 	
+	/**
+	* Represents Login Command
+	*/
     LOGIN("LOGIN"),
+	/**
+	* Represents User Create Command
+	*/
     USER_CREATE("USER_CREATE"),
+	/**
+	* Represents Success Response
+	*/
     SUCCESS_RESPONSE("SUCCESS"),
+	/**
+	* Represents Failure Reponse
+	*/
     FAILURE_RESPONSE("FAILURE");
 
 	

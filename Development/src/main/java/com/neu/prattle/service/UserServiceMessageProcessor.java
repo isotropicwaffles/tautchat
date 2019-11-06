@@ -24,20 +24,32 @@ import com.neu.prattle.websocket.OutgoingMessageProcessor;
  */
 public class UserServiceMessageProcessor implements IMessageProcessor {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	User Service instance
+	*/
 	private static UserService accountService = UserServiceImpl.getInstance();
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Singleton instance of this class
+	*/
 	private static IMessageProcessor instance = new UserServiceMessageProcessor();
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Factory for generating message processors
+	*/
 	private IMessageProcessorFactory mPF = MessageProcessorFactory.getInstance();
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Private constructor for class
+	*/
 	private UserServiceMessageProcessor(){
 	}
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*  Returns singleton instance of this class
+	*
+	*  @returns instance - instance of this clas 
+	*/
 	public static IMessageProcessor getInstance()  {
 
 		return UserServiceMessageProcessor.instance;
@@ -52,10 +64,10 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 */
 	public void processMessage(Message message) throws IOException {	
 
-		if (message.getContent().contains(UserServiceCommands.LOGIN.label)) {
+		if (message.getContentType().equals(UserServiceCommands.LOGIN.label)) {
 			processLogin(message);
 
-		} else if (message.getContent().contains(UserServiceCommands.USER_CREATE.label)) {
+		} else if (message.getContentType().equals(UserServiceCommands.USER_CREATE.label)) {
 			processUserCreation(message); 
 		}
 
@@ -70,7 +82,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 */
 	@Override
 	public boolean canProcessMessage(Message message) {
-		return message.getTo().contentEquals(MessageAddresses.USER_SERVICE.label);
+		return message.getType().contentEquals(MessageAddresses.USER_SERVICE.label);
 	}
 
 
@@ -82,7 +94,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 */
 	private void processLogin(Message message) throws IOException {	
 		Message response;
-		String userName = message.getContent().substring((UserServiceCommands.LOGIN.label).length() + 1);
+		String userName = message.getContent();
 		Optional<User> user = accountService.findUserByName(userName);
 
 		if (!user.isPresent()) {
@@ -134,7 +146,11 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	}
 
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	 * Sends message to general router
+	 * 
+	 * @param response - a message response being sent from the user service
+	 */
 	private void sendMessage(Message response) throws IOException {
 		if(mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).canProcessMessage(response)) {
 			mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).processMessage(response);
@@ -153,6 +169,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 		return Message.messageBuilder()
 				.setFrom(MessageAddresses.USER_SERVICE.label)
 				.setTo(receiver)
+				.setType(MessageAddresses.DIRECT_MESSAGE.label)
 				.setMessageContent(response)
 				.build();
 	}

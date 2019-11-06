@@ -46,7 +46,9 @@ public class UserServiceImpl implements UserService {
     }
 
     
-    //(TODO) COMPLETE COMMITS
+    /**
+	*	Set of user objects
+	*/
     private Set<User> userSet = new HashSet<>();
 
     /***

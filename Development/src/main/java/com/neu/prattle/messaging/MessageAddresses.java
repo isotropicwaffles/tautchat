@@ -10,13 +10,30 @@ package com.neu.prattle.messaging;
 */
 public enum MessageAddresses{
 	
-	
-    USER_SERVICE("~USER_SERVICE"),
-    SESSION_SERVICE("~SESSION_SERVICE"),
-    GROUP_SERVICE("~GROUP_SERVICE"),//(TODO) Hook up logic for using this
-    GROUP_MESSAGE("~GROUP_MESSAGE"),//(TODO) Hook up logic for using this
-    DIRECT_MESSAGE("~DIRECT_MESSAGE"), //(TODO) Hook up logic for using this
-    BROADCAST_MESSAGE("~BROADCAST_MESSAGE"); //(TODO) Hook up logic for using this
+	/**
+	* Represents User Service Address
+	*/
+    USER_SERVICE("USER_SERVICE"),
+	/**
+	* Represents Session Service Address
+	*/
+    SESSION_SERVICE("SESSION_SERVICE"),
+	/**
+	* Represents Group Service Address
+	*/
+    GROUP_SERVICE("GROUP_SERVICE"),
+	/**
+	* Represents group message address
+	*/
+    GROUP_MESSAGE("GROUP_MESSAGE"),//(TODO) Hook up logic for using this
+    /**
+	* Represents a direct message address
+	*/
+	DIRECT_MESSAGE("DIRECT_MESSAGE"), //(TODO) Hook up logic for using this
+    /**
+	* Represents a broadcast message address
+	*/
+	BROADCAST_MESSAGE("BROADCAST_MESSAGE"); //(TODO) Hook up logic for using this
 
 	 /**
 	 * Variable to store string associate with enum

@@ -13,10 +13,14 @@ import java.util.List;
 */
 public class GeneralMessageRouter extends AbstractMessageRouter {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	The instance of this router
+	*/
 	private static IMessageProcessor instance = new GeneralMessageRouter();
 	
-	//(TODO) COMPLETE COMMITS
+	/**
+	* Private constructor of router
+	*/
 	private GeneralMessageRouter(){
 
 		List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
@@ -28,7 +32,9 @@ public class GeneralMessageRouter extends AbstractMessageRouter {
 
 	}
 	
-	//(TODO) COMPLETE COMMITS
+	/**
+	* Returns instance of this router
+	*/
 	public static IMessageProcessor getInstance()  {
 
 		return GeneralMessageRouter.instance;

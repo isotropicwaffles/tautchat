@@ -10,6 +10,11 @@ package com.neu.prattle.messaging;
 */
 public interface IMessageProcessorFactory {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Get an IMessageProcessor instance of specified by given TypeOfMessageProcessor
+	*	
+	*	@param messageProcessor: type of message processor desired
+	*	@returns iMessageProcessor: an instance o the requested messageProcessor
+	*/
 	public IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor);
 }

@@ -19,11 +19,17 @@ import com.neu.prattle.model.Message;
 */
 public class SessionServiceMessageProcessor implements IMessageProcessor {
     	
-    //(TODO) COMPLETE COMMITS
+	/**
+	*	The instance of this message processor
+	*/
 	private static IMessageProcessor instance = new SessionServiceMessageProcessor();
 	
 	
-    //(TODO) COMPLETE COMMITS
+    /**
+	*	Returns the instance of this message processor
+	*
+	*	@returns instance - an instance of this message processor
+	*/
 	public static IMessageProcessor getInstance()  {
 			
 		return SessionServiceMessageProcessor.instance;
@@ -55,7 +61,7 @@ public class SessionServiceMessageProcessor implements IMessageProcessor {
 	 */
 	@Override
 	public boolean canProcessMessage(Message message) {
-		return message.getTo().contentEquals(MessageAddresses.SESSION_SERVICE.label);
+		return message.getType().contentEquals(MessageAddresses.SESSION_SERVICE.label);
 	}
 	
 	

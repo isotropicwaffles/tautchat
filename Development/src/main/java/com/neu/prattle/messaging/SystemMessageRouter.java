@@ -13,10 +13,14 @@ import java.util.List;
 */
 public class SystemMessageRouter extends AbstractMessageRouter {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	An instance of this message processor	
+	*/
 	private static IMessageProcessor instance = new SystemMessageRouter();
 	
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Constructor for object
+	*/
 	private SystemMessageRouter(){
 
 		List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
@@ -30,7 +34,11 @@ public class SystemMessageRouter extends AbstractMessageRouter {
 
 	}
 	
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Returns an instance of this message processor
+	*	
+	*	@returns instance - an instance of this object
+	*/
 	public static IMessageProcessor getInstance()  {
 
 		return SystemMessageRouter.instance;

@@ -27,10 +27,5 @@ public enum SessionServiceCommands {
         this.label = label;
     }
     
-
-    //(TODO) COMPLETE LOGIC/COMMENTS
-   public String formLoginCommand(String preLoginId, String newUserName) {
-       return LOGIN.label + " " + preLoginId + "~" + newUserName ;
-   }
     
 }

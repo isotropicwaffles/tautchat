@@ -16,15 +16,23 @@ import com.neu.prattle.model.Message;
  */
 public class OutgoingMessageProcessor implements IMessageProcessor {
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	An Instance of this object
+	*/
 	private static IMessageProcessor instance = new OutgoingMessageProcessor();
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	*   Constructor for this object 
+	*/ 
 	private OutgoingMessageProcessor(){
 
 	}
 
-    //(TODO) COMPLETE COMMITS
+    /**
+	*   Returns instance of this object
+	*
+	*	@return instance : an instance of this message processor
+	*/ 
 	public static IMessageProcessor getInstance()  {
 
 		return OutgoingMessageProcessor.instance;
@@ -40,10 +48,10 @@ public class OutgoingMessageProcessor implements IMessageProcessor {
 	@Override
 	public void processMessage(Message message) throws IOException {	
 
-		if (message.getTo().equals(MessageAddresses.BROADCAST_MESSAGE.label)) {
+		if (message.getType().equals(MessageAddresses.BROADCAST_MESSAGE.label)) {
 			ChatEndpoint.broadcast(message);
 		}
-		else {
+		else if (message.getType().equals(MessageAddresses.DIRECT_MESSAGE.label)){
 			ChatEndpoint.directedMessage(message);
 		}
 

@@ -13,21 +13,32 @@ import com.neu.prattle.websocket.SessionServiceMessageProcessor;
 public class MessageProcessorFactory implements IMessageProcessorFactory {
 
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	* An instance of this message factory
+	*/
 	private static MessageProcessorFactory instance = new MessageProcessorFactory();
 
-	//(TODO) COMPLETE COMMITS
+	/**
+	* Private constructor
+	*/	
 	private MessageProcessorFactory() {
 		
 	}
 	
-	//(TODO) COMPLETE COMMITS
+	/**
+	* Returns an instance of this message factory
+	*/	
 	public static MessageProcessorFactory getInstance() {
 	
 		return MessageProcessorFactory.instance;
 	}
 	
-	//(TODO) COMPLETE COMMITS
+	/**
+	*	Get an IMessageProcessor instance of specified by given TypeOfMessageProcessor
+	*	
+	*	@param messageProcessor: type of message processor desired
+	*	@returns iMessageProcessor: an instance o the requested messageProcessor
+	*/
 	@Override
 	public IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor) {
 
