@@ -78,10 +78,10 @@ public class User {
 	/**
 	 * Sets the id number.
 	 *
-	 * @param idNumber the id number
+	 * @param id the id number
 	 */
 	public void setId(int id) {
-		if (idNumber > 0) {
+		if (id > 0) {
 			this.id = id;
 		}
 		else {
@@ -106,15 +106,7 @@ public class User {
 	public boolean getBot() {
 		return isBot;
 	}
-  
-  /**
-   * Sets whether user is a bot.
-   *
-   * @param whether the user is a bot or not
-   /
-  public void setBot(boolean isBot) {
-     this.isBot = isBot;
-  }
+
 	
 	/**
 	 * Sets the searchable.

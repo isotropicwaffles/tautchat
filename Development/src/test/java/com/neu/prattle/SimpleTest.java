@@ -68,13 +68,17 @@ public class SimpleTest {
 	// This method just tries to add 
 	@Test
 	public void setUserTest() throws IOException{
-	   as.addUser(new User().setName("Mike"));
+		User u = new User();
+		u.setName("Mike");
+	   as.addUser(u);
 	}
 	
 	// This method just tries to add 
 	@Test
 	public void getUserTest() throws IOException{
-	   as.addUser(new User().setName("Mike"));
+		User u = new User();
+		u.setName("Mike");
+	   as.addUser(u);
 		Optional<User> user = as.findUserByName("Mike");
 		assertTrue(user.isPresent());
 	}
@@ -101,10 +105,12 @@ public class SimpleTest {
 	public void createUserControllerFailTest() throws IOException{
 		UserController controller = new UserController();
 		Response failure409 = Response.status(409).build();
-				
-		controller.createUserAccount(new User().setName("Jack"));
+
+		User u = new User();
+		u.setName("Jack");
+		controller.createUserAccount(u);
 		
-		assertEquals(failure409.getStatus(), controller.createUserAccount(new User().setName("Jack")).getStatus());
+		assertEquals(failure409.getStatus(), controller.createUserAccount(u).getStatus());
 	}
 	
 	// This method tests if a unique user is added via the user controller
@@ -112,9 +118,10 @@ public class SimpleTest {
 	public void createUserConterollerSuccessTest() throws IOException{
 		UserController controller = new UserController();
 		Response okayStatus= Response.ok().build();
-				
-		
-		assertEquals(okayStatus.getStatus(), controller.createUserAccount(new User().setName("Tim")).getStatus());
+
+		User u = new User();
+		u.setName("Tim");
+		assertEquals(okayStatus.getStatus(), controller.createUserAccount(u).getStatus());
 	}
 	
 	// This method tests encoding and decoding a message
@@ -207,7 +214,9 @@ public class SimpleTest {
 	@Test(timeout = 10000)
 	public void checkPrefTest() throws IOException{
 		for(int i=0; i < 1000; i++) {
-			as.addUser(new User().setName("Mike"+i));
+			User u = new User();
+			u.setName("Mike"+i);
+			as.addUser(u);
 		}
 	}
 	
@@ -215,49 +224,57 @@ public class SimpleTest {
 	
 	@Test
 	public void testUserName() {
-		User u = new User().setName("Marco");
+		User u = new User();
+		u.setName("Marco");
 		assertEquals("Marco",u.getName());
 	}
 	
 	@Test
 	public void testUserStatusAway() {
-		User u = new User().setStatus(UserStatus.AWAY);
+		User u = new User();
+		u.setStatus(UserStatus.AWAY);
 		assertEquals(UserStatus.AWAY,u.getStatus());
 	}
 	
 	@Test
 	public void testUserStatusDNN() {
-		User u = new User().setStatus(UserStatus.DONOTDISTURB);
+		User u = new User();
+		u.setStatus(UserStatus.DONOTDISTURB);
 		assertEquals(UserStatus.DONOTDISTURB,u.getStatus());
 	}
 	
 	@Test
 	public void testUserStatusIdle() {
-		User u = new User().setStatus(UserStatus.IDLE);
+		User u = new User();
+		u.setStatus(UserStatus.IDLE);
 		assertEquals(UserStatus.IDLE,u.getStatus());
 	}
 	
 	@Test
 	public void testUserStatusOnline() {
-		User u = new User().setStatus(UserStatus.ONLINE);
+		User u = new User();
+		u.setStatus(UserStatus.ONLINE);
 		assertEquals(UserStatus.ONLINE,u.getStatus());
 	}
 	
 	@Test
 	public void testUserStatusOffline() {
-		User u = new User().setStatus(UserStatus.OFFLINE);
+		User u = new User();
+		u.setStatus(UserStatus.OFFLINE);
 		assertEquals(UserStatus.OFFLINE,u.getStatus());
 	}
 	
 	@Test
 	public void testUserId() {
-		User u = new User().setIdNumber(12);
-		assertEquals(12,u.getIdNumber());
+		User u = new User();
+		u.setId(12);
+		assertEquals(12,u.getId());
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testUserIdNeg() {
-		User u = new User().setIdNumber(-412);
+		User u = new User();
+		u.setId(-412);
 	}
 	
 	@Test
@@ -268,7 +285,8 @@ public class SimpleTest {
 	
 	@Test
 	public void testSearchable() {
-		User u = new User().setSearchable(true);
+		User u = new User();
+		u.setSearchable(true);
 		assertTrue(u.getSearchable());
 	}
 	
