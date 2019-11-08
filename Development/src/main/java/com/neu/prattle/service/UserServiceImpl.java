@@ -45,6 +45,10 @@ public class UserServiceImpl implements UserService {
         return accountService;
     }
 
+    
+    /**
+	*	Set of user objects
+	*/
     private Set<User> userSet = new HashSet<>();
 
     /***
@@ -61,6 +65,11 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
     }
 
+    /**
+ 	*	Adds users to Service 
+	*	
+	*	@param user : user to add
+ 	*/
     @Override
     public synchronized void addUser(User user) {
         if (userSet.contains(user))

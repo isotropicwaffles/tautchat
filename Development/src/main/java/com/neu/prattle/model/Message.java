@@ -1,5 +1,7 @@
 package com.neu.prattle.model;
 
+import java.util.Date;
+
 /***
  * A Basic POJO for Message.
  *
@@ -7,6 +9,17 @@ package com.neu.prattle.model;
  * @version dated 2019-10-06
  */
 public class Message {
+
+    /**
+     * Id for identifying record within database.
+     */
+    private int id;
+
+    /**
+     * Date recording keeping track of messages. !!CURRENTLY ONLY YEAR-MONTH-DAY!!.
+     */
+    private Date dateSent;
+
     /***
      * The name of the user who sent this message.
      */
@@ -15,6 +28,17 @@ public class Message {
      * The name of the user to whom the message is sent.
      */
     private String to;
+	
+	 /***
+     * It represents the type of the message.
+     */
+    private String type;
+	
+	 /***
+     * It represents the type of the contents of the message.
+     */
+    private String contentType;
+	
     /***
      * It represents the contents of the message.
      */
@@ -25,10 +49,29 @@ public class Message {
         return new StringBuilder()
                 .append("From: ").append(from)
                 .append("To: ").append(to)
+				.append("Type: ").append(type)
+				.append("ContentType: ").append(type)
                 .append("Content: ").append(content)
                 .toString();
     }
+	    
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+	
+	    
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+    
     public String getFrom() {
         return from;
     }
@@ -57,6 +100,22 @@ public class Message {
         return new MessageBuilder();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDateSent() {
+        return dateSent;
+    }
+
+    public void setDateSent(Date dateSent) {
+        this.dateSent = dateSent;
+    }
+
     /***
      * A Builder helper class to create instances of {@link Message}
      */
@@ -81,6 +140,16 @@ public class Message {
             return this;
         }
 
+        public MessageBuilder setType(String type)    {
+            message.setType(type);
+            return this;
+        }
+        
+        public MessageBuilder setContentType(String contentType)    {
+            message.setContentType(contentType);
+            return this;
+        }
+        
         public MessageBuilder setMessageContent(String content)   {
             message.setContent(content);
             return this;

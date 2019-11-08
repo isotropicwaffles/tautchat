@@ -10,20 +10,52 @@ import java.util.Objects;
  */
 public class User {
 
+	/**
+	 * Gets the name of user
+	 * @return name - name of user
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/*
+	 * Sets the name of the user
+	 * 
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Variable to store name of user
+	 */
 	private String name;
 
+	/**
+	 * Identifying marker for user in database.
+	 */
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 *  Default constructor for user
+	 */
 	public User() {
 
 	}
 
+	/**
+	 * Constuctor for user given a user name
+	 * 
+	 * @param name - name of user
+	 */
     public User(String name) {
         this.name = name;
     }
