@@ -1,5 +1,7 @@
 package com.neu.prattle.model;
 
+import java.util.Date;
+
 /***
  * A Basic POJO for Message.
  *
@@ -7,6 +9,17 @@ package com.neu.prattle.model;
  * @version dated 2019-10-06
  */
 public class Message {
+
+    /**
+     * Id for identifying record within database.
+     */
+    private int id;
+
+    /**
+     * Date recording keeping track of messages. !!CURRENTLY ONLY YEAR-MONTH-DAY!!.
+     */
+    private Date dateSent;
+
     /***
      * The name of the user who sent this message.
      */
@@ -85,6 +98,22 @@ public class Message {
 
     public static MessageBuilder messageBuilder()   {
         return new MessageBuilder();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDateSent() {
+        return dateSent;
+    }
+
+    public void setDateSent(Date dateSent) {
+        this.dateSent = dateSent;
     }
 
     /***

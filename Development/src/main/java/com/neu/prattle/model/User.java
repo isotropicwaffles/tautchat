@@ -6,7 +6,7 @@ import java.util.Objects;
  * A User object represents a basic account information for a user.
  *
  * @author CS5500 Fall 2019 Teaching staff
- * @version dated 2019-10-06
+ * @version dated 2019-11-07
  */
 public class User {
 
@@ -17,21 +17,13 @@ public class User {
 	private UserStatus status;
 	
 	/** The id number. */
-	private int idNumber;
+	private int id;
 	
 	/** The is bot. */
 	private final boolean isBot;
 	
 	/** The searchable. */
 	private boolean searchable;
-	
-	
-	/**
-	 * Sets the name.
-	 *
-	 * @param name the name
-	 * @return the user
-	 */
 	
 	public User() {
 		this.isBot = false;
@@ -47,9 +39,13 @@ public class User {
 		this.isBot = isBot;
 	}
 	
-	public User setName(String name) {
+  /**
+	 * Sets the name.
+	 *
+	 * @param name the name
+	 */
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 	
 	/**
@@ -65,11 +61,9 @@ public class User {
 	 * Sets the status.
 	 *
 	 * @param status the status
-	 * @return the user
 	 */
-	public User setStatus(UserStatus status) {
+	public void setStatus(UserStatus status) {
 		this.status = status;
-		return this;
 	}
 	
 	/**
@@ -85,12 +79,10 @@ public class User {
 	 * Sets the id number.
 	 *
 	 * @param idNumber the id number
-	 * @return the user
 	 */
-	public User setIdNumber(int idNumber) {
+	public void setId(int id) {
 		if (idNumber > 0) {
-			this.idNumber = idNumber;
-			return this;
+			this.id = id;
 		}
 		else {
 			throw new IllegalArgumentException("ID Number must be positive");
@@ -102,8 +94,8 @@ public class User {
 	 *
 	 * @return the id number
 	 */
-	public int getIdNumber() {
-		return idNumber;
+	public int getId() {
+		return id;
 	}
 	
 	/**
@@ -114,16 +106,23 @@ public class User {
 	public boolean getBot() {
 		return isBot;
 	}
+  
+  /**
+   * Sets whether user is a bot.
+   *
+   * @param whether the user is a bot or not
+   /
+  public void setBot(boolean isBot) {
+     this.isBot = isBot;
+  }
 	
 	/**
 	 * Sets the searchable.
 	 *
 	 * @param searchable the searchable
-	 * @return the user
 	 */
-	public User setSearchable(boolean searchable) {
+	public void setSearchable(boolean searchable) {
 		this.searchable = searchable;
-		return this;
 	}
 	
 	/**
@@ -142,7 +141,6 @@ public class User {
      * As name can be treated as a sort of identifier for
      * this instance, we can use the hashCode of "name"
      * for the complete object.
-     *
      *
      * @return hashCode of "this"
      */
