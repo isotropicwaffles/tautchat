@@ -10,42 +10,131 @@ import java.util.Objects;
  */
 public class User {
 
+	/** The name. */
+	private String name;
+	
+	/** The status. */
+	private UserStatus status;
+	
+	/** The id number. */
+	private int idNumber;
+	
+	/** The is bot. */
+	private final boolean isBot;
+	
+	/** The searchable. */
+	private boolean searchable;
+	
+	
 	/**
-	 * Gets the name of user
-	 * @return name - name of user
+	 * Sets the name.
+	 *
+	 * @param name the name
+	 * @return the user
+	 */
+	
+	public User() {
+		this.isBot = false;
+	}
+	
+	public User(String name) {
+		this.name = name;
+		this.isBot = false;
+	}
+	
+	public User(String name, boolean isBot) {
+		this.name = name;
+		this.isBot = isBot;
+	}
+	
+	public User setName(String name) {
+		this.name = name;
+		return this;
+	}
+	
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
-
-	/*
-	 * Sets the name of the user
-	 * 
+	
+	/**
+	 * Sets the status.
+	 *
+	 * @param status the status
+	 * @return the user
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public User setStatus(UserStatus status) {
+		this.status = status;
+		return this;
 	}
-
+	
 	/**
-	 * Variable to store name of user
+	 * Gets the status.
+	 *
+	 * @return the status
 	 */
-	private String name;
-
-	/**
-	 *  Default constructor for user
-	 */
-	public User() {
-
+	public UserStatus getStatus() {
+		return status;
 	}
-
+	
 	/**
-	 * Constuctor for user given a user name
-	 * 
-	 * @param name - name of user
+	 * Sets the id number.
+	 *
+	 * @param idNumber the id number
+	 * @return the user
 	 */
-    public User(String name) {
-        this.name = name;
-    }
+	public User setIdNumber(int idNumber) {
+		if (idNumber > 0) {
+			this.idNumber = idNumber;
+			return this;
+		}
+		else {
+			throw new IllegalArgumentException("ID Number must be positive");
+		}
+	}
+	
+	/**
+	 * Gets the id number.
+	 *
+	 * @return the id number
+	 */
+	public int getIdNumber() {
+		return idNumber;
+	}
+	
+	/**
+	 * Gets whether user is a bot.
+	 *
+	 * @return if the user is a bot
+	 */
+	public boolean getBot() {
+		return isBot;
+	}
+	
+	/**
+	 * Sets the searchable.
+	 *
+	 * @param searchable the searchable
+	 * @return the user
+	 */
+	public User setSearchable(boolean searchable) {
+		this.searchable = searchable;
+		return this;
+	}
+	
+	/**
+	 * Gets if user is searchable.
+	 *
+	 * @return if user is searchable
+	 */
+	public boolean getSearchable() {
+		return searchable;
+	}
+	
 
     /***
      * Returns the hashCode of this object.

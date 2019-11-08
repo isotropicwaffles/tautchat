@@ -1,8 +1,12 @@
 package com.neu.prattle.service;
 
 import com.neu.prattle.exceptions.UserAlreadyPresentException;
+import com.neu.prattle.model.Group;
+import com.neu.prattle.model.Icon;
 import com.neu.prattle.model.User;
+import com.neu.prattle.model.UserStatus;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -85,4 +89,70 @@ public class UserServiceImpl implements UserService {
     public static void clear() {
         accountService=null;
     }
+
+	@Override
+	public void deleteUser(User user) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void friendUsers(User user1, User user2) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unfriendUsers(User user1, User user2) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void followUser(User follower, User followee) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unfollowUser(User follower, User followee) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public UserStatus getUserStatus(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Icon getUserDefaultIcon(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<User> getUserFriends(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<User> getUserFollowers(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<User> getUserFollowees(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Group> getUserGroupMemberships(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
