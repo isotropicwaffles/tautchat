@@ -6,59 +6,134 @@ import java.util.Objects;
  * A User object represents a basic account information for a user.
  *
  * @author CS5500 Fall 2019 Teaching staff
- * @version dated 2019-10-06
+ * @version dated 2019-11-07
  */
 public class User {
 
-	/**
-	 * Gets the name of user
-	 * @return name - name of user
-	 */
-	public String getName() {
-		return name;
+	/** The name. */
+	private String name;
+	
+	/** The status. */
+	private UserStatus status;
+	
+	/** The id number. */
+	private int id;
+	
+	/** The is bot. */
+	private final boolean isBot;
+	
+	/** The searchable. */
+	private boolean searchable;
+	
+	public User() {
+		this.isBot = false;
 	}
-
-	/*
-	 * Sets the name of the user
-	 * 
+	
+	public User(String name) {
+		this.name = name;
+		this.isBot = false;
+	}
+	
+	public User(String name, boolean isBot) {
+		this.name = name;
+		this.isBot = isBot;
+	}
+	
+  /**
+	 * Sets the name.
+	 *
+	 * @param name the name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	/**
-	 * Variable to store name of user
+	 * Gets the name.
+	 *
+	 * @return the name
 	 */
-	private String name;
-
+	public String getName() {
+		return name;
+	}
+	
 	/**
-	 * Identifying marker for user in database.
+	 * Sets the status.
+	 *
+	 * @param status the status
 	 */
-	private int id;
-
+	public void setStatus(UserStatus status) {
+		this.status = status;
+	}
+	
+	/**
+	 * Gets the status.
+	 *
+	 * @return the status
+	 */
+	public UserStatus getStatus() {
+		return status;
+	}
+	
+	/**
+	 * Sets the id number.
+	 *
+	 * @param idNumber the id number
+	 */
+	public void setId(int id) {
+		if (idNumber > 0) {
+			this.id = id;
+		}
+		else {
+			throw new IllegalArgumentException("ID Number must be positive");
+		}
+	}
+	
+	/**
+	 * Gets the id number.
+	 *
+	 * @return the id number
+	 */
 	public int getId() {
 		return id;
 	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	
 	/**
-	 *  Default constructor for user
+	 * Gets whether user is a bot.
+	 *
+	 * @return if the user is a bot
 	 */
-	public User() {
-
+	public boolean getBot() {
+		return isBot;
 	}
-
+  
+  /**
+   * Sets whether user is a bot.
+   *
+   * @param whether the user is a bot or not
+   /
+  public void setBot(boolean isBot) {
+     this.isBot = isBot;
+  }
+	
 	/**
-	 * Constuctor for user given a user name
-	 * 
-	 * @param name - name of user
+	 * Sets the searchable.
+	 *
+	 * @param searchable the searchable
 	 */
-    public User(String name) {
-        this.name = name;
-    }
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
+	}
+	
+	/**
+	 * Gets if user is searchable.
+	 *
+	 * @return if user is searchable
+	 */
+	public boolean getSearchable() {
+		return searchable;
+	}
+	
 
     /***
      * Returns the hashCode of this object.
@@ -66,7 +141,6 @@ public class User {
      * As name can be treated as a sort of identifier for
      * this instance, we can use the hashCode of "name"
      * for the complete object.
-     *
      *
      * @return hashCode of "this"
      */
