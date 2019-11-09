@@ -12,6 +12,7 @@ import com.neu.prattle.messaging.TypeOfMessageProcessor;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
 import com.neu.prattle.websocket.ChatEndpoint;
+import com.neu.prattle.websocket.SessionServiceCommands;
 
 
 /**
@@ -103,7 +104,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 		}
 		else {
 
-			ChatEndpoint.userLogin(userName, message.getFrom());
+			sendMessage(generateSessionLoginRequest(message.getFrom(), userName));
 			response = generateResponseMessage(userName,
 					UserServiceCommands.LOGIN.label + " " +
 							UserServiceCommands.SUCCESS_RESPONSE.label);
@@ -172,6 +173,24 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 				.setMessageContent(response)
 				.build();
 	}
+
+	/**
+	 * This generates a login request to send to Session Service
+	 * 
+	 * @param userID - current user ID
+	 * @param loginName - user Login Name
+	 */
+	private Message generateSessionLoginRequest(String userID, String loginName) {
+		return Message.messageBuilder()
+				.setFrom(MessageAddresses.USER_SERVICE.label)
+				.setTo(userID)
+				.setType(MessageAddresses.SESSION_SERVICE.label)
+				.setContentType(SessionServiceCommands.LOGIN.label)
+				.setMessageContent(loginName)
+				.build();
+	}
+
+
 
 
 
