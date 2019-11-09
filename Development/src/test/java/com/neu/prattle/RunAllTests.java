@@ -8,7 +8,7 @@ import com.neu.prattle.daos.UserDatabaseImplTest;
 
 
 @RunWith(Suite.class)
-@SuiteClasses({UserTest.class, MessageTest.class, ChatEndpointTest.class,MessageDatabaseImplTest.class, UserDatabaseImplTest.class})
+@SuiteClasses({UserTest.class, MessageTest.class, ChatEndpointTest.class, MessageProcessorTest.class, MessageDatabaseImplTest.class, UserDatabaseImplTest.class})
 public class RunAllTests {
 
 }

@@ -44,7 +44,7 @@ public class SessionServiceMessageProcessor implements IMessageProcessor {
 	@Override
 	public void processMessage(Message message) throws IOException {	
 		
-		  if (message.getContent().contains(SessionServiceCommands.LOGIN.label)) {
+		  if (message.getContentType().equals(SessionServiceCommands.LOGIN.label)) {
 			  processLogin(message);
 		  
 		  } 
@@ -71,9 +71,9 @@ public class SessionServiceMessageProcessor implements IMessageProcessor {
 	 * @throws IOException 
 	 */
 	private void processLogin(Message message) {	
-		String userName = message.getContent().substring((SessionServiceCommands.LOGIN.label).length() + 1);
+		String userName = message.getContent();
 
-  		ChatEndpoint.userLogin(userName, message.getFrom());
+  		ChatEndpoint.userLogin(userName, message.getTo());
 	}
 
 
