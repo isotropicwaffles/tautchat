@@ -104,13 +104,13 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 		}
 		else {
 
-			sendMessage(generateSessionLoginRequest(message.getFrom(), userName));
+			IMessageProcessor.sendMessage(generateSessionLoginRequest(message.getFrom(), userName));
 			response = generateResponseMessage(userName,
 					UserServiceCommands.LOGIN.label + " " +
 							UserServiceCommands.SUCCESS_RESPONSE.label);
 		}
 
-		sendMessage(response);
+		IMessageProcessor.sendMessage(response);
 
 	}
 
@@ -142,20 +142,9 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 							UserServiceCommands.FAILURE_RESPONSE.label);    
 		}
 
-		sendMessage(response);	
+		IMessageProcessor.sendMessage(response);	
 	}
 
-
-	/**
-	 * Sends message to general router
-	 * 
-	 * @param response - a message response being sent from the user service
-	 */
-	private void sendMessage(Message response) throws IOException {
-		if(mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).canProcessMessage(response)) {
-			mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).processMessage(response);
-		}
-	}
 
 
 

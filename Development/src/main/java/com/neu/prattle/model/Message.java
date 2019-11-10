@@ -43,6 +43,12 @@ public class Message {
      * It represents the contents of the message.
      */
     private String content;
+    
+    /***
+     * It represents the additional information of the message.
+     */
+    private String additionalInfo;
+    
 
     @Override
     public String toString() {
@@ -50,8 +56,10 @@ public class Message {
                 .append("From: ").append(from)
                 .append("To: ").append(to)
 				.append("Type: ").append(type)
-				.append("ContentType: ").append(type)
+				.append("ContentType: ").append(contentType)
                 .append("Content: ").append(content)
+                .append("DateSent: ").append(dateSent)
+                .append("additionalInfo: ").append(additionalInfo)
                 .toString();
     }
 	    
@@ -112,11 +120,21 @@ public class Message {
         return dateSent;
     }
 
-    public void setDateSent(Date dateSent) {
-        this.dateSent = dateSent;
+    public void setDateSent(Date date) {
+        this.dateSent = date;
     }
 
-    /***
+
+
+	public String getAdditionalInfo() {
+		return additionalInfo;
+	}
+
+	public void setAdditionalInfo(String additionalInfo) {
+		this.additionalInfo = additionalInfo;
+	}
+
+	/***
      * A Builder helper class to create instances of {@link Message}
      */
     public static class MessageBuilder    {
@@ -137,6 +155,16 @@ public class Message {
 
         public MessageBuilder setTo(String to)    {
             message.setTo(to);
+            return this;
+        }
+        
+        public MessageBuilder setDateSent(Date date)    {
+            message.setDateSent(date);
+            return this;
+        }
+
+        public MessageBuilder setAdditionalInfo(String addInfo)    {
+            message.setAdditionalInfo(addInfo);
             return this;
         }
 

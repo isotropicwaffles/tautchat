@@ -1,6 +1,7 @@
 package com.neu.prattle.messaging;
 
 import com.neu.prattle.service.UserServiceMessageProcessor;
+import com.neu.prattle.websocket.GroupMessageProcessor;
 import com.neu.prattle.websocket.OutgoingMessageProcessor;
 import com.neu.prattle.websocket.SessionServiceMessageProcessor;
 
@@ -73,7 +74,12 @@ public class MessageProcessorFactory implements IMessageProcessorFactory {
 			createdProcessor = SessionServiceMessageProcessor.getInstance();
 
 			break;
-
+			
+		case GROUP_MESSAGE_PROCESSOR :
+			createdProcessor = GroupMessageProcessor.getInstance();
+			
+			break;
+			
 		default : 
 			throw new IllegalArgumentException("Invalid Message Processor");
 		}

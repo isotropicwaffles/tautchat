@@ -13,6 +13,11 @@ import com.neu.prattle.model.Message;
 */
 public interface IMessageProcessor {
 	
+	
+	/**
+	*	Factory for generating message processors
+	*/
+	static IMessageProcessorFactory mPF = MessageProcessorFactory.getInstance();
 	 /**
 	 * This processes the given message
 	 * 
@@ -30,4 +35,15 @@ public interface IMessageProcessor {
 	 */
 	public boolean canProcessMessage(Message message);
 
+	
+	/**
+	 * Sends message to general router
+	 * 
+	 * @param response - a message response being sent from the user service
+	 */
+	static void sendMessage(Message response) throws IOException {
+		if(mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).canProcessMessage(response)) {
+			mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).processMessage(response);
+		}
+	}
 }
