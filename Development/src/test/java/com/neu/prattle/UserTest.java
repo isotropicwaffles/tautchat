@@ -155,7 +155,7 @@ public class UserTest {
 	@Test
 	public void testBot() {
 		User u = new User("Mike",true);
-		assertTrue(u.getBot());
+		assertTrue(u.userIsBot());
 	}
 
 	@Test
