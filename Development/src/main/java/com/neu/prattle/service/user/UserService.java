@@ -1,10 +1,12 @@
-package com.neu.prattle.service;
+package com.neu.prattle.service.user;
 
+import com.neu.prattle.messaging.ReservedCharacters;
 import com.neu.prattle.model.*;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /***
  * Acts as an interface between the data layer and the
@@ -18,6 +20,24 @@ import java.util.Set;
  *
  */
 public interface UserService {
+	
+	
+    /***
+     * Returns a string representation of a list of users 
+     * @param users - generates string list of users
+     * @return string list of user objects names.
+     */
+	static String generateUserList(Set<User> users) {
+
+		StringJoiner list = new StringJoiner(ReservedCharacters.LIST_SEPARATORS.label);
+
+		for(User user : users){
+			list.add(user.getName());
+		}
+		
+		return list.toString();
+	}
+	
     /***
      * Returns an optional object which might be empty or wraps an object
      * if the System contains a {@link User} object having the same name
@@ -28,6 +48,16 @@ public interface UserService {
      */
     Optional<User> findUserByName(String name);
 
+    
+    /***
+     * Attempts to return the user associated with the name and throws and error if the user doesn't exist
+     *
+     * @param name -> The name of the user.
+     * @return The associated user.
+     * @throws error if user does not exist
+     */
+	public User protectedfindUserByName(String name);
+	
     /***
      * Tries to add a user in the system
      * @param user User object
@@ -39,10 +69,9 @@ public interface UserService {
     /***
      * Tries to delete a user in the system
      * @param user User object
-     * @throws IOException when user doesn't exist
      *
      */
-    void deleteUser(User user) throws IOException;
+    void deleteUser(User user);
     
     /***
      * Tries to friend two users
@@ -123,5 +152,7 @@ public interface UserService {
      *
      */
     Set<Group> getUserGroupMemberships(User user);
+    
+    
     
 }

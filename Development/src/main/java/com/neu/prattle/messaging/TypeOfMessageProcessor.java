@@ -37,6 +37,14 @@ public enum TypeOfMessageProcessor {
 	/**
 	* Represents Group Service Processor
 	*/
-	GROUP_SERVICE_PROCESSOR,
+	GROUP_SERVICE_ROUTER,
+	/**
+	* Represents Group Service Management Processor
+	*/
+	GROUP_SERVICE_GROUP_MANAGEMENT_PROCESSOR,
+	/**
+	* Represents Group Service Group Queries Processor
+	*/
+	GROUP_SERVICE_GROUP_QUERY_PROCESSOR,
 	
 }

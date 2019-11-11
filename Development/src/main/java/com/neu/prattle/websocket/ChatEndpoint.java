@@ -31,8 +31,9 @@ import com.neu.prattle.messaging.MessageProcessorFactory;
 import com.neu.prattle.messaging.TypeOfMessageProcessor;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
+import com.neu.prattle.service.user.UserService;
+import com.neu.prattle.service.user.UserServiceImpl;
+
 
 /**
  * The Class ChatEndpoint.

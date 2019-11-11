@@ -18,8 +18,9 @@ import org.junit.Test;
 import com.neu.prattle.controller.UserController;
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
+import com.neu.prattle.service.user.UserService;
+import com.neu.prattle.service.user.UserServiceImpl;
+
 
 
 public class UserTest {
@@ -142,14 +143,14 @@ public class UserTest {
 	@Test
 	public void testUserId() {
 		User u = new User();
-		u.setId(12);
-		assertEquals(12,u.getId());
+		u.setIdNumber(12);
+		assertEquals(12,u.getIdNumber());
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testUserIdNeg() {
 		User u = new User();
-		u.setId(-412);
+		u.setIdNumber(-412);
 	}
 
 	@Test

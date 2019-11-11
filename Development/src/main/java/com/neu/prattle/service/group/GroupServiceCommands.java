@@ -1,4 +1,4 @@
-package com.neu.prattle.service;
+package com.neu.prattle.service.group;
 
 
 /**
@@ -41,7 +41,6 @@ public enum GroupServiceCommands {
 	*/
     REMOVE_GROUP("REMOVE_GROUP"),
     
-
 	/**
 	* Represents a Request to Add User to GROUP Command
 	*/
@@ -56,9 +55,27 @@ public enum GroupServiceCommands {
 	*/
     GET_GROUP_USERS("GET_GROUP_USERS"),
 	/**
+	* Represents a request to get the group sub groups
+	*/
+    GET_GROUP_SUBGROUPS("GET_GROUP_SUBGROUPS"),
+	/**
+	* Represents a request to get the group super groups
+	*/
+    GET_GROUP_SUPERGROUPS("GET_GROUP_SUPERGROUPS"),
+	/**
 	* Represents a request to get the group moderator
 	*/
-    GET_GROUP_MODERATOR("GET_GROUP_MODERATOR");
+    GET_GROUP_MODERATORS("GET_GROUP_MODERATORS"),
+	/**
+	* Represents a request to get the pending users requests fo the group
+	*/
+    GET_PENDING_USER_REQUESTS("GET_PENDING_USER_REQUESTS"),
+	/**
+	* Represents a request to get the pending subgroup requests fo the group
+	*/
+	GET_PENDING_SUBGROUP_REQUESTS("GET_PENDING_SUBGROUP_REQUESTS");
+	
+	
 
 	
 	 /**

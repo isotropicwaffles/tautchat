@@ -1,4 +1,4 @@
-package com.neu.prattle.service;
+package com.neu.prattle.service.user;
 
 
 /**
@@ -18,15 +18,7 @@ public enum UserServiceCommands {
 	/**
 	* Represents User Create Command
 	*/
-    USER_CREATE("USER_CREATE"),
-	/**
-	* Represents Success Response
-	*/
-    SUCCESS_RESPONSE("SUCCESS"),
-	/**
-	* Represents Failure Reponse
-	*/
-    FAILURE_RESPONSE("FAILURE");
+    USER_CREATE("USER_CREATE");
 
 	
 	 /**

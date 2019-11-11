@@ -2,8 +2,8 @@ package com.neu.prattle.controller;
 
 import com.neu.prattle.exceptions.UserAlreadyPresentException;
 import com.neu.prattle.model.User;
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
+import com.neu.prattle.service.user.UserService;
+import com.neu.prattle.service.user.UserServiceImpl;
 
 import java.io.IOException;
 

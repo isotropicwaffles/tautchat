@@ -1,5 +1,6 @@
-package com.neu.prattle.service;
+package com.neu.prattle.service.user;
 
+import com.neu.prattle.exceptions.GroupNotPresentException;
 import com.neu.prattle.exceptions.UserAlreadyPresentException;
 import com.neu.prattle.model.Group;
 import com.neu.prattle.model.Icon;
@@ -68,6 +69,29 @@ public class UserServiceImpl implements UserService {
         else
             return Optional.empty();
     }
+    
+    
+    /***
+     * Attempts to return the user associated with the name and throws and error if the user doesn't exist
+     *
+     * @param name -> The name of the user.
+     * @return The associated user.
+     * @throws error if user does not exist
+     */
+    @Override
+	public User protectedfindUserByName(String name) {
+		
+		Optional<User> potentialGroup = findUserByName(name); 
+
+		if (potentialGroup.isPresent()) {
+			return potentialGroup.get();
+		}
+		else {
+
+			throw new GroupNotPresentException(String.format("User %s could not be found", name));
+		}
+	}
+    
 
     /**
  	*	Adds users to Service 
@@ -91,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public void deleteUser(User user) throws IOException {
+	public void deleteUser(User user) {
 		// TODO Auto-generated method stub
 		
 	}

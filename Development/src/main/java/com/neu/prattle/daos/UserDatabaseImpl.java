@@ -46,7 +46,7 @@ public class UserDatabaseImpl implements UserDAO {
           int id = results.getInt("id");
           String name = results.getString("name");
           User user = new User();
-          user.setId(id);
+          user.setIdNumber(id);
           user.setName(name);
           users.add(user);
         }
@@ -68,7 +68,7 @@ public class UserDatabaseImpl implements UserDAO {
           int id = results.getInt("id");
           String name = results.getString("name");
           User user = new User();
-          user.setId(id);
+          user.setIdNumber(id);
           user.setName(name);
           return user;
         }
@@ -90,7 +90,7 @@ public class UserDatabaseImpl implements UserDAO {
           int id = results.getInt("id");
           String name = results.getString("name");
           User user = new User();
-          user.setId(id);
+          user.setIdNumber(id);
           user.setName(name);
           return user;
         }
@@ -120,7 +120,7 @@ public class UserDatabaseImpl implements UserDAO {
   public int updateUser(User user) {
     String updateMessageSQL = "UPDATE `tautdb`.`users` SET "
             + "`name`= '" + user.getName()
-            + "' WHERE `id`=" + user.getId();
+            + "' WHERE `id`=" + user.getIdNumber();
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
       statement.executeUpdate(updateMessageSQL);

@@ -65,7 +65,8 @@ public class OutgoingMessageProcessor implements IMessageProcessor {
 	 */
 	@Override
 	public boolean canProcessMessage(Message message) {
-		return true;
+		return message.getType().equals(MessageAddresses.BROADCAST_MESSAGE.label) ||
+				message.getType().equals(MessageAddresses.DIRECT_MESSAGE.label);
 	}
 
 

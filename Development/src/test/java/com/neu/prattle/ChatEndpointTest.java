@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.Set;
 
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
 import com.neu.prattle.websocket.ChatEndpoint;
 
 import org.junit.After;
@@ -17,7 +15,7 @@ import com.neu.prattle.controller.UserController;
 import com.neu.prattle.main.PrattleApplication;
 import com.neu.prattle.messaging.MessageAddresses;
 import com.neu.prattle.model.Message;
-import com.neu.prattle.model.User;
+import com.neu.prattle.service.user.UserServiceImpl;
 
 import javax.websocket.EncodeException;
 import javax.websocket.RemoteEndpoint;
@@ -36,9 +34,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ChatEndpointTest {
 
 
-
-	// Mock instance of userService
-	private UserService userService;
 
 	ChatEndpoint chatEndpoint1;
 	ChatEndpoint chatEndpoint2;
@@ -64,7 +59,6 @@ public class ChatEndpointTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException {
-		userService = mock(UserService.class);
 
 
 		// Create an instance of argument captor. As the name goes, useful to capture argumemnts passed
@@ -206,7 +200,7 @@ public class ChatEndpointTest {
 
 		message2 = messageArgumentCaptor2.getAllValues().get(2);
 
-		assertEquals(messageArgumentCaptor1.getAllValues().size(), 2);
+		assertEquals(2,messageArgumentCaptor1.getAllValues().size());
 		assertEquals(DirectMessage, message2.getContent());
 		assertEquals(userID1, message2.getFrom());
 

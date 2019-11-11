@@ -1,13 +1,16 @@
 package com.neu.prattle.websocket;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
+import java.util.Optional;
 
 import com.neu.prattle.messaging.IMessageProcessor;
 import com.neu.prattle.messaging.MessageAddresses;
 import com.neu.prattle.model.Group;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
+import com.neu.prattle.service.group.GroupService;
+import com.neu.prattle.service.group.GroupServiceImpl;
 
 
 /**
@@ -19,31 +22,31 @@ import com.neu.prattle.model.User;
  */
 public class GroupMessageProcessor implements IMessageProcessor {
 
-	
-	/**
-	*	Group Service instance
-	*/
-	//private static GroupService groupAccountService = UserServiceImpl.getInstance();
-
-
 
 	/**
-	*	An Instance of this object
-	*/
+	 *	Group Service instance
+	 */
+	private static GroupService groupAccountService = GroupServiceImpl.getInstance();
+
+
+
+	/**
+	 *	An Instance of this object
+	 */
 	private static IMessageProcessor instance = new GroupMessageProcessor();
 
 	/**
-	*   Constructor for this object 
-	*/ 
+	 *   Constructor for this object 
+	 */ 
 	private GroupMessageProcessor(){
 
 	}
 
-    /**
-	*   Returns instance of this object
-	*
-	*	@return instance : an instance of this message processor
-	*/ 
+	/**
+	 *   Returns instance of this object
+	 *
+	 *	@return instance : an instance of this message processor
+	 */ 
 	public static IMessageProcessor getInstance()  {
 
 		return GroupMessageProcessor.instance;
@@ -74,24 +77,28 @@ public class GroupMessageProcessor implements IMessageProcessor {
 	 */
 	@Override
 	public boolean canProcessMessage(Message message) {
-		return true;
+		return 	message.getType().equals(MessageAddresses.GROUP_MESSAGE.label);
 	}
-	
-	
+
+
 	/**
 	 * Processes Message to group and sends to all group users and subgroups
 	 * 
 	 * @param message - a message to be processed
-	 * @throws IOException 
 	 */
-	private void processGroupMessage(Message message) throws IOException {	
-		
-		List<User> groupUsers;
-		List<Group> groupSubGroups;
-		
-		// Send message to group users
-		for (User user : groupUsers) {
-			IMessageProcessor.sendMessage(Message.messageBuilder()
+	private void processGroupMessage(Message message) {	
+
+
+		Optional<Group> group = groupAccountService.findGroupByName(message.getTo());
+
+		if (group.isPresent()) {
+
+			Set<User> groupUsers = group.get().getMembers();
+			Set<Group> groupSubGroups = group.get().getSubGroups();
+
+			// Send message to group users
+			for (User user : groupUsers) {
+				IMessageProcessor.sendMessage(Message.messageBuilder()
 						.setFrom(message.getFrom())
 						.setTo(user.getName())
 						.setType(MessageAddresses.DIRECT_MESSAGE.label)
@@ -100,24 +107,25 @@ public class GroupMessageProcessor implements IMessageProcessor {
 						.setAdditionalInfo(message.getTo())
 						.setDateSent(message.getDateSent())
 						.build());
-			
-		}		
-		
-		// Send message to subgroups
-		for (Group group : groupSubGroups) {
-			IMessageProcessor.sendMessage(Message.messageBuilder()
-					.setFrom(message.getTo())
-					.setTo(group.getName())
-					.setType(MessageAddresses.GROUP_MESSAGE.label)
-					.setContentType(message.getContentType())
-					.setMessageContent(message.getContent())
-					.setAdditionalInfo(message.getAdditionalInfo())
-					.setDateSent(message.getDateSent())
-					.build());
+
+			}		
+
+			// Send message to subgroups
+			for (Group subGroup : groupSubGroups) {
+				IMessageProcessor.sendMessage(Message.messageBuilder()
+						.setFrom(message.getTo())
+						.setTo(subGroup.getName())
+						.setType(MessageAddresses.GROUP_MESSAGE.label)
+						.setContentType(message.getContentType())
+						.setMessageContent(message.getContent())
+						.setAdditionalInfo(message.getAdditionalInfo())
+						.setDateSent(message.getDateSent())
+						.build());
+			}
 		}
 
 	}
-	
+
 
 
 
