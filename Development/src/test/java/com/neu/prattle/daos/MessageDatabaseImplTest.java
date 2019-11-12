@@ -19,6 +19,8 @@ public class MessageDatabaseImplTest {
 	private Message testMessage;
 	private User testUser;
 
+	private UserDatabaseImpl userImplTest = new UserDatabaseImpl();
+
 	@Before
 	public void setUp() {
 		testUser = new User();

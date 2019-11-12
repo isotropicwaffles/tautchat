@@ -19,6 +19,10 @@ public enum TypeOfMessageProcessor {
 	*/
 	OUTGOING_MESSAGE_PROCESSOR,
 	/**
+	* Represents Group Message Processor
+	*/
+	GROUP_MESSAGE_PROCESSOR,
+	/**
 	* Represents System Message Processor
 	*/
 	SYSTEM_MESSAGE_PROCESSOR,
@@ -30,5 +34,17 @@ public enum TypeOfMessageProcessor {
 	* Represents User Service Processor
 	*/
 	USER_SERVICE_PROCESSOR,
+	/**
+	* Represents Group Service Processor
+	*/
+	GROUP_SERVICE_ROUTER,
+	/**
+	* Represents Group Service Management Processor
+	*/
+	GROUP_SERVICE_GROUP_MANAGEMENT_PROCESSOR,
+	/**
+	* Represents Group Service Group Queries Processor
+	*/
+	GROUP_SERVICE_GROUP_QUERY_PROCESSOR,
 	
 }

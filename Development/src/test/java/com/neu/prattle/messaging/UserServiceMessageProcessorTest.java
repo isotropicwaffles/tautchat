@@ -1,49 +1,37 @@
-package com.neu.prattle;
+package com.neu.prattle.messaging;
 
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceCommands;
-import com.neu.prattle.service.UserServiceImpl;
 import com.neu.prattle.websocket.ChatEndpoint;
-import com.neu.prattle.websocket.MessageDecoder;
-import com.neu.prattle.websocket.MessageEncoder;
+
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.neu.prattle.controller.UserController;
-import com.neu.prattle.daos.UserDatabaseImpl;
-import com.neu.prattle.main.PrattleApplication;
+
 import com.neu.prattle.messaging.MessageAddresses;
 import com.neu.prattle.model.Message;
-import com.neu.prattle.model.User;
+import com.neu.prattle.service.user.UserServiceCommands;
+import com.neu.prattle.service.user.UserServiceImpl;
 
 import javax.websocket.EncodeException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import javax.ws.rs.core.Response;
 import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class MessageProcessorTest {
-	// Mock instance of userService
-	private UserService userService;
+public class UserServiceMessageProcessorTest {
 
 	ChatEndpoint chatEndpoint1;
 	ChatEndpoint chatEndpoint2;
@@ -78,7 +66,6 @@ public class MessageProcessorTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException {
-		 userService = UserServiceImpl.getInstance();
 		// Create an instance of argument captor. As the name goes, useful to capture argumemnts passed
 		// to our mock object.
 		messageArgumentCaptor1 = ArgumentCaptor.forClass(Message.class);
@@ -110,7 +97,7 @@ public class MessageProcessorTest {
 		UserServiceImpl.clear();
 		chatEndpoint1.onClose(session1);
 		chatEndpoint2.onClose(session2);
-		chatEndpoint3.onClose(session2);
+		chatEndpoint3.onClose(session3);
 
 		messageArgumentCaptor1 = null;
 		messageArgumentCaptor2 = null;
@@ -155,7 +142,8 @@ public class MessageProcessorTest {
 		Message message = messageArgumentCaptor2.getAllValues().get(0);
 
 		assertEquals(MessageAddresses.USER_SERVICE.label, message.getFrom());
-		assertEquals(UserServiceCommands.LOGIN.label + " " + UserServiceCommands.FAILURE_RESPONSE.label, message.getContent());
+		assertEquals(UserServiceCommands.LOGIN.label, message.getContentType());
+		assertEquals(GenericMessageResponses.FAILURE_RESPONSE.label, message.getContent());
 		assertEquals(MessageAddresses.DIRECT_MESSAGE.label, message.getType());
 
 	}
@@ -172,7 +160,7 @@ public class MessageProcessorTest {
 		
 		// create User
 		Message createUserRequest = Message.messageBuilder()
-				.setFrom("")
+				.setFrom(userName1)
 				.setTo("")
 				.setType(MessageAddresses.USER_SERVICE.label)
 				.setContentType(UserServiceCommands.USER_CREATE.label)
@@ -188,7 +176,8 @@ public class MessageProcessorTest {
 		Message message = messageArgumentCaptor1.getAllValues().get(0);
 
 		assertEquals(MessageAddresses.USER_SERVICE.label, message.getFrom());
-		assertEquals(UserServiceCommands.USER_CREATE.label + " " + UserServiceCommands.SUCCESS_RESPONSE.label, message.getContent());
+		assertEquals(UserServiceCommands.USER_CREATE.label, message.getContentType());
+		assertEquals(GenericMessageResponses.SUCCESS_RESPONSE.label, message.getContent());
 		assertEquals(MessageAddresses.DIRECT_MESSAGE.label, message.getType());
 		
 		// Successful Login
@@ -209,7 +198,8 @@ public class MessageProcessorTest {
 		message = messageArgumentCaptor1.getAllValues().get(1);
 
 		assertEquals(MessageAddresses.USER_SERVICE.label, message.getFrom());
-		assertEquals(UserServiceCommands.LOGIN.label + " " + UserServiceCommands.SUCCESS_RESPONSE.label, message.getContent());
+		assertEquals(UserServiceCommands.LOGIN.label, message.getContentType());
+		assertEquals(GenericMessageResponses.SUCCESS_RESPONSE.label, message.getContent());
 		assertEquals(MessageAddresses.DIRECT_MESSAGE.label, message.getType());
 		
 
@@ -244,7 +234,8 @@ public class MessageProcessorTest {
 		Message message = messageArgumentCaptor3.getAllValues().get(0);
 
 		assertEquals(MessageAddresses.USER_SERVICE.label, message.getFrom());
-		assertEquals(UserServiceCommands.USER_CREATE.label + " " + UserServiceCommands.SUCCESS_RESPONSE.label, message.getContent());
+		assertEquals(UserServiceCommands.USER_CREATE.label, message.getContentType());
+		assertEquals(GenericMessageResponses.SUCCESS_RESPONSE.label, message.getContent());
 		assertEquals(MessageAddresses.DIRECT_MESSAGE.label, message.getType());
 		
 
@@ -257,7 +248,8 @@ public class MessageProcessorTest {
 		message = messageArgumentCaptor3.getAllValues().get(1);
 
 		assertEquals(MessageAddresses.USER_SERVICE.label, message.getFrom());
-		assertEquals(UserServiceCommands.USER_CREATE.label + " " + UserServiceCommands.FAILURE_RESPONSE.label, message.getContent());
+		assertEquals(UserServiceCommands.USER_CREATE.label, message.getContentType());
+		assertEquals(GenericMessageResponses.FAILURE_RESPONSE.label, message.getContent());
 		assertEquals(MessageAddresses.DIRECT_MESSAGE.label, message.getType());
 		
 

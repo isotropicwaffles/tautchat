@@ -18,8 +18,9 @@ import org.junit.Test;
 import com.neu.prattle.controller.UserController;
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
+import com.neu.prattle.service.user.UserService;
+import com.neu.prattle.service.user.UserServiceImpl;
+
 
 
 public class UserTest {

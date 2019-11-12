@@ -27,6 +27,7 @@ public class SystemMessageRouter extends AbstractMessageRouter {
 
 	
 		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.USER_SERVICE_PROCESSOR));
+		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.GROUP_SERVICE_ROUTER));
 		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.SESSION_SERVICE_MESSAGE_PROCESSOR));
 
 		

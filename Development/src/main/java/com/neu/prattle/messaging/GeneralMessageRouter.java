@@ -26,8 +26,10 @@ public class GeneralMessageRouter extends AbstractMessageRouter {
 		List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
 
 		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.SYSTEM_MESSAGE_PROCESSOR));
+		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.GROUP_MESSAGE_PROCESSOR));
 		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.OUTGOING_MESSAGE_PROCESSOR));
-		
+
+
 		super.setSubMessageProcessors(subMessageProcessors);
 
 	}

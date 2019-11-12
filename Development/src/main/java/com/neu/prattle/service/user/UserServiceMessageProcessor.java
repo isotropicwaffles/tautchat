@@ -1,17 +1,14 @@
-package com.neu.prattle.service;
+package com.neu.prattle.service.user;
 
 
 import java.io.IOException;
 import java.util.Optional;
 
+import com.neu.prattle.messaging.GenericMessageResponses;
 import com.neu.prattle.messaging.IMessageProcessor;
-import com.neu.prattle.messaging.IMessageProcessorFactory;
 import com.neu.prattle.messaging.MessageAddresses;
-import com.neu.prattle.messaging.MessageProcessorFactory;
-import com.neu.prattle.messaging.TypeOfMessageProcessor;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
-import com.neu.prattle.websocket.ChatEndpoint;
 import com.neu.prattle.websocket.SessionServiceCommands;
 
 
@@ -25,19 +22,9 @@ import com.neu.prattle.websocket.SessionServiceCommands;
 public class UserServiceMessageProcessor implements IMessageProcessor {
 
 	/**
-	*	User Service instance
-	*/
-	private static UserService accountService = UserServiceImpl.getInstance();
-
-	/**
 	*	Singleton instance of this class
 	*/
 	private static IMessageProcessor instance = new UserServiceMessageProcessor();
-
-	/**
-	*	Factory for generating message processors
-	*/
-	private IMessageProcessorFactory mPF = MessageProcessorFactory.getInstance();
 
 	/**
 	*	Private constructor for class
@@ -64,12 +51,24 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 */
 	public void processMessage(Message message) throws IOException {	
 
+		Message response;
+		
 		if (message.getContentType().equals(UserServiceCommands.LOGIN.label)) {
-			processLogin(message);
+			response = processLogin(message);
 
 		} else if (message.getContentType().equals(UserServiceCommands.USER_CREATE.label)) {
-			processUserCreation(message); 
+			response = processUserCreation(message); 
 		}
+		else {
+			response = generateResponseMessage(message.getContentType(),
+					GenericMessageResponses.UNKNOWN_COMMAND.label);
+		}
+		
+		if(response.getTo() == null) {
+			response.setTo(message.getFrom());
+		}
+		
+		IMessageProcessor.sendMessage(response);
 
 	}
 
@@ -90,27 +89,27 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 * This processes the login message
 	 * 
 	 * @param message - a message to be processed
-	 * @throws IOException 
+	 * 
+	 * @return a message in reponse to this request
 	 */
-	private void processLogin(Message message) throws IOException {	
+	private Message processLogin(Message message) {	
 		Message response;
 		String userName = message.getContent();
-		Optional<User> user = accountService.findUserByName(userName);
+		Optional<User> user = UserServiceImpl.getInstance().findUserByName(userName);
 
 		if (!user.isPresent()) {
-			response = generateResponseMessage(message.getFrom(),
-					UserServiceCommands.LOGIN.label + " " +
-							UserServiceCommands.FAILURE_RESPONSE.label); 
+			response = generateResponseMessage(message.getContentType(),
+							GenericMessageResponses.FAILURE_RESPONSE.label); 
 		}
 		else {
 
-			sendMessage(generateSessionLoginRequest(message.getFrom(), userName));
-			response = generateResponseMessage(userName,
-					UserServiceCommands.LOGIN.label + " " +
-							UserServiceCommands.SUCCESS_RESPONSE.label);
+			IMessageProcessor.sendMessage(generateSessionLoginRequest(message.getFrom(), userName));
+			response = generateResponseMessage(message.getContentType(),
+							GenericMessageResponses.SUCCESS_RESPONSE.label);
+			response.setTo(userName);
 		}
 
-		sendMessage(response);
+		return response;
 
 	}
 
@@ -119,43 +118,32 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 * This processes the user create message
 	 * 
 	 * @param message - a message to be processed
+	 * 
+	 * @return a message in reponse to this request
 	 * @throws IOException 
 	 */
-	private void processUserCreation(Message message) throws IOException {	
+	private Message processUserCreation(Message message) throws IOException {	
 		Message response;
 
 		String userName = message.getContent();
 
-		Optional<User> user = accountService.findUserByName(userName);
+		Optional<User> user = UserServiceImpl.getInstance().findUserByName(userName);
 
 		if (!user.isPresent()) {
 
-			accountService.addUser(new User(userName));
+			UserServiceImpl.getInstance().addUser(new User(userName));
 
-			response = generateResponseMessage(message.getFrom(),
-					UserServiceCommands.USER_CREATE.label + " " +
-							UserServiceCommands.SUCCESS_RESPONSE.label);
+			response = generateResponseMessage(message.getContentType(),
+							GenericMessageResponses.SUCCESS_RESPONSE.label);
 		}
 		else {
-			response = generateResponseMessage(message.getFrom(),
-					UserServiceCommands.USER_CREATE.label + " " +
-							UserServiceCommands.FAILURE_RESPONSE.label);    
+			response = generateResponseMessage(message.getContentType(),
+					GenericMessageResponses.FAILURE_RESPONSE.label);    
 		}
 
-		sendMessage(response);	
+		return response;	
 	}
 
-
-	/**
-	 * Sends message to general router
-	 * 
-	 * @param response - a message response being sent from the user service
-	 */
-	private void sendMessage(Message response) throws IOException {
-		if(mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).canProcessMessage(response)) {
-			mPF.getInstanceOf(TypeOfMessageProcessor.GENERAL_MESSAGE_PROCESSOR).processMessage(response);
-		}
-	}
 
 
 
@@ -165,10 +153,10 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	 * @param receiver - to whom the message should be sent
 	 * @param response - the response that is being sent
 	 */
-	private Message generateResponseMessage(String receiver, String response) {
+	private Message generateResponseMessage(String contentType, String response) {
 		return Message.messageBuilder()
 				.setFrom(MessageAddresses.USER_SERVICE.label)
-				.setTo(receiver)
+				.setContentType(contentType)
 				.setType(MessageAddresses.DIRECT_MESSAGE.label)
 				.setMessageContent(response)
 				.build();
