@@ -442,7 +442,7 @@ public class GroupServiceQueryTest {
 		commonGroupMessageAsserts(messageArgumentCaptor1.getValue(), userName1, invalidCommand, GenericMessageResponses.UNKNOWN_COMMAND.label);
 
 		
-		mp1.processMessage(incorrect_message_2);
+		mp2.processMessage(incorrect_message_2);
 		commonGroupMessageAsserts(messageArgumentCaptor2.getValue(), userName2, invalidCommand,  GenericMessageResponses.UNKNOWN_COMMAND.label);
 
 	

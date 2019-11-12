@@ -143,14 +143,14 @@ public class UserTest {
 	@Test
 	public void testUserId() {
 		User u = new User();
-		u.setIdNumber(12);
-		assertEquals(12,u.getIdNumber());
+		u.setId(12);
+		assertEquals(12,u.getId());
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testUserIdNeg() {
 		User u = new User();
-		u.setIdNumber(-412);
+		u.setId(-412);
 	}
 
 	@Test

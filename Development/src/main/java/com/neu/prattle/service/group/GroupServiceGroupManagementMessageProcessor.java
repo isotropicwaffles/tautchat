@@ -2,6 +2,7 @@ package com.neu.prattle.service.group;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 import com.neu.prattle.messaging.GenericMessageResponses;
 import com.neu.prattle.messaging.IMessageProcessor;
@@ -9,7 +10,6 @@ import com.neu.prattle.messaging.MessageAddresses;
 import com.neu.prattle.model.Group;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
-import com.neu.prattle.service.user.UserService;
 import com.neu.prattle.service.user.UserServiceImpl;
 
 
@@ -249,15 +249,16 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		Message response;
 
-		Group existGroup = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 		User potentialModerator = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
 		User userToAdd = UserServiceImpl.getInstance().protectedfindUserByName(message.getContent());
 
+		Set<User> mods = group.getModerators();
 
-		if (existGroup.authenticateAsMod(potentialModerator) &&
-				!existGroup.hasMember(userToAdd)) {
+		if (mods.contains(potentialModerator) &&
+				!group.hasMember(userToAdd)) {
 
-			existGroup.addUser(potentialModerator, userToAdd);
+			group.addUser(potentialModerator, userToAdd);
 		
 			response = generateSuccessResponseMessage(message);
 		}else {
@@ -284,8 +285,8 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 		User potentialModerator = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
 		Group groupToAdd =GroupServiceImpl.getInstance().protectedFindGroupByName(message.getContent()); 
 
-
-		if (group.authenticateAsMod(potentialModerator) && 
+		Set<User> mods = group.getModerators();
+		if (mods.contains(potentialModerator) && 
 				!group.hasSubGroup(groupToAdd)) {
 
 			group.addSubgroup(potentialModerator, groupToAdd);						
@@ -315,12 +316,13 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 		User userRequesting = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
 		User userToBeRemoved = UserServiceImpl.getInstance().protectedfindUserByName(message.getContent()); 
 
-		boolean authenticatedRequest =  group.authenticateAsMod(userRequesting) || userRequesting.equals(userToBeRemoved);
-		boolean validRemoval = (!group.authenticateAsMod(userToBeRemoved) || group.getModerators().size() > 1) ;
+		Set<User> mods = group.getModerators();
+		boolean authenticatedRequest =  mods.contains(userRequesting) || userRequesting.equals(userToBeRemoved);
+		boolean validRemoval = (!mods.contains(userToBeRemoved) || group.getModerators().size() > 1) ;
 
 		if ( authenticatedRequest && validRemoval ) {
 			
-			group.removeUser(userToBeRemoved);						
+			group.removeUser(userRequesting, userToBeRemoved);					
 
 			response = generateSuccessResponseMessage(message);
 		}else {
@@ -346,8 +348,12 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 		User userRequesting = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
 		Group groupToBeRemoved = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getContent()); 
 
-		boolean authenticatedRequest = group.authenticateAsMod(userRequesting)  || 
-				groupToBeRemoved.authenticateAsMod(userRequesting);
+		
+		Set<User> mods = group.getModerators();
+		Set<User> subGroup_mods = groupToBeRemoved.getModerators();
+
+		boolean authenticatedRequest = mods.contains(userRequesting)  || 
+				subGroup_mods.contains(userRequesting);
 		boolean validRemoval = group.hasSubGroup(groupToBeRemoved) ;
 
 		if (authenticatedRequest && validRemoval) {

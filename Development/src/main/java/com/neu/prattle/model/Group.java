@@ -1,12 +1,12 @@
 package com.neu.prattle.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
+import com.neu.prattle.service.user.UserService;
+import com.neu.prattle.service.user.UserServiceImpl;
 import com.neu.prattle.websocket.ChatEndpoint;
 
 /**
@@ -62,7 +62,13 @@ public class Group {
 	 * Contains Users who have attempted to join the Group
 	 * but who have not yet been approved by a moderator.
 	 */
-	private Set<User> joinQueue;
+	private Set<User> joinUserQueue;
+	
+	/**
+	 * Contains Groups who have attempted to join the Group
+	 * but who have not yet been approved by a moderator.
+	 */
+	private Set<Group> joinSubGroupQueue;
 	
 	/**
 	 * Creates a Group with only a single moderator.
@@ -79,16 +85,17 @@ public class Group {
 			throw new IllegalArgumentException("User is not authorized to moderate this group.");
 		}
 
-		this.moderators = new HashSet<>();
+		this.moderators = new LinkedHashSet<>();
 		this.moderators.add(moderator);
 		
-		this.subgroups = new HashSet<>();
-		this.supergroups = new HashSet<>();
+		this.subgroups = new LinkedHashSet<>();
+		this.supergroups = new LinkedHashSet<>();
 		
-		this.memberAliases = new HashMap<>();
+		this.memberAliases = new LinkedHashMap<>();
 		this.memberAliases.put(moderator, moderator.getName());
 		
-		this.joinQueue = new HashSet<>();
+		this.joinUserQueue = new LinkedHashSet<>();
+		this.joinSubGroupQueue = new LinkedHashSet<>();
 	}
 
 	// Called by builder
@@ -116,7 +123,8 @@ public class Group {
 		
 		this.memberAliases = memberAliases;
 		
-		this.joinQueue = new HashSet<>();
+		this.joinUserQueue = new LinkedHashSet<>();
+		this.joinSubGroupQueue = new LinkedHashSet<>();
 	}
 
 	private boolean validUser(User moderator, UserService serv) {
@@ -152,11 +160,27 @@ public class Group {
 		return this.memberAliases.containsKey(user);
 	}
 	
+	
+	/**
+	 * Returns a set of all all user add requests of this group.
+	 * @return set of members
+	 */
+	public Set<User> getPendingUserRequests() {
+		return this.joinUserQueue;
+	}
+	
+	/**
+	 * Returns a set of all all subgroup add requests of this group.
+	 * @return set of members
+	 */
+	public Set<Group> getPendingSubGroupRequests() {
+		return this.joinSubGroupQueue;
+	}
+	
 	/**
 	 * Returns a set of all the Users who are members of this Group.
 	 * @return set of members
 	 */
-	// TODO do we want this to return the actual members? or just names?
 	public Set<User> getMembers() {
 		return this.memberAliases.keySet();
 	}
@@ -219,6 +243,8 @@ public class Group {
 			this.subgroups.add(subgroup);
 			// Preserve symmetry by adding this as child to supergroup.
 			subgroup.addSupergroup(mod, this);
+		} else {
+			joinSubGroupQueue.add(subgroup);
 		}
 	}
 	
@@ -236,14 +262,18 @@ public class Group {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.
-			if (!this.subgroups.contains(subgroup)) {
-				return;
+			if (this.subgroups.contains(subgroup)) {
+				this.subgroups.remove(subgroup);
+			} else if (joinSubGroupQueue.contains(subgroup)) {
+				this.joinSubGroupQueue.remove(subgroup);
 			}
-			this.subgroups.remove(subgroup);
+		}
+		
+		
+
 			// Preserve symmetry by adding this as child to supergroup.
 			subgroup.removeSupergroup(mod, this);
 		}
-	}
 
 	/**
 	 * Adds given Group to this Group's set of supergroups.
@@ -267,7 +297,7 @@ public class Group {
 			this.supergroups.add(supergroup);
 			// Preserve symmetry by adding this as child to supergroup.
 			supergroup.addSubgroup(mod, this);
-		}
+		} 
 	}
 	
 	/**
@@ -338,14 +368,19 @@ public class Group {
 			this.memberAliases.putIfAbsent(user, user.getName());
 		}
 		else {
-			this.joinQueue.add(user);
+			this.joinUserQueue.add(user);
 		}
 	}
 	
 	public void removeUser(User mod, User user) {
 		// User can only be removed by the same user or a mod.
 		if (mod.equals(user) || authenticateAsMod(mod, this)) {
-			this.memberAliases.remove(user);
+			
+			if (this.memberAliases.containsKey(user)) {
+				this.memberAliases.remove(user);
+			} else if(this.joinUserQueue.contains(user)) {
+				this.joinUserQueue.remove(user);
+			}
 		}
 	}
 	
@@ -358,14 +393,14 @@ public class Group {
 		
 		public GroupBuilder() {
 			this.groupName = "";
-			this.moderators = new HashSet<>();
-			this.memberAliases = new HashMap<>();
-			this.subgroups = new HashSet<>();
-			this.supergroups = new HashSet<>();
+			this.moderators = new LinkedHashSet<>();
+			this.memberAliases = new LinkedHashMap<>();
+			this.subgroups = new LinkedHashSet<>();
+			this.supergroups = new LinkedHashSet<>();
 		}
 		
 		public Group build() throws IllegalArgumentException {
-			if (groupName != "" && moderators.size() != 0) {
+			if (groupName.isEmpty() && !moderators.isEmpty()) {
 				return new Group(groupName, moderators, 
 						memberAliases, subgroups, supergroups);
 			}
@@ -385,7 +420,6 @@ public class Group {
 		
 		public GroupBuilder addModerator(User user) {
 			if (user != null) {
-				// TODO Should moderators be in user set, too?
 				this.moderators.add(user);
 			}
 			
@@ -394,7 +428,7 @@ public class Group {
 		
 		public GroupBuilder setAlias(User user, String alias) {
 			// N.B. '~' denotes Service account
-			if (alias != "" && alias.charAt(0) != '~') {
+			if (!alias.isEmpty() && alias.charAt(0) != '~') {
 				this.memberAliases.replace(user, alias);
 			}
 			
@@ -418,7 +452,7 @@ public class Group {
 		}
 		
 		public GroupBuilder setName(String name) {
-			if (name != "" && name.charAt(0) != '~') {
+			if (name.isEmpty() && name.charAt(0) != '~') {
 				this.groupName = name;
 			}
 			

@@ -15,9 +15,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.neu.prattle.exceptions.GroupAlreadyPresentException;
-import com.neu.prattle.exceptions.GroupNotPresentException;
-import com.neu.prattle.exceptions.UserAlreadyPresentException;
 import com.neu.prattle.messaging.MessageAddresses;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.service.group.GroupServiceCommands;
@@ -323,16 +320,6 @@ public class GroupServiceManagementTest {
 	@Test
 	public void testApproveRemoveSubgroupTest() throws IOException, TimeoutException{
 
-		// Invalid Group User
-		
-		Message getSubGroups =  Message.messageBuilder()
-				.setFrom(userName1)
-				.setTo(groupName1)
-				.setType(MessageAddresses.GROUP_SERVICE.label)
-				.setContentType(GroupServiceCommands.GET_GROUP_SUBGROUPS.label)
-				.setMessageContent("")
-				.build();
-		
 		// Invalid Group User
 		
 		Message removeSubGroups =  Message.messageBuilder()
