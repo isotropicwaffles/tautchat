@@ -2,6 +2,7 @@ package com.neu.prattle.daos;
 
 import com.neu.prattle.DatabaseConnection;
 import com.neu.prattle.model.User;
+import com.neu.prattle.model.UserStatus;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,14 +24,31 @@ public class UserDatabaseImpl implements UserDAO {
 
   @Override
   public void createUser(User user) {
-    String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`) VALUES ('"
-            + user.getName() + "');";
+    String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
+            + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
+            + user.userIsBot() + ", " + user.getSearchable() + ")";
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
       statement.executeUpdate(createUserSQL);
     } catch (SQLException e) {
       logging.log(Level.INFO, "Create User SQL blew up: " + e.toString());
+    }
+  }
+
+  private UserStatus stringToUserStatus(String string) {
+    if (string.equalsIgnoreCase("donotdisturb")) {
+      return UserStatus.DONOTDISTURB;
+    } else if (string.equalsIgnoreCase("away")) {
+      return UserStatus.AWAY;
+    } else if (string.equalsIgnoreCase("idle")) {
+      return UserStatus.IDLE;
+    } else if (string.equalsIgnoreCase("offline")) {
+      return UserStatus.OFFLINE;
+    } else if (string.equalsIgnoreCase("online")) {
+      return UserStatus.ONLINE;
+    } else {
+      return null;
     }
   }
 
@@ -45,9 +63,13 @@ public class UserDatabaseImpl implements UserDAO {
         while (results.next()) {
           int id = results.getInt("id");
           String name = results.getString("name");
-          User user = new User();
+          String status = results.getString("status");
+          boolean isBot = results.getBoolean("is_bot");
+          boolean searchable = results.getBoolean("searchable");
+          User user = new User(name, isBot);
           user.setId(id);
-          user.setName(name);
+          user.setStatus(stringToUserStatus(status));
+          user.setSearchable(searchable);
           users.add(user);
         }
       }
@@ -67,9 +89,13 @@ public class UserDatabaseImpl implements UserDAO {
         while (results.next()) {
           int id = results.getInt("id");
           String name = results.getString("name");
-          User user = new User();
+          String status = results.getString("status");
+          boolean isBot = results.getBoolean("is_bot");
+          boolean searchable = results.getBoolean("searchable");
+          User user = new User(name, isBot);
           user.setId(id);
-          user.setName(name);
+          user.setStatus(stringToUserStatus(status));
+          user.setSearchable(searchable);
           return user;
         }
       }
@@ -89,9 +115,13 @@ public class UserDatabaseImpl implements UserDAO {
         while (results.next()) {
           int id = results.getInt("id");
           String name = results.getString("name");
-          User user = new User();
+          String status = results.getString("status");
+          boolean isBot = results.getBoolean("is_bot");
+          boolean searchable = results.getBoolean("searchable");
+          User user = new User(name, isBot);
           user.setId(id);
-          user.setName(name);
+          user.setStatus(stringToUserStatus(status));
+          user.setSearchable(searchable);
           return user;
         }
       }
@@ -103,11 +133,11 @@ public class UserDatabaseImpl implements UserDAO {
 
   @Override
   public boolean userExists(String username) {
-    String findAllUsersSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + username + "'";
+    String userExistsSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + username + "'";
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findAllUsersSQL)) {
+      try (ResultSet results = statement.executeQuery(userExistsSQL)) {
         return results.next();
       }
     } catch (SQLException e) {
@@ -119,8 +149,9 @@ public class UserDatabaseImpl implements UserDAO {
   @Override
   public int updateUser(User user) {
     String updateMessageSQL = "UPDATE `tautdb`.`users` SET "
-            + "`name`= '" + user.getName()
-            + "' WHERE `id`=" + user.getId();
+            + "`name`= '" + user.getName() + "', `status`= '" + user.getStatus().toString()
+            + "', `is_bot` = " + user.userIsBot() + ", `searchable`=" + user.getSearchable()
+            + " WHERE `id`=" + user.getId();
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
       statement.executeUpdate(updateMessageSQL);
@@ -163,5 +194,56 @@ public class UserDatabaseImpl implements UserDAO {
     } catch (SQLException e) {
       logging.log(Level.INFO, "Delete All Users SQL blew up: " + e.toString());
     }
+  }
+
+  @Override
+  public boolean isBot(User user) {
+    String userIsBotSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + user.getName()
+            + "' AND `is_bot` = 1";
+
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         Statement statement = connection.createStatement()) {
+      try (ResultSet results = statement.executeQuery(userIsBotSQL)) {
+        return results.next();
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Is User a bot SQL blew up: " + e.toString());
+    }
+    return false;
+  }
+
+  @Override
+  public boolean isSearchable(User user) {
+    String userIsSearchableSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + user.getName()
+            + "' AND `searchable` = 1";
+
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         Statement statement = connection.createStatement()) {
+      try (ResultSet results = statement.executeQuery(userIsSearchableSQL)) {
+        return results.next();
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Is User searchable SQL blew up: " + e.toString());
+    }
+    return false;
+  }
+
+  @Override
+  public UserStatus retrieveStatus(User user) {
+    String userStatusSQL = "SELECT `users`.`status` FROM `tautdb`.`users` WHERE `name`='"
+            + user.getName() + "'";
+
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         Statement statement = connection.createStatement()) {
+      try (ResultSet results = statement.executeQuery(userStatusSQL)) {
+        if (results.next()) {
+          String status = results.getString("status");
+          return stringToUserStatus(status);
+        }
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Retrieve status SQL blew up: " + e.toString());
+    }
+    return null;
   }
 }

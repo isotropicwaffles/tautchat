@@ -1,6 +1,7 @@
 package com.neu.prattle.daos;
 
 import com.neu.prattle.model.User;
+import com.neu.prattle.model.UserStatus;
 
 import java.util.Collection;
 
@@ -50,7 +51,7 @@ public interface UserDAO {
   /**
    * Update user data.
    *
-   * @param user   the user
+   * @param user the user
    * @return 0 denoting completion of method
    */
   int updateUser(User user);
@@ -72,8 +73,31 @@ public interface UserDAO {
   int deleteUserByUsername(String username);
 
   /**
-   *
+   * Delete all users.
    */
   void deleteAllUsers();
 
+  /**
+   * Is bot boolean.
+   *
+   * @param user the user
+   * @return the boolean
+   */
+  boolean isBot(User user);
+
+  /**
+   * Is searchable boolean.
+   *
+   * @param user the user
+   * @return the boolean
+   */
+  boolean isSearchable(User user);
+
+  /**
+   * Retrieve status user status.
+   *
+   * @param user the user
+   * @return the user status
+   */
+  UserStatus retrieveStatus(User user);
 }
