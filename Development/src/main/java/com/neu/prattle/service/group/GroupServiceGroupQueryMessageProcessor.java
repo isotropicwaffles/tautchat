@@ -22,10 +22,6 @@ import com.neu.prattle.service.user.UserService;
  */
 public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor {
 
-	/**
-	 *	Group Service instance
-	 */
-	private static GroupService groupAccountService = GroupServiceImpl.getInstance();
 
 	/**
 	 *	Singleton instance of this class
@@ -111,7 +107,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 			
 		} catch (Exception e) {
 
-			response = generateResponseMessage(message.getFrom(), e.getMessage());
+			response = generateResponseMessage(message.getContentType(), e.getMessage());
 
 		}
 		
@@ -132,7 +128,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 	 */
 	private Message processGetUsersFromGroup(Message message) {	
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 
 		Set<User> users = group.getMembers();
 		
@@ -149,7 +145,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 	 */
 	private Message processGetModeratorsFromGroup(Message message) {	
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 
 		Set<User> users = group.getModerators();
 		
@@ -166,7 +162,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 	 */
 	private Message processGetSubGroupsFromGroup(Message message) {	
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 
 		Set<Group> groups = group.getSubGroups();
 
@@ -183,7 +179,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 	 */
 	private Message processGetSuperGroupsFromGroup(Message message) {	
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 
 		Set<Group> groups = group.getSuperGroups();
 
@@ -200,7 +196,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 	 */
 	private Message processGetPendingUsersAddsFromGroup(Message message) {	
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 
 		Set<User> users = group.getPendingUserRequests();
 		
@@ -216,7 +212,7 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 	 */
 	private Message processGetPendingSubgroupAddsFromGroup(Message message) {	
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
 
 		Set<Group> subgroups = group.getPendingSubGroupRequests();
 

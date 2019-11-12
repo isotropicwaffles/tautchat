@@ -22,11 +22,6 @@ import com.neu.prattle.websocket.SessionServiceCommands;
 public class UserServiceMessageProcessor implements IMessageProcessor {
 
 	/**
-	*	User Service instance
-	*/
-	private static UserService accountService = UserServiceImpl.getInstance();
-
-	/**
 	*	Singleton instance of this class
 	*/
 	private static IMessageProcessor instance = new UserServiceMessageProcessor();
@@ -69,8 +64,10 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 					GenericMessageResponses.UNKNOWN_COMMAND.label);
 		}
 		
-		response.setTo(message.getFrom());
-	
+		if(response.getTo() == null) {
+			response.setTo(message.getFrom());
+		}
+		
 		IMessageProcessor.sendMessage(response);
 
 	}
@@ -98,7 +95,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 	private Message processLogin(Message message) {	
 		Message response;
 		String userName = message.getContent();
-		Optional<User> user = accountService.findUserByName(userName);
+		Optional<User> user = UserServiceImpl.getInstance().findUserByName(userName);
 
 		if (!user.isPresent()) {
 			response = generateResponseMessage(message.getContentType(),
@@ -109,6 +106,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 			IMessageProcessor.sendMessage(generateSessionLoginRequest(message.getFrom(), userName));
 			response = generateResponseMessage(message.getContentType(),
 							GenericMessageResponses.SUCCESS_RESPONSE.label);
+			response.setTo(userName);
 		}
 
 		return response;
@@ -129,11 +127,11 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 
 		String userName = message.getContent();
 
-		Optional<User> user = accountService.findUserByName(userName);
+		Optional<User> user = UserServiceImpl.getInstance().findUserByName(userName);
 
 		if (!user.isPresent()) {
 
-			accountService.addUser(new User(userName));
+			UserServiceImpl.getInstance().addUser(new User(userName));
 
 			response = generateResponseMessage(message.getContentType(),
 							GenericMessageResponses.SUCCESS_RESPONSE.label);

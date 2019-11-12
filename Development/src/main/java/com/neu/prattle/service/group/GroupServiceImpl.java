@@ -56,7 +56,7 @@ public class GroupServiceImpl implements GroupService {
 
     
     /** The sessions. */
-    private static Map<String,Group> groupMap = new HashMap<>();
+    private Map<String,Group> groupMap = new HashMap<>();
 
     /***
      *

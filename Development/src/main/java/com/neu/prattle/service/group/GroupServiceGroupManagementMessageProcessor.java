@@ -24,17 +24,6 @@ import com.neu.prattle.service.user.UserServiceImpl;
 public class GroupServiceGroupManagementMessageProcessor implements IMessageProcessor {
 
 	/**
-	 *	User Service instance
-	 */
-	private static UserService userAccountService = UserServiceImpl.getInstance();
-
-
-	/**
-	 *	Group Service instance
-	 */
-	private static GroupService groupAccountService = GroupServiceImpl.getInstance();
-
-	/**
 	 *	Singleton instance of this class
 	 */
 	private static IMessageProcessor instance = new GroupServiceGroupManagementMessageProcessor();
@@ -127,7 +116,7 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 			
 		} catch (Exception e) {
 
-			response = generateResponseMessage(message.getFrom(), e.getMessage());
+			response = generateResponseMessage(message.getContentType(), e.getMessage());
 
 		}
 		
@@ -152,14 +141,16 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		Message response;
 		
-		User moderator =  userAccountService.protectedfindUserByName(message.getFrom());
+		User moderator =  UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom());
 
 		Group newGroup = new Group(moderator);
-
-		Optional<Group> existGroup = groupAccountService.findGroupByName(message.getContent()); 
+		
+		newGroup.setName(moderator, message.getContent());
+		
+		Optional<Group> existGroup = GroupServiceImpl.getInstance().findGroupByName(message.getContent()); 
 		
 		if (! existGroup.isPresent()) {
-			groupAccountService.addGroup(newGroup);
+			GroupServiceImpl.getInstance().addGroup(newGroup);
 			
 			response = generateSuccessResponseMessage(message);
 		}else {
@@ -182,9 +173,9 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 		
 		Message response;
 
-		Group existGroup = groupAccountService.protectedFindGroupByName(message.getContent()); 
+		Group existGroup = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getContent()); 
 
-		groupAccountService.deleteGroup(existGroup);
+		GroupServiceImpl.getInstance().deleteGroup(existGroup);
 		
 		response = generateSuccessResponseMessage(message);
 		
@@ -204,10 +195,10 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 		
 		Message response;
 
-		Group existGroup = groupAccountService.protectedFindGroupByName(message.getTo()); 
-		User userToAdd = userAccountService.protectedfindUserByName(message.getContent()); 
+		Group existGroup = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		User userToAdd = UserServiceImpl.getInstance().protectedfindUserByName(message.getContent()); 
 
-		if (existGroup.hasMember(userToAdd)) {
+		if (!existGroup.hasMember(userToAdd)) {
 
 			existGroup.addUser(null, userToAdd);
 			
@@ -230,8 +221,8 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		Message response;
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
-		Group groupToAdd = groupAccountService.protectedFindGroupByName(message.getContent()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		Group groupToAdd = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getContent()); 
 
 		if (!group.hasSubGroup(groupToAdd)) {
 
@@ -258,9 +249,9 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		Message response;
 
-		Group existGroup = groupAccountService.protectedFindGroupByName(message.getTo()); 
-		User potentialModerator = userAccountService.protectedfindUserByName(message.getFrom()); 
-		User userToAdd = userAccountService.protectedfindUserByName(message.getContent());
+		Group existGroup = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		User potentialModerator = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
+		User userToAdd = UserServiceImpl.getInstance().protectedfindUserByName(message.getContent());
 
 
 		if (existGroup.authenticateAsMod(potentialModerator) &&
@@ -289,9 +280,9 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		Message response;
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
-		User potentialModerator = userAccountService.protectedfindUserByName(message.getFrom()); 
-		Group groupToAdd =groupAccountService.protectedFindGroupByName(message.getContent()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		User potentialModerator = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
+		Group groupToAdd =GroupServiceImpl.getInstance().protectedFindGroupByName(message.getContent()); 
 
 
 		if (group.authenticateAsMod(potentialModerator) && 
@@ -320,14 +311,15 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		Message response;
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
-		User userRequesting = userAccountService.protectedfindUserByName(message.getFrom()); 
-		User userToBeRemoved = userAccountService.protectedfindUserByName(message.getContent()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		User userRequesting = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
+		User userToBeRemoved = UserServiceImpl.getInstance().protectedfindUserByName(message.getContent()); 
 
+		boolean authenticatedRequest =  group.authenticateAsMod(userRequesting) || userRequesting.equals(userToBeRemoved);
+		boolean validRemoval = (!group.authenticateAsMod(userToBeRemoved) || group.getModerators().size() > 1) ;
 
-		if ( group.authenticateAsMod(userRequesting) || 
-				userRequesting.equals(userToBeRemoved)) {
-
+		if ( authenticatedRequest && validRemoval ) {
+			
 			group.removeUser(userToBeRemoved);						
 
 			response = generateSuccessResponseMessage(message);
@@ -350,12 +342,15 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 		
 		Message response;
 
-		Group group = groupAccountService.protectedFindGroupByName(message.getTo()); 
-		User userRequesting = userAccountService.protectedfindUserByName(message.getFrom()); 
-		Group groupToBeRemoved = groupAccountService.protectedFindGroupByName(message.getContent()); 
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getTo()); 
+		User userRequesting = UserServiceImpl.getInstance().protectedfindUserByName(message.getFrom()); 
+		Group groupToBeRemoved = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getContent()); 
 
-		if (group.authenticateAsMod(userRequesting)  || 
-				groupToBeRemoved.authenticateAsMod(userRequesting)) {
+		boolean authenticatedRequest = group.authenticateAsMod(userRequesting)  || 
+				groupToBeRemoved.authenticateAsMod(userRequesting);
+		boolean validRemoval = group.hasSubGroup(groupToBeRemoved) ;
+
+		if (authenticatedRequest && validRemoval) {
 			group.removeSubgroup(userRequesting, groupToBeRemoved);						
 
 			response = generateSuccessResponseMessage(message);

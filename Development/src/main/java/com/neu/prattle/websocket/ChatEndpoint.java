@@ -42,10 +42,7 @@ import com.neu.prattle.service.user.UserServiceImpl;
  */
 @ServerEndpoint(value = "/chat/", decoders = MessageDecoder.class, encoders = MessageEncoder.class)
 public class ChatEndpoint {
-    
-    /** The account service. */
-    private UserService accountService = UserServiceImpl.getInstance();
-    
+
     /** The session. */
     private Session session;
     
@@ -88,7 +85,7 @@ public class ChatEndpoint {
     	//Confirm the id doesn't match the name of a user
     	do {
     		id = UUID.randomUUID();
-    		user = accountService.findUserByName(id.toString());
+    		user = UserServiceImpl.getInstance().findUserByName(id.toString());
     	} while (user.isPresent());
          
     	 addEndpoint(session, id);

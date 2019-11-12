@@ -24,13 +24,6 @@ public class GroupMessageProcessor implements IMessageProcessor {
 
 
 	/**
-	 *	Group Service instance
-	 */
-	private static GroupService groupAccountService = GroupServiceImpl.getInstance();
-
-
-
-	/**
 	 *	An Instance of this object
 	 */
 	private static IMessageProcessor instance = new GroupMessageProcessor();
@@ -89,7 +82,7 @@ public class GroupMessageProcessor implements IMessageProcessor {
 	private void processGroupMessage(Message message) {	
 
 
-		Optional<Group> group = groupAccountService.findGroupByName(message.getTo());
+		Optional<Group> group = GroupServiceImpl.getInstance().findGroupByName(message.getTo());
 
 		if (group.isPresent()) {
 
@@ -102,7 +95,7 @@ public class GroupMessageProcessor implements IMessageProcessor {
 						.setFrom(message.getFrom())
 						.setTo(user.getName())
 						.setType(MessageAddresses.DIRECT_MESSAGE.label)
-						.setContentType(message.getContentType())
+						.setContentType(MessageAddresses.GROUP_MESSAGE.label)
 						.setMessageContent(message.getContent())
 						.setAdditionalInfo(message.getTo())
 						.setDateSent(message.getDateSent())
@@ -113,10 +106,10 @@ public class GroupMessageProcessor implements IMessageProcessor {
 			// Send message to subgroups
 			for (Group subGroup : groupSubGroups) {
 				IMessageProcessor.sendMessage(Message.messageBuilder()
-						.setFrom(message.getTo())
+						.setFrom(message.getFrom())
 						.setTo(subGroup.getName())
 						.setType(MessageAddresses.GROUP_MESSAGE.label)
-						.setContentType(message.getContentType())
+						.setContentType(MessageAddresses.GROUP_MESSAGE.label)
 						.setMessageContent(message.getContent())
 						.setAdditionalInfo(message.getAdditionalInfo())
 						.setDateSent(message.getDateSent())

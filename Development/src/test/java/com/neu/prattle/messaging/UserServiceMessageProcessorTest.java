@@ -97,7 +97,7 @@ public class UserServiceMessageProcessorTest {
 		UserServiceImpl.clear();
 		chatEndpoint1.onClose(session1);
 		chatEndpoint2.onClose(session2);
-		chatEndpoint3.onClose(session2);
+		chatEndpoint3.onClose(session3);
 
 		messageArgumentCaptor1 = null;
 		messageArgumentCaptor2 = null;
@@ -160,7 +160,7 @@ public class UserServiceMessageProcessorTest {
 		
 		// create User
 		Message createUserRequest = Message.messageBuilder()
-				.setFrom("")
+				.setFrom(userName1)
 				.setTo("")
 				.setType(MessageAddresses.USER_SERVICE.label)
 				.setContentType(UserServiceCommands.USER_CREATE.label)
