@@ -1,6 +1,7 @@
 package com.neu.prattle.daos;
 
 import com.neu.prattle.model.User;
+import com.neu.prattle.model.UserStatus;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,10 +21,16 @@ public class UserDatabaseImplTest {
 	public void setUp() {
 		User testPerson = new User();
 		testPerson.setName("HughMann");
+		testPerson.setSearchable(true);
+		testPerson.setStatus(UserStatus.ONLINE);
 		User testIndividual = new User();
 		testIndividual.setName("NotarObot");
+		testIndividual.setSearchable(true);
+		testIndividual.setStatus(UserStatus.OFFLINE);
 		User testHuman = new User();
 		testHuman.setName("Bender");
+		testHuman.setSearchable(false);
+		testHuman.setStatus(UserStatus.ONLINE);
 		if (!userImplTest.userExists(testPerson.getName())) {
 			userImplTest.createUser(testPerson);
 		}
@@ -46,6 +53,8 @@ public class UserDatabaseImplTest {
 	public void createUserTest() {
 		User testMan = new User();
 		testMan.setName("Testerberg");
+		testMan.setSearchable(true);
+		testMan.setStatus(UserStatus.IDLE);
 		userImplTest.createUser(testMan);
 		ArrayList<User> testList = new ArrayList<>();
 		testList = (ArrayList<User>) userImplTest.findAllUsers();
@@ -96,6 +105,8 @@ public class UserDatabaseImplTest {
 	public void updateUserTest() {
 		User changer = new User();
 		changer.setName("Original");
+		changer.setSearchable(true);
+		changer.setStatus(UserStatus.AWAY);
 		if (!userImplTest.userExists(changer.getName())) {
 			userImplTest.createUser(changer);
 		}
@@ -109,6 +120,8 @@ public class UserDatabaseImplTest {
 	public void deleteUserByIdTest() {
 		User doomed = new User();
 		doomed.setName("condemned");
+		doomed.setStatus(UserStatus.IDLE);
+		doomed.setSearchable(false);
 		if (!userImplTest.userExists(doomed.getName())) {
 			userImplTest.createUser(doomed);
 		}
@@ -122,6 +135,8 @@ public class UserDatabaseImplTest {
 	public void deleteUserByUsernameTest() {
 		User doomed = new User();
 		doomed.setName("condemned");
+		doomed.setStatus(UserStatus.IDLE);
+		doomed.setSearchable(false);
 		if (!userImplTest.userExists(doomed.getName())) {
 			userImplTest.createUser(doomed);
 		}
