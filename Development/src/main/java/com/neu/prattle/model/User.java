@@ -97,17 +97,7 @@ public class User {
 	public int getId() {
 		return id;
 	}
-	
-	/**
-	 * Gets whether user is a bot.
-	 *
-	 * @return if the user is a bot
-	 */
-	public boolean getBot() {
-		return isBot;
-	}
 
-	
 	/**
 	 * Sets the searchable.
 	 *
@@ -157,4 +147,12 @@ public class User {
         User user = (User) obj;
         return user.name.equals(this.name);
     }
+
+    /**
+     * Determines if the current user is a bot or not.
+     * @return true if user is a bot
+     */
+	public boolean userIsBot() {
+		return this.isBot;
+	}
 }
