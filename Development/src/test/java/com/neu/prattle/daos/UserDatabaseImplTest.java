@@ -62,7 +62,7 @@ public class UserDatabaseImplTest {
 	@Test
 	public void findUserByIdTest() {
 		User testUser = userImplTest.findUserByUsername("HughMann");
-		User testUser2 = userImplTest.findUserById(testUser.getIdNumber());
+		User testUser2 = userImplTest.findUserById(testUser.getId());
 		assertEquals("HughMann", testUser2.getName());
 	}
 
@@ -99,7 +99,7 @@ public class UserDatabaseImplTest {
 		if (!userImplTest.userExists(changer.getName())) {
 			userImplTest.createUser(changer);
 		}
-		changer.setIdNumber(userImplTest.findUserByUsername("HughMann").getIdNumber());
+		changer.setId(userImplTest.findUserByUsername("HughMann").getId());
 		changer.setName("NewName");
 		userImplTest.updateUser(changer);
 		assertEquals("NewName", userImplTest.findUserByUsername("NewName").getName());
@@ -114,7 +114,7 @@ public class UserDatabaseImplTest {
 		}
 		int dbSize = userImplTest.findAllUsers().size();
 		User testUser = userImplTest.findUserByUsername(doomed.getName());
-		userImplTest.deleteUserById(testUser.getIdNumber());
+		userImplTest.deleteUserById(testUser.getId());
 		assertTrue(userImplTest.findAllUsers().size() < dbSize);
 	}
 
