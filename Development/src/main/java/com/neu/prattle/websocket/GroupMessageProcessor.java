@@ -9,7 +9,6 @@ import com.neu.prattle.messaging.MessageAddresses;
 import com.neu.prattle.model.Group;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
-import com.neu.prattle.service.group.GroupService;
 import com.neu.prattle.service.group.GroupServiceImpl;
 
 
