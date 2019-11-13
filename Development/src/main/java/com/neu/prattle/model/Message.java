@@ -184,6 +184,10 @@ public class Message {
         }
 
         public Message build()  {
+        	// Time stamp message if data is not specified
+        	if(message.getDateSent() == null) {
+        		message.setDateSent(new Date(System.currentTimeMillis()));
+        	}
             return message;
         }
     }

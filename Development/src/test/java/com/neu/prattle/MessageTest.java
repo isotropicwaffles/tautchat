@@ -3,9 +3,12 @@ package com.neu.prattle;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import com.neu.prattle.websocket.MessageDecoder;
 import com.neu.prattle.websocket.MessageEncoder;
@@ -67,6 +70,42 @@ public class MessageTest {
 		assertFalse(decoder.willDecode(null));
 		assertTrue(decoder.willDecode("test"));
 
+	}
+	
+	/**
+	 * This function tests whether date setting works as expected
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void dataSetTest() throws InterruptedException {
+		
+		Message noInitialDateSet = Message.messageBuilder()
+				.setFrom("Tom")
+				.setTo("Mark")
+				.setMessageContent("Simple")
+				.build();
+		
+		//This should have a data set automatically during the build function
+		assertNotEquals(null,noInitialDateSet.getDateSent());
+
+		//Current Time
+		Date aDate = new Date(System.currentTimeMillis());
+
+		//Wait some time
+		TimeUnit.SECONDS.sleep(1);
+		
+		Message SetInitialDate = Message.messageBuilder()
+				.setFrom("Tom")
+				.setTo("Mark")
+				.setMessageContent("Simple")
+				.setDateSent(aDate)
+				.build();
+		
+		
+		//The time should match
+		assertEquals(aDate,SetInitialDate.getDateSent());
+
+		
 	}
 
 
