@@ -113,7 +113,7 @@ function generalMessageRouter(message) {
 		userServiveMessageRouter(message);
 	}
 	
-	if (message.from == messageTypes.BROADCAST_MESSAGE) {
+	if (message.type == messageTypes.BROADCAST_MESSAGE) {
 		//  process chat message
 		processChatMessage(message);
 	}
@@ -125,13 +125,13 @@ function generalMessageRouter(message) {
  */
 function userServiveMessageRouter(message) {
 	//  Check if it's a login response
-	if (message.content.indexOf(userServiceContent.LOGIN, 0) !==- 1) {
+	if (message.contentType == userServiceContent.LOGIN) {
 		processLoginResponse(message);
 
 	}
 	
 	//  Check if it's a create user response
-	if (message.content.indexOf(userServiceContent.USER_CREATE, 0) !==- 1) {
+	if (message.contentType == userServiceContent.USER_CREATE) {
 		//  process chat message
 		processUserCreateResponse(message);
 	}
@@ -193,9 +193,9 @@ function createUser() {
 */
 function processLoginResponse(message){
 	if (message.content.includes(userServiceContent.SUCCESS_RESPONSE)){
-		//If successful this should run
-		document.location.href='/prattle/chat.html';
-
+	    // If unsuccessful this should run
+	    error_label.style.color = colors.GREEN;
+		error_label.innerHTML =  "SUCCESS: User successfully logged into session.";	
 	}
 	
 	if (message.content.includes(userServiceContent.FAILURE_RESPONSE)){
