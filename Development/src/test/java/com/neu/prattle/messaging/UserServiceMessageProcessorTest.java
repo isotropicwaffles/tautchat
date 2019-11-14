@@ -330,9 +330,9 @@ public class UserServiceMessageProcessorTest {
 	}
 	
 	/***
-	 * Waits for the message Arguement counter to reaech given count message
+	 * Waits for the message Argument counter to reach given count message
 	 * 
-	 * @param messageArgumentCaptor - the Arguement Capture to check
+	 * @param messageArgumentCaptor - the Argument Capture to check
 	 * @param messageCount - the message counter to stop waiting
 	 * @param timeOut - a time out if getting messages takes to long, given in seconds
 	 * @throws TimeoutException  - if timed out

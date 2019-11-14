@@ -15,6 +15,7 @@ import com.neu.prattle.websocket.ChatEndpoint;
  * @author jdwilson73
  */
 public class Group {
+	private int id;
 
 	/**
 	 * Whether or not the group is still active.
@@ -126,14 +127,8 @@ public class Group {
 		this.subgroups = new LinkedHashSet<>();
 		this.supergroups = new LinkedHashSet<>();
 		
-		//this.subgroups = subgroups;
-		//this.supergroups = supergroups;
-		for (Group sub : subgroups) {
-			this.addSubgroup(adderMod, sub);
-		}
-		for (Group sup : supergroups) {
-			this.addSupergroup(adderMod, sup);
-		}
+		this.subgroups = subgroups;
+		this.supergroups = supergroups;
 		
 		this.memberAliases = memberAliases;
 		
@@ -178,21 +173,7 @@ public class Group {
 	 * @return true if the member belongs to the Group, false otherwise
 	 */
 	public boolean hasMember(User user) {
-		//return this.memberAliases.containsKey(user);
-		
-		if (this.memberAliases.containsKey(user)) {
-			return true;
-		}
-		else {
-			for (Group subgroup: this.subgroups) {
-				if (subgroup.hasMember(user)) {
-					return true;
-				}
-			}
-		}
-		
-		
-		return false;
+		return this.memberAliases.containsKey(user);
 	}
 	
 	
@@ -268,7 +249,7 @@ public class Group {
 			return;
 		}
 		
-		if (this.isActive && (authenticateAsMod(mod, this) || authenticateAsMod(mod, subgroup))) {
+		if (this.isActive && authenticateAsMod(mod, this)) {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.
@@ -322,7 +303,7 @@ public class Group {
 			return;
 		}
 		
-		if (this.isActive && (authenticateAsMod(mod, this) || authenticateAsMod(mod, supergroup))) {
+		if (this.isActive && authenticateAsMod(mod, this)) {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.
@@ -377,11 +358,11 @@ public class Group {
 			ChatEndpoint.directedMessage(message);
 		}
 	}
-	
+
 	public Set<Group> getSubGroups() {
 		return this.subgroups;
 	}
-	
+
 	public Set<Group> getSuperGroups() {
 		return this.supergroups;
 	}
@@ -389,7 +370,8 @@ public class Group {
 	public boolean hasSubGroup(Group group) {
 		return this.subgroups.contains(group);
 	}
-	
+
+
 	public Set<User> getModerators() {
 		return this.moderators;
 	}
@@ -437,7 +419,7 @@ public class Group {
 		}
 		
 		public Group build() throws IllegalArgumentException {
-			if (!groupName.isEmpty() && !moderators.isEmpty()) {
+		  if (groupName.isEmpty() && !moderators.isEmpty()) {
 				return new Group(groupName, moderators, 
 						memberAliases, subgroups, supergroups);
 			}
@@ -489,7 +471,7 @@ public class Group {
 			}
 			
 			return this;
-		}
+}
 		
 		public GroupBuilder setName(String name) {
 			if (!name.isEmpty() && name.charAt(0) != '~') {
@@ -498,5 +480,50 @@ public class Group {
 			
 			return this;
 		}
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean active) {
+		isActive = active;
+	}
+
+
+	public Map<User, String> getMemberAliases() {
+		return memberAliases;
+	}
+
+	public void setMemberAliases(Map<User, String> memberAliases) {
+		this.memberAliases = memberAliases;
+	}
+
+	public Set<User> getJoinUserQueue() {
+		return joinUserQueue;
+	}
+
+	public void setJoinUserQueue(Set<User> joinUserQueue) {
+		this.joinUserQueue = joinUserQueue;
+	}
+
+	public Set<Group> getJoinSubGroupQueue() {
+		return joinSubGroupQueue;
+	}
+
+	public void setJoinSubGroupQueue(Set<Group> joinSubGroupQueue) {
+		this.joinSubGroupQueue = joinSubGroupQueue;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setModerators(Set<User> moderators) {
+		this.moderators = moderators;
 	}
 }

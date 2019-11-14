@@ -403,10 +403,10 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 		
 		Set<User> mods = group.getModerators();
-		Set<User> subGroup_mods = groupToBeRemoved.getModerators();
+		Set<User> subGroupMods = groupToBeRemoved.getModerators();
 
 		boolean authenticatedRequest = mods.contains(userRequesting)  || 
-				subGroup_mods.contains(userRequesting);
+				subGroupMods.contains(userRequesting);
 		boolean validRemoval = group.hasSubGroup(groupToBeRemoved) ;
 
 		if (authenticatedRequest && validRemoval) {
