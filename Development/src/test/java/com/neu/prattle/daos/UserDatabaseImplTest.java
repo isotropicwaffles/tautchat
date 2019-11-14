@@ -16,18 +16,21 @@ import static org.junit.Assert.*;
 public class UserDatabaseImplTest {
 
 	private UserDatabaseImpl userImplTest = new UserDatabaseImpl();
+	private User testPerson;
+	private User testIndividual;
+	private User testHuman;
 
 	@Before
 	public void setUp() {
-		User testPerson = new User();
+		testPerson = new User();
 		testPerson.setName("HughMann");
 		testPerson.setSearchable(true);
 		testPerson.setStatus(UserStatus.ONLINE);
-		User testIndividual = new User();
+		testIndividual = new User();
 		testIndividual.setName("NotarObot");
 		testIndividual.setSearchable(true);
 		testIndividual.setStatus(UserStatus.OFFLINE);
-		User testHuman = new User();
+		testHuman = new User();
 		testHuman.setName("Bender");
 		testHuman.setSearchable(false);
 		testHuman.setStatus(UserStatus.ONLINE);
@@ -152,5 +155,20 @@ public class UserDatabaseImplTest {
 		assertEquals(0, userImplTest.findAllUsers().size());
 	}
 
+	@Test
+	public void isBotTest() {
+		assertFalse(userImplTest.isBot(testPerson));
+	}
+
+	@Test
+	public void isSearchableTest() {
+		assertTrue(userImplTest.isSearchable(testIndividual));
+		assertFalse(userImplTest.isSearchable(testHuman));
+	}
+
+	@Test
+	public void retrieveStatusTest() {
+		assertEquals(UserStatus.ONLINE, userImplTest.retrieveStatus(testPerson));
+	}
 
 }

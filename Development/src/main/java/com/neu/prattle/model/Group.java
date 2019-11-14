@@ -16,6 +16,8 @@ import com.neu.prattle.websocket.ChatEndpoint;
  */
 public class Group {
 
+	private int id;
+
 	/**
 	 * Whether or not the group is still active.
 	 * If Group is deactivated, no changes can be made
@@ -34,7 +36,7 @@ public class Group {
 	 * Set of Users serving as moderators for this Group.
 	 * Every Group must have at least one moderator.
 	 */
-	private Set<User> moderators;
+	private LinkedHashSet<User> moderators;
 	
 	/**
 	 * Current name of the Group (may change).
@@ -99,7 +101,7 @@ public class Group {
 	}
 
 	// Called by builder
-	private Group(String name, Set<User> moderators, 
+	private Group(String name, LinkedHashSet<User> moderators,
 			Map<User, String> memberAliases,
 			Set<Group> subgroups, Set<Group> supergroups) {
 		
@@ -342,11 +344,11 @@ public class Group {
 			ChatEndpoint.directedMessage(message);
 		}
 	}
-	
+
 	public Set<Group> getSubGroups() {
 		return this.subgroups;
 	}
-	
+
 	public Set<Group> getSuperGroups() {
 		return this.supergroups;
 	}
@@ -354,7 +356,8 @@ public class Group {
 	public boolean hasSubGroup(Group group) {
 		return this.subgroups.contains(group);
 	}
-	
+
+
 	public Set<User> getModerators() {
 		return this.moderators;
 	}
@@ -386,7 +389,7 @@ public class Group {
 	
 	public static class GroupBuilder {
 		private String groupName;
-		private Set<User> moderators;
+		private LinkedHashSet<User> moderators;
 		private Map<User, String> memberAliases;
 		private Set<Group> subgroups;
 		private Set<Group> supergroups;
@@ -458,5 +461,50 @@ public class Group {
 			
 			return this;
 		}
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean active) {
+		isActive = active;
+	}
+
+
+	public Map<User, String> getMemberAliases() {
+		return memberAliases;
+	}
+
+	public void setMemberAliases(Map<User, String> memberAliases) {
+		this.memberAliases = memberAliases;
+	}
+
+	public Set<User> getJoinUserQueue() {
+		return joinUserQueue;
+	}
+
+	public void setJoinUserQueue(Set<User> joinUserQueue) {
+		this.joinUserQueue = joinUserQueue;
+	}
+
+	public Set<Group> getJoinSubGroupQueue() {
+		return joinSubGroupQueue;
+	}
+
+	public void setJoinSubGroupQueue(Set<Group> joinSubGroupQueue) {
+		this.joinSubGroupQueue = joinSubGroupQueue;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setModerators(LinkedHashSet<User> moderators) {
+		this.moderators = moderators;
 	}
 }
