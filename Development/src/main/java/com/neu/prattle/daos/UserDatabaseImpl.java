@@ -36,7 +36,7 @@ public class UserDatabaseImpl implements UserDAO {
     }
   }
 
-  private UserStatus stringToUserStatus(String string) {
+  public UserStatus stringToUserStatus(String string) {
     if (string.equalsIgnoreCase("donotdisturb")) {
       return UserStatus.DONOTDISTURB;
     } else if (string.equalsIgnoreCase("away")) {
@@ -117,7 +117,6 @@ public class UserDatabaseImpl implements UserDAO {
         while (results.next()) {
           int id = results.getInt("id");
           String name = results.getString("name");
-
           String status = results.getString("status");
           boolean isBot = results.getBoolean("is_bot");
           boolean searchable = results.getBoolean("searchable");

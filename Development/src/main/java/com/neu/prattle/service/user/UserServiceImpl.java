@@ -1,5 +1,6 @@
 package com.neu.prattle.service.user;
 
+import com.neu.prattle.daos.UserDatabaseImpl;
 import com.neu.prattle.exceptions.GroupNotPresentException;
 import com.neu.prattle.exceptions.UserAlreadyPresentException;
 import com.neu.prattle.model.Group;
@@ -23,160 +24,168 @@ import java.util.Set;
  */
 public class UserServiceImpl implements UserService {
 
-    /***
-     * UserServiceImpl is a Singleton class.
-     */
-    private UserServiceImpl() {
 
+  /**
+   * Database instance for persistence.
+   */
+  private UserDatabaseImpl userDatabase = new UserDatabaseImpl();
+
+  /***
+   * UserServiceImpl is a Singleton class.
+   */
+  private UserServiceImpl() {
+
+  }
+
+  /***
+   * Variable to store the singleton instance
+   *
+   */
+  private static UserService accountService = null;
+
+
+  /**
+   * Call this method to return an instance of this service.
+   *
+   * @return this
+   */
+  public static UserService getInstance() {
+
+    if (accountService == null) {
+      accountService = new UserServiceImpl();
     }
 
-    /***
-     * Variable to store the singleton instance
-     * 
-     */
-    private static UserService accountService = null;
+    return accountService;
+  }
 
 
-    /**
-     * Call this method to return an instance of this service.
-     * @return this
-     */
-    public static UserService getInstance() {
-    	
-    	if (accountService == null) {
-            accountService = new UserServiceImpl();
-    	}
-    	
-        return accountService;
+  /**
+   * Set of user objects
+   */
+  private Set<User> userSet = new HashSet<>();
+
+  /***
+   *
+   * @param name -> The name of the user.
+   * @return An optional wrapper supplying the user.
+   */
+  @Override
+  public Optional<User> findUserByName(String name) {
+    final User user = new User(name);
+    if (userSet.contains(user))
+      return Optional.of(user);
+    else if (userDatabase.userExists(name)) {
+      User userDB = userDatabase.findUserByUsername(name);
+      return Optional.of(userDB);
+    } else {
+      return Optional.empty();
     }
+  }
 
-    
-    /**
-	*	Set of user objects
-	*/
-    private Set<User> userSet = new HashSet<>();
 
-    /***
-     *
-     * @param name -> The name of the user.
-     * @return An optional wrapper supplying the user.
-     */
-    @Override
-    public Optional<User> findUserByName(String name) {
-        final User user = new User(name);
-        if (userSet.contains(user))
-            return Optional.of(user);
-        else
-            return Optional.empty();
+  /***
+   * Attempts to return the user associated with the name and throws and error if the user doesn't exist
+   *
+   * @param name -> The name of the user.
+   * @return The associated user.
+   * @throws GroupNotPresentException if user does not exist
+   */
+  @Override
+  public User protectedfindUserByName(String name) {
+
+    Optional<User> potentialGroup = findUserByName(name);
+
+    if (potentialGroup.isPresent()) {
+      return potentialGroup.get();
+    } else {
+
+      throw new GroupNotPresentException(String.format("User %s could not be found", name));
     }
-    
-    
-    /***
-     * Attempts to return the user associated with the name and throws and error if the user doesn't exist
-     *
-     * @param name -> The name of the user.
-     * @return The associated user.
-     * @throws error if user does not exist
-     */
-    @Override
-	public User protectedfindUserByName(String name) {
-		
-		Optional<User> potentialGroup = findUserByName(name); 
+  }
 
-		if (potentialGroup.isPresent()) {
-			return potentialGroup.get();
-		}
-		else {
 
-			throw new GroupNotPresentException(String.format("User %s could not be found", name));
-		}
-	}
-    
+  /**
+   * Adds users to Service
+   *
+   * @param user : user to add
+   */
+  @Override
+  public synchronized void addUser(User user) {
+    if (userSet.contains(user))
+      throw new UserAlreadyPresentException(String.format("User already present with name: %s", user.getName()));
 
-    /**
- 	*	Adds users to Service 
-	*	
-	*	@param user : user to add
- 	*/
-    @Override
-    public synchronized void addUser(User user) {
-        if (userSet.contains(user))
-            throw new UserAlreadyPresentException(String.format("User already present with name: %s", user.getName()));
+    userSet.add(user);
+    userDatabase.createUser(user);
+  }
 
-        userSet.add(user);
-    }
-    
-    /**
-     * Call this method to clear the current instance of this service.
-     * 
-     */
-    public static void clear() {
-        accountService=null;
-    }
+  /**
+   * Call this method to clear the current instance of this service.
+   */
+  public static void clear() {
+    accountService = null;
+  }
 
-	@Override
-	public void deleteUser(User user) {
-		// TODO Auto-generated method stub
-		
-	}
+  @Override
+  public void deleteUser(User user) {
+    userDatabase.deleteUserByUsername(user.getName());
+  }
 
-	@Override
-	public void friendUsers(User user1, User user2) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+  @Override
+  public void friendUsers(User user1, User user2) throws IOException {
+    // TODO Auto-generated method stub
 
-	@Override
-	public void unfriendUsers(User user1, User user2) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+  }
 
-	@Override
-	public void followUser(User follower, User followee) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+  @Override
+  public void unfriendUsers(User user1, User user2) throws IOException {
+    // TODO Auto-generated method stub
 
-	@Override
-	public void unfollowUser(User follower, User followee) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+  }
 
-	@Override
-	public UserStatus getUserStatus(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public void followUser(User follower, User followee) throws IOException {
+    // TODO Auto-generated method stub
 
-	@Override
-	public Icon getUserDefaultIcon(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  }
 
-	@Override
-	public Set<User> getUserFriends(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public void unfollowUser(User follower, User followee) throws IOException {
+    // TODO Auto-generated method stub
 
-	@Override
-	public Set<User> getUserFollowers(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  }
 
-	@Override
-	public Set<User> getUserFollowees(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public UserStatus getUserStatus(User user) {
+    return userDatabase.retrieveStatus(user);
+  }
 
-	@Override
-	public Set<Group> getUserGroupMemberships(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public Icon getUserDefaultIcon(User user) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<User> getUserFriends(User user) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<User> getUserFollowers(User user) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<User> getUserFollowees(User user) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<Group> getUserGroupMemberships(User user) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
