@@ -16,8 +16,6 @@ import com.neu.prattle.websocket.ChatEndpoint;
  */
 public class Group {
 
-	private int id;
-
 	/**
 	 * Whether or not the group is still active.
 	 * If Group is deactivated, no changes can be made
@@ -36,7 +34,7 @@ public class Group {
 	 * Set of Users serving as moderators for this Group.
 	 * Every Group must have at least one moderator.
 	 */
-	private LinkedHashSet<User> moderators;
+	private Set<User> moderators;
 	
 	/**
 	 * Current name of the Group (may change).
@@ -101,7 +99,7 @@ public class Group {
 	}
 
 	// Called by builder
-	private Group(String name, LinkedHashSet<User> moderators,
+	private Group(String name, Set<User> moderators, 
 			Map<User, String> memberAliases,
 			Set<Group> subgroups, Set<Group> supergroups) {
 		
@@ -110,18 +108,32 @@ public class Group {
 		// Poll UserService to check that User is valid/exists
 		// E.g. trying to make a bot a mod should fail.
 		UserService serv = UserServiceImpl.getInstance();
+
+		// Need a moderator to add the sub/supergroups, so
+		// I grab it here while iterating.
+		User adderMod = null;
 		for (User mod : moderators) {
 			if (!validUser(mod, serv)) {
 				throw new IllegalArgumentException("User is not authorized to moderate this group.");
 			}
+			adderMod = mod;
 		}
 		
 		this.groupName = name;
 		
 		this.moderators = moderators;
+
+		this.subgroups = new LinkedHashSet<>();
+		this.supergroups = new LinkedHashSet<>();
 		
-		this.subgroups = subgroups;
-		this.supergroups = supergroups;
+		//this.subgroups = subgroups;
+		//this.supergroups = supergroups;
+		for (Group sub : subgroups) {
+			this.addSubgroup(adderMod, sub);
+		}
+		for (Group sup : supergroups) {
+			this.addSupergroup(adderMod, sup);
+		}
 		
 		this.memberAliases = memberAliases;
 		
@@ -131,6 +143,13 @@ public class Group {
 
 	private boolean validUser(User moderator, UserService serv) {
 		return serv.findUserByName(moderator.getName()).isPresent() && !moderator.userIsBot();
+	}
+	
+	public void addModerator(User mod, User new_mod) {
+		if (authenticateAsMod(mod, this)) {
+			this.moderators.add(new_mod);
+			this.memberAliases.put(new_mod, new_mod.getName());
+		}
 	}
 	
 	/**
@@ -159,7 +178,21 @@ public class Group {
 	 * @return true if the member belongs to the Group, false otherwise
 	 */
 	public boolean hasMember(User user) {
-		return this.memberAliases.containsKey(user);
+		//return this.memberAliases.containsKey(user);
+		
+		if (this.memberAliases.containsKey(user)) {
+			return true;
+		}
+		else {
+			for (Group subgroup: this.subgroups) {
+				if (subgroup.hasMember(user)) {
+					return true;
+				}
+			}
+		}
+		
+		
+		return false;
 	}
 	
 	
@@ -235,7 +268,7 @@ public class Group {
 			return;
 		}
 		
-		if (this.isActive && authenticateAsMod(mod, this)) {
+		if (this.isActive && (authenticateAsMod(mod, this) || authenticateAsMod(mod, subgroup))) {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.
@@ -289,7 +322,7 @@ public class Group {
 			return;
 		}
 		
-		if (this.isActive && authenticateAsMod(mod, this)) {
+		if (this.isActive && (authenticateAsMod(mod, this) || authenticateAsMod(mod, supergroup))) {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.
@@ -344,11 +377,11 @@ public class Group {
 			ChatEndpoint.directedMessage(message);
 		}
 	}
-
+	
 	public Set<Group> getSubGroups() {
 		return this.subgroups;
 	}
-
+	
 	public Set<Group> getSuperGroups() {
 		return this.supergroups;
 	}
@@ -356,8 +389,7 @@ public class Group {
 	public boolean hasSubGroup(Group group) {
 		return this.subgroups.contains(group);
 	}
-
-
+	
 	public Set<User> getModerators() {
 		return this.moderators;
 	}
@@ -384,12 +416,14 @@ public class Group {
 			} else if(this.joinUserQueue.contains(user)) {
 				this.joinUserQueue.remove(user);
 			}
+			
+			this.moderators.remove(user);
 		}
 	}
 	
 	public static class GroupBuilder {
 		private String groupName;
-		private LinkedHashSet<User> moderators;
+		private Set<User> moderators;
 		private Map<User, String> memberAliases;
 		private Set<Group> subgroups;
 		private Set<Group> supergroups;
@@ -403,7 +437,7 @@ public class Group {
 		}
 		
 		public Group build() throws IllegalArgumentException {
-			if (groupName.isEmpty() && !moderators.isEmpty()) {
+			if (!groupName.isEmpty() && !moderators.isEmpty()) {
 				return new Group(groupName, moderators, 
 						memberAliases, subgroups, supergroups);
 			}
@@ -424,6 +458,9 @@ public class Group {
 		public GroupBuilder addModerator(User user) {
 			if (user != null) {
 				this.moderators.add(user);
+				// TODO Added this to allow mods to have aliases, also--otherwise,
+				// TODO they wouldn't be found when looking in user list.
+				this.memberAliases.put(user, user.getName());
 			}
 			
 			return this;
@@ -455,56 +492,11 @@ public class Group {
 		}
 		
 		public GroupBuilder setName(String name) {
-			if (name.isEmpty() && name.charAt(0) != '~') {
+			if (!name.isEmpty() && name.charAt(0) != '~') {
 				this.groupName = name;
 			}
 			
 			return this;
 		}
-	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean active) {
-		isActive = active;
-	}
-
-
-	public Map<User, String> getMemberAliases() {
-		return memberAliases;
-	}
-
-	public void setMemberAliases(Map<User, String> memberAliases) {
-		this.memberAliases = memberAliases;
-	}
-
-	public Set<User> getJoinUserQueue() {
-		return joinUserQueue;
-	}
-
-	public void setJoinUserQueue(Set<User> joinUserQueue) {
-		this.joinUserQueue = joinUserQueue;
-	}
-
-	public Set<Group> getJoinSubGroupQueue() {
-		return joinSubGroupQueue;
-	}
-
-	public void setJoinSubGroupQueue(Set<Group> joinSubGroupQueue) {
-		this.joinSubGroupQueue = joinSubGroupQueue;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setModerators(LinkedHashSet<User> moderators) {
-		this.moderators = moderators;
 	}
 }
