@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
   /**
    * Database instance for persistence.
    */
-  private UserDatabaseImpl userDatabase = new UserDatabaseImpl();
+  private static UserDatabaseImpl userDatabase = new UserDatabaseImpl();
 
   /***
    * UserServiceImpl is a Singleton class.
@@ -50,11 +50,11 @@ public class UserServiceImpl implements UserService {
    * @return this
    */
   public static UserService getInstance() {
-
+    userSet = new HashSet<>();
+    userSet.addAll(userDatabase.findAllUsers());
     if (accountService == null) {
       accountService = new UserServiceImpl();
     }
-
     return accountService;
   }
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
   /**
    * Set of user objects
    */
-  private Set<User> userSet = new HashSet<>();
+  private static Set<User> userSet;
 
   /***
    *
@@ -74,9 +74,6 @@ public class UserServiceImpl implements UserService {
     final User user = new User(name);
     if (userSet.contains(user)) {
       return Optional.of(user);
-/*    else if (userDatabase.userExists(name)) {
-      User userDB = userDatabase.findUserByUsername(name);
-      return Optional.of(userDB);*/
     } else {
       return Optional.empty();
     }
@@ -115,9 +112,11 @@ public class UserServiceImpl implements UserService {
       throw new UserAlreadyPresentException(String.format("User already present with name: %s", user.getName()));
 
     userSet.add(user);
-/*    if (!userDatabase.userExists(user.getName())) {
+    user.setSearchable(true);
+    user.setStatus(UserStatus.IDLE);
+    if (!userDatabase.userExists(user.getName())) {
       userDatabase.createUser(user);
-    }*/
+    }
   }
 
   /**
@@ -125,6 +124,7 @@ public class UserServiceImpl implements UserService {
    */
   public static void clear() {
     accountService = null;
+    userSet = null;
   }
 
   @Override

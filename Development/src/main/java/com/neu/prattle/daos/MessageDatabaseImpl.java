@@ -24,25 +24,24 @@ public class MessageDatabaseImpl implements MessageDAO {
   private LogManager logManager = LogManager.getLogManager();
   private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  @Override
-  public void createMessage(Message message) {
-    String createMessageSQL = "INSERT INTO `tautdb`.`messages` (`content`, `sender_username`, "
-            + "`recipient_username`, `date_sent`) VALUES ('contentPH', 'senderIdPH', 'recipientIdPH'"
-            + ", 'datePH')";
-
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+  private void executeUpdateQueryHelper(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
-      String sql = createMessageSQL.replace("contentPH", message.getContent());
-      sql = sql.replace("senderIdPH", message.getFrom());
-      sql = sql.replace("recipientIdPH", message.getTo());
-      sql = sql.replace("datePH", simpleDateFormat.format(new Date()));
-      int newId = statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-      message.setId(newId);
+      statement.executeUpdate(string);
     } catch (SQLException e) {
-      logging.log(Level.INFO, "Create Message SQL blew up: " + e.toString());
+      logging.log(Level.INFO, "Update Message Query SQL blew up: " + e.toString());
     }
+  }
+
+  @Override
+  public void createMessage(Message message) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    String createMessageSQL = "INSERT INTO `tautdb`.`messages` (`content`, `sender_username`, "
+            + "`recipient_username`, `date_sent`) VALUES ('" + message.getContent() + "', '"
+            + message.getFrom() + "', '" + message.getTo() + "', '"
+            + simpleDateFormat.format(message.getDateSent()) +"')";
+    executeUpdateQueryHelper(createMessageSQL);
   }
 
   @Override
@@ -105,8 +104,8 @@ public class MessageDatabaseImpl implements MessageDAO {
   }
 
   @Override
-  public int updateMessage(int messageId, Message message) {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  public void updateMessage(int messageId, Message message) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     String updateMessageSQL = "UPDATE `tautdb`.`messages` SET "
             + "`content`= '" + message.getContent()
@@ -114,25 +113,12 @@ public class MessageDatabaseImpl implements MessageDAO {
             + "', `recipient_username`= '" + message.getTo()
             + "', `date_sent`= '" + simpleDateFormat.format(message.getDateSent())
             + "' WHERE `id`=" + messageId;
-
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(updateMessageSQL);
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Update Message SQL blew up: " + e.toString());
-    }
-    return 0;
+    executeUpdateQueryHelper(updateMessageSQL);
   }
 
   @Override
-  public int deleteMessage(int messageId) {
+  public void deleteMessage(int messageId) {
     String deleteMessageSQL = "DELETE FROM `tautdb`.`messages` WHERE `id`=" + messageId;
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(deleteMessageSQL);
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Delete Message SQL blew up: " + e.toString());
-    }
-    return 0;
+    executeUpdateQueryHelper(deleteMessageSQL);
   }
 }

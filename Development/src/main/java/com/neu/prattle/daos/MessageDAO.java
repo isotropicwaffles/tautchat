@@ -39,16 +39,14 @@ public interface MessageDAO {
    *
    * @param messageId the message id
    * @param message   the message
-   * @return 0 denoting completion of method
    */
-  int updateMessage(int messageId, Message message);
+  void updateMessage(int messageId, Message message);
 
   /**
    * Delete a stored message. Do we ever need this in practice?
    *
    * @param messageId id for message record
-   * @return 0 denoting completion of method
    */
-  int deleteMessage(int messageId);
+  void deleteMessage(int messageId);
 }
 

@@ -15,7 +15,6 @@ import com.neu.prattle.websocket.ChatEndpoint;
  * @author jdwilson73
  */
 public class Group {
-
 	private int id;
 
 	/**
@@ -36,7 +35,7 @@ public class Group {
 	 * Set of Users serving as moderators for this Group.
 	 * Every Group must have at least one moderator.
 	 */
-	private LinkedHashSet<User> moderators;
+	private Set<User> moderators;
 	
 	/**
 	 * Current name of the Group (may change).
@@ -403,7 +402,7 @@ public class Group {
 		}
 		
 		public Group build() throws IllegalArgumentException {
-			if (groupName.isEmpty() && !moderators.isEmpty()) {
+		  if (groupName.isEmpty() && !moderators.isEmpty()) {
 				return new Group(groupName, moderators, 
 						memberAliases, subgroups, supergroups);
 			}
@@ -452,7 +451,7 @@ public class Group {
 			}
 			
 			return this;
-		}
+}
 		
 		public GroupBuilder setName(String name) {
 			if (name.isEmpty() && name.charAt(0) != '~') {
@@ -504,7 +503,7 @@ public class Group {
 		this.id = id;
 	}
 
-	public void setModerators(LinkedHashSet<User> moderators) {
+	public void setModerators(Set<User> moderators) {
 		this.moderators = moderators;
 	}
 }
