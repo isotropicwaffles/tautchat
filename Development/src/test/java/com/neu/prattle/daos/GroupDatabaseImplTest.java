@@ -170,6 +170,8 @@ public class GroupDatabaseImplTest {
 
   @Test
   public void findUserAlias() {
+    assertTrue("McTesterson".equalsIgnoreCase(groupDatabase.
+            findUserAlias(testSubGroup, testIndividual)));
   }
 
   @Test
