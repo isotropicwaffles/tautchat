@@ -49,13 +49,15 @@ public class SendingMessagesTest {
 	Session session5;
 	Session session6;
 	
-	final String userName1 = "mockUser4";
-	final String userName2 = "mockUser5";
+	final String userName1 = "HellomockUser4";
+	final String userName2 = "HellomockUser5";
 	final String userName3 = "mockUser6";
 	final String userName4 = "mockUser7";
 	final String userName5 = "mockUser8";
 	final String userName6 = "mockUser9";
-	
+	final String nonOverlappingUserName = "2134124";
+	final String partialOverlappingTwoUserNames = "hello";
+
 	final String groupName1 = "mockGroup1";
 	final String groupName2 = "mockGroup2";
 	final String groupName3 = "mockGroup3";
@@ -90,6 +92,7 @@ public class SendingMessagesTest {
 	ArgumentCaptor<Message> messageArgumentCaptor5;
 	ArgumentCaptor<Message> messageArgumentCaptor6;
 
+	String RESERVED_SEPERATOR = ",";
 	/***
 	 * Called up each test before invocation.
 	 * @throws EncodeException 
@@ -401,7 +404,144 @@ public class SendingMessagesTest {
 		}
 	
 
+	/**
+	 * Tests if a user can send a group invite message
+	 * @throws IOException
+	 * @throws TimeoutException
+	 */
 	
+	@Test
+	public void sendGroupInviteToUserTest() throws IOException, TimeoutException{
+
+		//Invite User to Group that doesn't exist 
+		Message messageToQuery=  Message.messageBuilder()
+				.setFrom(userName1)
+				.setType(MessageAddresses.GROUP_SERVICE.label)
+				.setContentType(GroupServiceCommands.INVITE_USER.label)
+				.setMessageContent(userName2)
+				.setAdditionalInfo(groupName1)
+				.build();
+		
+	
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		Message messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.INVITE_USER.label, messageReceived_1.getContentType());
+		assertEquals(String.format("Group %s could not be found", groupName1) , messageReceived_1.getContent());
+			
+		//Invite NonExisting User to Group that does exist
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, createGroup1, messageArgumentCaptor1);
+
+		messageToQuery.setContent(nonOverlappingUserName);
+
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.INVITE_USER.label, messageReceived_1.getContentType());
+		assertEquals(String.format("User %s could not be found", nonOverlappingUserName) , messageReceived_1.getContent());
+		
+		
+		
+		//Invite user to group that they exist in
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, createGroup1, messageArgumentCaptor1);
+
+		messageToQuery.setFrom(userName2);
+		messageToQuery.setContent(userName1);
+
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.INVITE_USER.label, messageReceived_1.getContentType());
+		assertEquals(failureResponse, messageReceived_1.getContent());
+		
+		
+		//Invite new user group that they not a part of
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, createGroup1, messageArgumentCaptor1);
+
+		messageToQuery.setFrom(userName1);
+		messageToQuery.setContent(userName2);
+
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		Message messageReceived_2 = messageArgumentCaptor2.getValue();
+
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.INVITE_USER.label, messageReceived_1.getContentType());
+		assertEquals(successResponse, messageReceived_1.getContent());
+		
+		
+		assertEquals(userName2, messageReceived_2.getTo());
+		assertEquals(userName1, messageReceived_2.getFrom());
+		assertEquals(GroupServiceCommands.INVITE_USER.label, messageReceived_2.getContentType());
+		assertEquals( messageReceived_2.getFrom() + " invites you to join the following group: " + messageReceived_2.getAdditionalInfo() + "!", messageReceived_2.getContent());
+		assertEquals(groupName1, messageReceived_2.getAdditionalInfo() );
+
+
+	}
+	
+	
+	
+	/**
+	 * Test if you can search for users by partial names
+	 * @throws IOException
+	 * @throws TimeoutException
+	 */
+	@Test
+	public void userSearchMessageTest() throws IOException, TimeoutException{
+
+		//Query No User from non-matching query
+		Message messageToQuery=  Message.messageBuilder()
+				.setFrom(userName1)
+				.setType(MessageAddresses.USER_SERVICE.label)
+				.setContentType(UserServiceCommands.SEARCH_USERS_BY_NAME.label)
+				.setMessageContent(nonOverlappingUserName)
+				.build();
+		
+	
+		String userNameReponses = "";
+
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		Message messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.USER_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(UserServiceCommands.SEARCH_USERS_BY_NAME.label, messageReceived_1.getContentType());
+		assertEquals(userNameReponses, messageReceived_1.getContent());
+
+		
+		
+		//Query partial name of two users
+		messageToQuery.setContent(partialOverlappingTwoUserNames);
+		
+		userNameReponses =  userName1 + RESERVED_SEPERATOR + userName2;
+		
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.USER_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(UserServiceCommands.SEARCH_USERS_BY_NAME.label, messageReceived_1.getContentType());
+		assertEquals(userNameReponses, messageReceived_1.getContent());
+
+			
+		//Query All User from empty string
+
+		messageToQuery.setContent("");
+		
+		userNameReponses =  userName3 + RESERVED_SEPERATOR + userName4 + RESERVED_SEPERATOR + 
+    			userName5 + RESERVED_SEPERATOR + userName6 + RESERVED_SEPERATOR +
+    			userName1 + RESERVED_SEPERATOR + userName2;;
+		
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.USER_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(UserServiceCommands.SEARCH_USERS_BY_NAME.label, messageReceived_1.getContentType());
+		assertEquals(userNameReponses, messageReceived_1.getContent());
+
+	}
 	
 	/***
 	 * Creates and logins in a given user to a given session

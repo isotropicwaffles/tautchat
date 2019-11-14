@@ -32,11 +32,13 @@ public class User {
 	public User(String name) {
 		this.name = name;
 		this.isBot = false;
+		this.setSearchable(true);
 	}
 	
 	public User(String name, boolean isBot) {
 		this.name = name;
 		this.isBot = isBot;
+		this.setSearchable(true);
 	}
 	
   /**

@@ -252,7 +252,81 @@ public class UserServiceMessageProcessorTest {
 		assertEquals(GenericMessageResponses.FAILURE_RESPONSE.label, message.getContent());
 		assertEquals(MessageAddresses.DIRECT_MESSAGE.label, message.getType());
 		
+	}
+	
+	/**
+	 *  Test sending invalid message to userservice messaging processor
+	 * @throws IOException
+	 * @throws TimeoutException
+	 */
+	@Test
+	public void testInvalidContentTypeTest() throws IOException, TimeoutException{
 
+		
+		createAndLoginUser1();
+
+		
+		// Create invalid commands
+		String invalidCommand = "Junk";
+		Message incorrect_message_1 =  Message.messageBuilder()
+				.setFrom(userName1)
+				.setTo("")
+				.setType(MessageAddresses.USER_SERVICE.label)
+				.setContentType(invalidCommand)
+				.setMessageContent("")
+				.build();
+
+		IMessageProcessor mp1 =  MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.USER_SERVICE_PROCESSOR);
+
+		mp1.processMessage(incorrect_message_1);
+		
+		Message messageResponse = messageArgumentCaptor1.getValue();
+
+		assertEquals(MessageAddresses.USER_SERVICE.label, messageResponse.getFrom());
+		assertEquals(invalidCommand, messageResponse.getContentType());
+		assertEquals(userName1, messageResponse.getTo());
+		assertEquals(GenericMessageResponses.UNKNOWN_COMMAND.label, messageResponse.getContent());
+
+	
+	}
+
+	/**
+	 * This just creates and performs a login for user 1
+	 * @throws IOException
+	 * @throws TimeoutException
+	 */
+	private void createAndLoginUser1() throws IOException, TimeoutException {
+		// create User and Login User 
+		Message createUserRequest = Message.messageBuilder()
+				.setFrom(userName1)
+				.setTo("")
+				.setType(MessageAddresses.USER_SERVICE.label)
+				.setContentType(UserServiceCommands.USER_CREATE.label)
+				.setMessageContent(userName1)
+				.build();
+		
+		chatEndpoint1.onMessage(session1, createUserRequest);
+
+		float timeOut = 1; //seconds
+		int messageCount = 1; // message counter to stop waiting
+		waitForMessage(messageArgumentCaptor1, messageCount,  timeOut);
+
+
+		
+		// Successful Login
+		Message loginRequest = Message.messageBuilder()
+				.setFrom("")
+				.setTo("")
+				.setType(MessageAddresses.USER_SERVICE.label)
+				.setContentType(UserServiceCommands.LOGIN.label)
+				.setMessageContent(userName1)
+				.build();
+	
+		chatEndpoint1.onMessage(session1, loginRequest);
+
+		timeOut = 1; //seconds
+		messageCount = 2; // message counter to stop waiting
+		waitForMessage(messageArgumentCaptor1, messageCount,  timeOut);
 	}
 	
 	/***

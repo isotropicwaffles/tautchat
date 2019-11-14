@@ -10,6 +10,7 @@ import com.neu.prattle.model.UserStatus;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,7 +24,6 @@ import java.util.Set;
  * @version dated 2019-10-06
  */
 public class UserServiceImpl implements UserService {
-
 
   /**
    * Database instance for persistence.
@@ -82,6 +82,27 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /***
+	 * Queries partial name and returns all searchable users that names partially match
+	 *
+	 *
+	 * @param partialName -> The name of the user.
+	 * @return Set of users with matching parital name.
+	 */
+	@Override
+	public Set<User> findUserByPartialName(String partialName) {
+
+		Set<User> partialMatches = new LinkedHashSet<>();
+		for(User user : userSet) {
+
+			if(user.getName().toLowerCase().contains(partialName.toLowerCase()) &&
+					user.getSearchable()) {
+				partialMatches.add(user);
+			}
+		}
+
+		return partialMatches;
+	}
 
   /***
    * Attempts to return the user associated with the name and throws and error if the user doesn't exist

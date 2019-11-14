@@ -3,6 +3,7 @@ package com.neu.prattle.service.user;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 import com.neu.prattle.messaging.GenericMessageResponses;
 import com.neu.prattle.messaging.IMessageProcessor;
@@ -58,6 +59,9 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 
 		} else if (message.getContentType().equals(UserServiceCommands.USER_CREATE.label)) {
 			response = processUserCreation(message); 
+			
+		} else if (message.getContentType().equals(UserServiceCommands.SEARCH_USERS_BY_NAME.label)) {
+			response = processSearchForUserName(message); 
 		}
 		else {
 			response = generateResponseMessage(message.getContentType(),
@@ -84,6 +88,20 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 		return message.getType().contentEquals(MessageAddresses.USER_SERVICE.label);
 	}
 
+	/**
+	 * This processes the searching for user by name message
+	 * 
+	 * @param message - a message to be processed
+	 * 
+	 * @return a message in reponse to this request
+	 */
+	private Message processSearchForUserName(Message message) {	
+		
+		Set<User> users = UserServiceImpl.getInstance().findUserByPartialName(message.getContent());
+		
+		return generateResponseMessage( message.getContentType(), UserService.generateUserList(users));
+
+	}
 
 	/**
 	 * This processes the login message
