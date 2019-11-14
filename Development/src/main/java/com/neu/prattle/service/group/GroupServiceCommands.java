@@ -22,6 +22,11 @@ public enum GroupServiceCommands {
     GROUP_DELETE("GROUP_DELETE"), 
     
 	/**
+	* Represents Invite User Command
+	*/
+    INVITE_USER("INVITE_USER"),
+    
+	/**
 	* Represents Group Add User Command
 	*/
     APPROVE_ADD_USER("APPROVE_ADD_USER"),

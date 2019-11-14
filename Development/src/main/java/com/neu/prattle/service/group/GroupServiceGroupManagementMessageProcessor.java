@@ -55,6 +55,7 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 	public boolean canProcessMessage(Message message) {
 		return message.getContentType().contentEquals(GroupServiceCommands.GROUP_CREATE.label) || 
 			   message.getContentType().contentEquals(GroupServiceCommands.GROUP_DELETE.label) || 
+			   message.getContentType().contentEquals(GroupServiceCommands.INVITE_USER.label) ||
 			   message.getContentType().contentEquals(GroupServiceCommands.APPROVE_ADD_USER.label) ||
 			   message.getContentType().contentEquals(GroupServiceCommands.APPROVE_ADD_GROUP.label) ||
 			   message.getContentType().contentEquals(GroupServiceCommands.REMOVE_USER.label) ||
@@ -84,6 +85,10 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 				response = processGroupDelete(message);
 
+			}else if (message.getContentType().equals(GroupServiceCommands.INVITE_USER.label)) {
+
+				response = processInviteUser(message);
+				
 			} else if (message.getContentType().equals(GroupServiceCommands.APPROVE_ADD_USER.label)) {
 
 				response = processApproveAddUser(message);
@@ -183,7 +188,55 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
 
 	}
 
+	
+	
+	
+	/**
+	 * The function sends an invite message to user based on a message
+	 * 
+	 * @param message - a message to be processed
+	 * 
+	 * @return a message in reponse to this request
+	 */
+	private Message processInviteUser(Message message) {	
+		Message response;
+		
+		Group group = GroupServiceImpl.getInstance().protectedFindGroupByName(message.getAdditionalInfo()); 
+		User userToInvite = UserServiceImpl.getInstance().protectedfindUserByName(message.getContent()); 
 
+		if (!group.hasMember(userToInvite)) {
+
+			IMessageProcessor.sendMessage(generateInviteMessage(message));
+
+			response = generateSuccessResponseMessage(message);
+		}else {
+			response = generateFailureResponseMessage(message);
+		}
+				
+		return response;
+	}
+	
+	/**
+	 * The function function generates the invite message
+	 * 
+	 * @param message - a message to be processed
+	 * 
+	 * @return a message in response to this request
+	 */
+	private Message generateInviteMessage(Message message) {	
+		
+		return Message.messageBuilder()
+				.setFrom(message.getFrom())
+				.setTo(message.getContent())
+				.setContentType(message.getContentType())
+				.setType(MessageAddresses.DIRECT_MESSAGE.label)
+				.setMessageContent( message.getFrom() + " invites you to join the following group: " + message.getAdditionalInfo() + "!")
+				.setAdditionalInfo(message.getAdditionalInfo())
+				.build();
+			
+	}
+	
+	
 	/**
 	 * The function submits the request to add of a user to the group
 	 * 

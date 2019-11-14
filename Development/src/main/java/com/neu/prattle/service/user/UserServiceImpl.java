@@ -10,7 +10,6 @@ import com.neu.prattle.model.UserStatus;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -74,7 +73,8 @@ public class UserServiceImpl implements UserService {
 
 
 	/***
-	 * Queries partial name and returns all users that names partially match
+	 * Queries partial name and returns all searchable users that names partially match
+	 *
 	 *
 	 * @param partialName -> The name of the user.
 	 * @return Set of users with matching parital name.
@@ -85,7 +85,8 @@ public class UserServiceImpl implements UserService {
 		Set<User> partialMatches = new LinkedHashSet<>();
 		for(User user : userSet) {
 
-			if(user.getName().toLowerCase().contains(partialName.toLowerCase())) {
+			if(user.getName().toLowerCase().contains(partialName.toLowerCase()) &&
+					user.getSearchable()) {
 				partialMatches.add(user);
 			}
 		}
