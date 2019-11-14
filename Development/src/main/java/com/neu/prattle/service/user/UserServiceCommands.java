@@ -18,7 +18,11 @@ public enum UserServiceCommands {
 	/**
 	* Represents User Create Command
 	*/
-    USER_CREATE("USER_CREATE");
+    USER_CREATE("USER_CREATE"),
+	/**
+	* Represents Search for User by Name Command Command
+	*/
+    SEARCH_USERS_BY_NAME("SEARCH_USERS_BY_NAME");
 
 	
 	 /**

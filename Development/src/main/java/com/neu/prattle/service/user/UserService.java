@@ -4,6 +4,7 @@ import com.neu.prattle.messaging.ReservedCharacters;
 import com.neu.prattle.model.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -48,6 +49,14 @@ public interface UserService {
      */
     Optional<User> findUserByName(String name);
 
+    /***
+     * Returns a list of users that partially match the given nameobject having the same name
+     * as the parameter.
+     *
+     * @param partialName The partial name of the user
+     * @return List<User> which is empty if there are no partial matches
+     */
+    Set<User> findUserByPartialName(String partialName);
     
     /***
      * Attempts to return the user associated with the name and throws and error if the user doesn't exist
