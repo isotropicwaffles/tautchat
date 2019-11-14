@@ -168,11 +168,11 @@ public class GroupDatabaseImplTest {
     assertTrue(groupDatabase.findAllSubGroups().size() > 0);
   }
 
-  @Test
+/*  @Test
   public void findUserAlias() {
     assertTrue("McTesterson".equalsIgnoreCase(groupDatabase.
             findUserAlias(testSubGroup, testIndividual)));
-  }
+  }*/
 
   @Test
   public void createModeratorForGroup() {
