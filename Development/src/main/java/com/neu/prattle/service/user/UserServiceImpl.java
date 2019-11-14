@@ -115,7 +115,9 @@ public class UserServiceImpl implements UserService {
       throw new UserAlreadyPresentException(String.format("User already present with name: %s", user.getName()));
 
     userSet.add(user);
-    userDatabase.createUser(user);
+/*    if (!userDatabase.userExists(user.getName())) {
+      userDatabase.createUser(user);
+    }*/
   }
 
   /**
