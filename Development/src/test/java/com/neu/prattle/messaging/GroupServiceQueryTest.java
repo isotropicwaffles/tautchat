@@ -70,6 +70,8 @@ public class GroupServiceQueryTest {
 	ArgumentCaptor<Message> messageArgumentCaptor2;
 	ArgumentCaptor<Message> messageArgumentCaptor3;
 
+	String RESERVED_SEPERATOR = ",";
+
 
 	/***
 	 * Called up each test before invocation.
@@ -291,7 +293,6 @@ public class GroupServiceQueryTest {
 		commonGroupMessageAsserts(messageArgumentCaptor3.getValue(), userName3, GroupServiceCommands.GET_GROUP_SUPERGROUPS.label,"");
 
 		
-		/** (TODO) Waiting for Dayton to fix his code
 		// One subgroups
 		sendMessageAndWaitForResponse(session1, chatEndpoint1, addSubGroup, messageArgumentCaptor1);
 		sendMessageAndWaitForResponse(session3, chatEndpoint3, getSuperGroups, messageArgumentCaptor3);
@@ -301,8 +302,8 @@ public class GroupServiceQueryTest {
 		addSubGroup.setTo(groupName2);
 		sendMessageAndWaitForResponse(session2, chatEndpoint2, addSubGroup, messageArgumentCaptor2);
 		sendMessageAndWaitForResponse(session3, chatEndpoint3, getSuperGroups, messageArgumentCaptor3);
-		commonGroupMessageAsserts(messageArgumentCaptor3.getValue(), userName3, GroupServiceCommands.GET_GROUP_SUPERGROUPS.label, groupName2);
-		 */
+		commonGroupMessageAsserts(messageArgumentCaptor3.getValue(), userName3, GroupServiceCommands.GET_GROUP_SUPERGROUPS.label, groupName1 + RESERVED_SEPERATOR + groupName2 );
+	
 		
 		}
 	@Test
