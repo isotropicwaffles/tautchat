@@ -72,11 +72,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public Optional<User> findUserByName(String name) {
     final User user = new User(name);
-    if (userSet.contains(user))
+    if (userSet.contains(user)) {
       return Optional.of(user);
-    else if (userDatabase.userExists(name)) {
+/*    else if (userDatabase.userExists(name)) {
       User userDB = userDatabase.findUserByUsername(name);
-      return Optional.of(userDB);
+      return Optional.of(userDB);*/
     } else {
       return Optional.empty();
     }

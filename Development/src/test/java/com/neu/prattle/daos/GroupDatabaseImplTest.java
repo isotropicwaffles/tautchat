@@ -64,17 +64,39 @@ public class GroupDatabaseImplTest {
     if (!groupDatabase.groupExists(testGroupOther.getName())) {
       groupDatabase.createGroup(testGroupOther);
     }
-    groupDatabase.createSubGroupForGroup(testGroup, testSubGroup);
-    groupDatabase.createSubGroupForGroup(testGroup, testGroupOther);
-    groupDatabase.createModeratorForGroup(testPerson, testGroup);
-    groupDatabase.createModeratorForGroup(testIndividual, testSubGroup);
-    groupDatabase.createModeratorForGroup(testHuman, testGroupOther);
-    groupDatabase.createUserAliasForGroup("McTesterson", testIndividual, testSubGroup);
-    groupDatabase.addUserToGroup(testPerson, testGroup);
-    groupDatabase.addUserToGroup(testIndividual, testSubGroup);
-    groupDatabase.addUserToGroup(testHuman, testGroupOther);
-    groupDatabase.addUserToGroup(testIndividual, testGroup);
-    groupDatabase.addUserToGroup(testHuman, testGroup);
+    if (!groupDatabase.subgroupForGroupExists(testGroup, testSubGroup)) {
+      groupDatabase.createSubGroupForGroup(testGroup, testSubGroup);
+    }
+    if (!groupDatabase.subgroupForGroupExists(testGroup, testGroupOther)) {
+      groupDatabase.createSubGroupForGroup(testGroup, testGroupOther);
+    }
+    if (!groupDatabase.moderatorForGroupExists(testPerson, testGroup)) {
+      groupDatabase.createModeratorForGroup(testPerson, testGroup);
+    }
+    if (!groupDatabase.moderatorForGroupExists(testIndividual, testSubGroup)) {
+      groupDatabase.createModeratorForGroup(testIndividual, testSubGroup);
+    }
+    if (!groupDatabase.moderatorForGroupExists(testHuman, testGroupOther)) {
+      groupDatabase.createModeratorForGroup(testHuman, testGroupOther);
+    }
+    if (!groupDatabase.userAliasForGroupExists(testIndividual, testSubGroup)) {
+      groupDatabase.createUserAliasForGroup("McTesterson", testIndividual, testSubGroup);
+    }
+    if (!groupDatabase.isUserMemberOfGroup(testPerson, testGroup)) {
+      groupDatabase.addUserToGroup(testPerson, testGroup);
+    }
+    if (!groupDatabase.isUserMemberOfGroup(testIndividual, testSubGroup)) {
+      groupDatabase.addUserToGroup(testIndividual, testSubGroup);
+    }
+    if (!groupDatabase.isUserMemberOfGroup(testHuman, testGroupOther)) {
+      groupDatabase.addUserToGroup(testHuman, testGroupOther);
+    }
+    if (!groupDatabase.isUserMemberOfGroup(testIndividual, testGroup)) {
+      groupDatabase.addUserToGroup(testIndividual, testGroup);
+    }
+    if (!groupDatabase.isUserMemberOfGroup(testHuman, testGroup)) {
+      groupDatabase.addUserToGroup(testHuman, testGroup);
+    }
   }
 
   @After
@@ -168,62 +190,88 @@ public class GroupDatabaseImplTest {
     assertTrue(groupDatabase.findAllSubGroups().size() > 0);
   }
 
-/*  @Test
+  @Test
   public void findUserAlias() {
     assertTrue("McTesterson".equalsIgnoreCase(groupDatabase.
             findUserAlias(testSubGroup, testIndividual)));
-  }*/
+  }
 
   @Test
   public void createModeratorForGroup() {
+    groupDatabase.createModeratorForGroup(testHuman, testGroup);
+    assertTrue(groupDatabase.findAllModeratorsByGroup(testGroup).size() > 1);
   }
 
   @Test
   public void deleteModeratorForGroup() {
+    groupDatabase.createModeratorForGroup(testHuman, testGroup);
+    groupDatabase.deleteModeratorForGroup(testHuman, testGroup);
+    assertEquals(0, groupDatabase.findAllModeratorsByGroup(testGroup).size());
   }
 
   @Test
   public void moderatorForGroupExists() {
+    assertTrue(groupDatabase.moderatorForGroupExists(testPerson, testGroup));
   }
 
   @Test
   public void createSubGroupForGroup() {
+    groupDatabase.createSubGroupForGroup(testSubGroup, testGroup);
+    assertTrue(groupDatabase.findAllSubGroupsByGroup(testSubGroup).size() > 0);
   }
 
   @Test
   public void subgroupForGroupExists() {
+    assertTrue(groupDatabase.subgroupForGroupExists(testGroup, testSubGroup));
+    assertFalse(groupDatabase.subgroupForGroupExists(testSubGroup, testGroupOther));
   }
 
   @Test
   public void deleteSubGroupForGroup() {
+    groupDatabase.createSubGroupForGroup(testSubGroup, testGroup);
+    assertTrue(groupDatabase.findAllSubGroupsByGroup(testSubGroup).size() > 1);
+    groupDatabase.deleteSubGroupForGroup(testSubGroup, testGroup);
+    assertEquals(0, groupDatabase.findAllSubGroupsByGroup(testSubGroup).size());
   }
 
   @Test
   public void createUserAliasForGroup() {
+    groupDatabase.createUserAliasForGroup("Godzilla", testHuman, testGroupOther);
+    assertTrue("Godzilla".equalsIgnoreCase(groupDatabase.findUserAlias(testGroupOther, testHuman)));
   }
 
   @Test
   public void deleteUserAliasForGroup() {
+    groupDatabase.createUserAliasForGroup("Godzilla", testHuman, testGroupOther);
+    groupDatabase.deleteUserAliasForGroup(testHuman, testGroupOther);
+    assertFalse("Godzilla".equalsIgnoreCase(groupDatabase.findUserAlias(testGroupOther, testHuman)));
   }
 
   @Test
   public void userAliasForGroupExists() {
+    assertTrue(groupDatabase.userAliasForGroupExists(testIndividual, testSubGroup));
   }
 
   @Test
   public void addUserToGroup() {
+    groupDatabase.addUserToGroup(testIndividual, testGroupOther);
+    assertTrue(groupDatabase.findAllGroupMembers(testGroupOther).size() > 1);
   }
 
   @Test
   public void deleteUserFromGroup() {
+    groupDatabase.addUserToGroup(testIndividual, testGroupOther);
+    groupDatabase.deleteUserFromGroup(testIndividual, testGroupOther);
+    assertEquals(1, groupDatabase.findAllGroupMembers(testGroupOther).size());
   }
 
   @Test
   public void isUserMemberOfGroup() {
+    assertTrue(groupDatabase.isUserMemberOfGroup(testPerson, testGroup));
   }
 
   @Test
   public void findAllGroupMembersTest() {
-
+    assertTrue(groupDatabase.findAllGroupMembers(testGroup).size() > 2);
   }
 }
