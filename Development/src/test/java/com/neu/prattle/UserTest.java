@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import com.neu.prattle.controller.UserController;
 import com.neu.prattle.daos.UserDatabaseImpl;
+import com.neu.prattle.model.Icon;
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
 import com.neu.prattle.service.user.UserService;
@@ -168,6 +169,14 @@ public class UserTest {
 		User u = new User();
 		u.setSearchable(true);
 		assertTrue(u.getSearchable());
+	}
+
+	@Test
+	public void testIcon() {
+		Icon icon = new Icon("testfiller");
+		assertTrue(icon.getIconURL().equalsIgnoreCase("testfiller"));
+		icon.setIconURL("changed");
+		assertTrue(icon.getIconURL().equalsIgnoreCase("changed"));
 	}
 
 }
