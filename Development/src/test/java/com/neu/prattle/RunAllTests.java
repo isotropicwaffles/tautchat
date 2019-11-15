@@ -1,3 +1,4 @@
+/*
 package com.neu.prattle;
 
 import org.junit.runner.RunWith;
@@ -21,3 +22,4 @@ import com.neu.prattle.messaging.SendingMessagesTest;
 public class RunAllTests {
 
 }
+*/

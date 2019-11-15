@@ -44,10 +44,7 @@ public class MessageDatabaseImplTest {
 
   @Test
   public void createMessageTest() {
-    List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-    for (Message message : testing) {
-      assertTrue(message.getContent().equals(testMessage.getContent()));
-    }
+    assertEquals(testMessage, messageDatabase.findMessage(testMessage));
   }
 
   @Test
