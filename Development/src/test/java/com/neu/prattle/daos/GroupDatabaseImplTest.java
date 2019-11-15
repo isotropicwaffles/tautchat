@@ -203,7 +203,7 @@ public class GroupDatabaseImplTest {
   public void createSubGroupForGroup() {
     setUpSubGroups();
     groupDatabase.createSubGroupForGroup(testSubGroup, testGroup);
-    assertTrue(groupDatabase.findAllSubGroupsByGroup(testSubGroup).size() > 0);
+    assertTrue(groupDatabase.subgroupForGroupExists(testSubGroup, testGroup));
   }
 
   @Test
@@ -245,7 +245,7 @@ public class GroupDatabaseImplTest {
   public void addUserToGroup() {
     setUpUserGroupMembers();
     groupDatabase.addUserToGroup(testIndividual, testGroupOther);
-    assertTrue(groupDatabase.findAllGroupMembers(testGroupOther).size() > 1);
+    assertTrue(groupDatabase.isUserMemberOfGroup(testIndividual, testGroupOther));
   }
 
   @Test
@@ -253,7 +253,7 @@ public class GroupDatabaseImplTest {
     setUpUserGroupMembers();
     groupDatabase.addUserToGroup(testIndividual, testGroupOther);
     groupDatabase.deleteUserFromGroup(testIndividual, testGroupOther);
-    assertEquals(1, groupDatabase.findAllGroupMembers(testGroupOther).size());
+    assertFalse(groupDatabase.isUserMemberOfGroup(testIndividual, testGroupOther));
   }
 
   @Test
