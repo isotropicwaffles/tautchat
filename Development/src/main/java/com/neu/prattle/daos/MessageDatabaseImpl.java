@@ -27,8 +27,8 @@ public class MessageDatabaseImpl implements MessageDAO {
 
   private void executeUpdateQueryHelper(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(string);
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      statement.executeUpdate();
     } catch (SQLException e) {
       logging.log(Level.INFO, "Update Message Query SQL blew up: " + e.toString());
     }
@@ -64,8 +64,8 @@ public class MessageDatabaseImpl implements MessageDAO {
     ArrayList<Message> messages = new ArrayList<>();
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findAllUserMessagesSQL)) {
+         PreparedStatement statement = connection.prepareStatement(findAllUserMessagesSQL)) {
+      try (ResultSet results = statement.executeQuery()) {
         while (results.next()) {
           int id = results.getInt("id");
           String content = results.getString("content");
@@ -97,8 +97,8 @@ public class MessageDatabaseImpl implements MessageDAO {
 
     String findMessageSQL = "SELECT * FROM `tautdb`.`messages` WHERE  `id`=" + message.getId();
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findMessageSQL)) {
+         PreparedStatement statement = connection.prepareStatement(findMessageSQL)) {
+      try (ResultSet results = statement.executeQuery()) {
         if (results.next()) {
           int id = results.getInt("id");
           String content = results.getString("content");

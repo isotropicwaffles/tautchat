@@ -5,9 +5,9 @@ import com.neu.prattle.model.Group;
 import com.neu.prattle.model.User;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,8 +31,8 @@ public class GroupDatabaseImpl implements GroupDAO {
 
   private void executeUpdateQueryHelper(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(string);
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      statement.executeUpdate();
     } catch (SQLException e) {
       logging.log(Level.INFO, "Update Group Query SQL blew up: " + e.toString());
     }
@@ -40,8 +40,8 @@ public class GroupDatabaseImpl implements GroupDAO {
 
   private boolean executeBooleanQuery(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(string)) {
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      try (ResultSet results = statement.executeQuery()) {
         return results.next();
       }
     } catch (SQLException e) {
@@ -59,8 +59,8 @@ public class GroupDatabaseImpl implements GroupDAO {
     ArrayList<Boolean> isSearchableList = new ArrayList<>();
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(string)) {
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      try (ResultSet results = statement.executeQuery()) {
         while (results.next()) {
           idList.add(results.getInt("id"));
           nameList.add(results.getString("name"));
@@ -96,8 +96,8 @@ public class GroupDatabaseImpl implements GroupDAO {
     ArrayList<String> primaryModeratorList = new ArrayList<>();
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet resultSet = statement.executeQuery(string)) {
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
           idList.add(resultSet.getInt("id"));
           isActiveList.add(resultSet.getBoolean(ISACTIVE));
@@ -172,8 +172,8 @@ public class GroupDatabaseImpl implements GroupDAO {
     String findGroupByNameSQL = SELECTALLGROUP + groupName + "'";
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet resultSet = statement.executeQuery(findGroupByNameSQL)) {
+         PreparedStatement statement = connection.prepareStatement(findGroupByNameSQL)) {
+      try (ResultSet resultSet = statement.executeQuery()) {
         if (resultSet.next()) {
           int id = resultSet.getInt("id");
           boolean isActive = resultSet.getBoolean(ISACTIVE);
@@ -224,8 +224,8 @@ public class GroupDatabaseImpl implements GroupDAO {
     String findPrimaryModeratorSQL = "SELECT `primary_moderator` FROM `tautdb`.`groups` "
             + "WHERE `group_name`='" + group.getName() + "'";
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findPrimaryModeratorSQL)) {
+         PreparedStatement statement = connection.prepareStatement(findPrimaryModeratorSQL)) {
+      try (ResultSet results = statement.executeQuery()) {
         if (results.next()) {
           return userDatabase.findUserByUsername(results.getString(PRIMARYMODERATOR));
         }
@@ -340,8 +340,8 @@ public class GroupDatabaseImpl implements GroupDAO {
             + user.getName() + "' AND `group_name`='" + group.getName() + "'";
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findUserAliasSQL)) {
+         PreparedStatement statement = connection.prepareStatement(findUserAliasSQL)) {
+      try (ResultSet results = statement.executeQuery()) {
         if (results.next()) {
           return results.getString("alias");
         }

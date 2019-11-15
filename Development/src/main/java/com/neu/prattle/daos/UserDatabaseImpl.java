@@ -5,9 +5,9 @@ import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -29,8 +29,8 @@ public class UserDatabaseImpl implements UserDAO {
 
   private void executeUpdateHelper(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(string);
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      statement.executeUpdate();
     } catch (SQLException e) {
       logging.log(Level.INFO, "Execute Update SQL blew up: " + e.toString());
     }
@@ -38,8 +38,8 @@ public class UserDatabaseImpl implements UserDAO {
 
   private boolean executeBooleanQuery(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(string)) {
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      try (ResultSet results = statement.executeQuery()) {
         return results.next();
       }
     } catch (SQLException e) {
@@ -50,8 +50,8 @@ public class UserDatabaseImpl implements UserDAO {
 
   private User returnUserQuery(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(string)) {
+         PreparedStatement statement = connection.prepareStatement(string)) {
+      try (ResultSet results = statement.executeQuery()) {
         if (results.next()) {
           int id = results.getInt("id");
           String name = results.getString("name");
@@ -105,8 +105,8 @@ public class UserDatabaseImpl implements UserDAO {
     ArrayList<User> users = new ArrayList<>();
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findAllUsersSQL)) {
+         PreparedStatement statement = connection.prepareStatement(findAllUsersSQL)) {
+      try (ResultSet results = statement.executeQuery()) {
         while (results.next()) {
           int id = results.getInt("id");
           String name = results.getString("name");
@@ -195,8 +195,8 @@ public class UserDatabaseImpl implements UserDAO {
             + user.getName() + "'";
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(userStatusSQL)) {
+         PreparedStatement statement = connection.prepareStatement(userStatusSQL)) {
+      try (ResultSet results = statement.executeQuery()) {
         if (results.next()) {
           String status = results.getString(STATUS);
           return stringToUserStatus(status);
