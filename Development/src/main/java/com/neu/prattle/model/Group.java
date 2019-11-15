@@ -249,7 +249,7 @@ public class Group {
 			return;
 		}
 		
-		if (this.isActive && authenticateAsMod(mod, this)) {
+		if (this.isActive && (authenticateAsMod(mod, this) || authenticateAsMod(mod, subgroup))) {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.
@@ -303,7 +303,7 @@ public class Group {
 			return;
 		}
 		
-		if (this.isActive && authenticateAsMod(mod, this)) {
+		if (this.isActive && (authenticateAsMod(mod, this) || authenticateAsMod(mod, supergroup))) {
 			// If subgroup already exists, then that means
 			// this is likely the second call of the method,
 			// so mission accomplished.

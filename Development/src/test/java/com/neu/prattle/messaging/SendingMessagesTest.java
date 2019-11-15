@@ -101,6 +101,11 @@ public class SendingMessagesTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException, TimeoutException {
+		
+		UserServiceImpl.getInstance();
+		
+		UserServiceImpl.clearAllUsers();
+
 		// Create an instance of argument captor. As the name goes, useful to capture argumemnts passed
 		// to our mock object.
 		messageArgumentCaptor1 = ArgumentCaptor.forClass(Message.class);
@@ -130,7 +135,7 @@ public class SendingMessagesTest {
 		chatEndpoint4.onOpen(session4, userName4);
 		chatEndpoint5.onOpen(session5, userName5);
 		chatEndpoint6.onOpen(session6, userName6);
-
+		//Remove the current users loaded from the database
 		// Login Users
 		userCreateAndLogin(userName1, chatEndpoint1, session1, messageArgumentCaptor1);
 		userCreateAndLogin(userName2, chatEndpoint2, session2, messageArgumentCaptor2);
@@ -413,6 +418,7 @@ public class SendingMessagesTest {
 	@Test
 	public void sendGroupInviteToUserTest() throws IOException, TimeoutException{
 
+		
 		//Invite User to Group that doesn't exist 
 		Message messageToQuery=  Message.messageBuilder()
 				.setFrom(userName1)

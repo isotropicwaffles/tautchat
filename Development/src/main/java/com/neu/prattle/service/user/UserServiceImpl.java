@@ -3,12 +3,9 @@ package com.neu.prattle.service.user;
 import com.neu.prattle.daos.UserDatabaseImpl;
 import com.neu.prattle.exceptions.GroupNotPresentException;
 import com.neu.prattle.exceptions.UserAlreadyPresentException;
-import com.neu.prattle.model.Group;
-import com.neu.prattle.model.Icon;
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -50,9 +47,10 @@ public class UserServiceImpl implements UserService {
    * @return this
    */
   public static UserService getInstance() {
-    userSet = new HashSet<>();
-    userSet.addAll(userDatabase.findAllUsers());
+    
     if (accountService == null) {
+      userSet = new HashSet<>();
+      userSet.addAll(userDatabase.findAllUsers());
       accountService = new UserServiceImpl();
     }
     return accountService;
@@ -147,68 +145,16 @@ public class UserServiceImpl implements UserService {
     accountService = null;
     userSet = null;
   }
+  
+  
 
-  @Override
-  public void deleteUser(User user) {
-    userDatabase.deleteUserByUsername(user.getName());
+  /**
+   * Call this method to clear the current set of users stored
+   */
+  public static void clearAllUsers() {
+    userSet = new HashSet<>();
   }
 
-  @Override
-  public void friendUsers(User user1, User user2) throws IOException {
-    // TODO Auto-generated method stub
 
-  }
 
-  @Override
-  public void unfriendUsers(User user1, User user2) throws IOException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void followUser(User follower, User followee) throws IOException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void unfollowUser(User follower, User followee) throws IOException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public UserStatus getUserStatus(User user) {
-    return userDatabase.retrieveStatus(user);
-  }
-
-  @Override
-  public Icon getUserDefaultIcon(User user) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Set<User> getUserFriends(User user) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Set<User> getUserFollowers(User user) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Set<User> getUserFollowees(User user) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Set<Group> getUserGroupMemberships(User user) {
-    // TODO Auto-generated method stub
-    return null;
-  }
 }
