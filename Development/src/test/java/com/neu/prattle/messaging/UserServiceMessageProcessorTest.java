@@ -66,6 +66,10 @@ public class UserServiceMessageProcessorTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException {
+		UserServiceImpl.getInstance();
+		
+		UserServiceImpl.clearAllUsers();
+
 		// Create an instance of argument captor. As the name goes, useful to capture argumemnts passed
 		// to our mock object.
 		messageArgumentCaptor1 = ArgumentCaptor.forClass(Message.class);
