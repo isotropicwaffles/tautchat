@@ -45,16 +45,18 @@ public class UserTest {
 	// This method just tries to add 
 	@Test
 	public void setUserTest() throws IOException{
-		User u = new User();
-		u.setName("Mike");
+		User u = new User.UserBuilder()
+				.setName("Mike")
+				.build();
 		as.addUser(u);
 	}
 
 	// This method just tries to add 
 	@Test
 	public void getUserTest() throws IOException{
-		User u = new User();
-		u.setName("Mike");
+		User u = new User.UserBuilder()
+				.setName("Mike")
+				.build();
 		as.addUser(u);
 		Optional<User> user = as.findUserByName("Mike");
 		assertTrue(user.isPresent());
@@ -63,8 +65,9 @@ public class UserTest {
 	// This method just tries to create an empty user and set the name 
 	@Test
 	public void emptyUserConstructorTest(){
-		User user = new User();
-		user.setName("John");
+		User user = new User.UserBuilder()
+				.setName("John")
+				.build();
 		assertEquals("John",user.getName());
 	}
 
@@ -72,8 +75,9 @@ public class UserTest {
 	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void notEqualObjectTest(){
-		User user = new User();
-		user.setName("John");
+		User user = new User.UserBuilder()
+				.setName("John")
+				.build();
 		assertFalse(user.equals(new String()));
 	}
 
@@ -83,8 +87,9 @@ public class UserTest {
 		UserController controller = new UserController();
 		Response failure409 = Response.status(409).build();
 
-		User u = new User();
-		u.setName("Jack");
+		User u = new User.UserBuilder()
+				.setName("Jack")
+				.build();
 		controller.createUserAccount(u);
 
 		assertEquals(failure409.getStatus(), controller.createUserAccount(u).getStatus());
@@ -96,8 +101,9 @@ public class UserTest {
 		UserController controller = new UserController();
 		Response okayStatus= Response.ok().build();
 
-		User u = new User();
-		u.setName("Tim");
+		User u = new User.UserBuilder()
+				.setName("Tim")
+				.build();
 		assertEquals(okayStatus.getStatus(), controller.createUserAccount(u).getStatus());
 	}
 
@@ -105,69 +111,82 @@ public class UserTest {
 
 	@Test
 	public void testUserName() {
-		User u = new User();
-		u.setName("Marco");
+		User u = new User.UserBuilder()
+				.setName("Marco")
+				.build();
 		assertEquals("Marco",u.getName());
 	}
 
 	@Test
 	public void testUserStatusAway() {
-		User u = new User();
-		u.setStatus(UserStatus.AWAY);
+		User u = new User.UserBuilder()
+				.setStatus(UserStatus.AWAY)
+				.build();
 		assertEquals(UserStatus.AWAY,u.getStatus());
 	}
 
 	@Test
 	public void testUserStatusDNN() {
-		User u = new User();
-		u.setStatus(UserStatus.DONOTDISTURB);
+		User u = new User.UserBuilder()
+				.setStatus(UserStatus.DONOTDISTURB)
+				.build();
 		assertEquals(UserStatus.DONOTDISTURB,u.getStatus());
 	}
 
 	@Test
 	public void testUserStatusIdle() {
-		User u = new User();
-		u.setStatus(UserStatus.IDLE);
+		User u = new User.UserBuilder()
+				.setStatus(UserStatus.IDLE)
+				.build();
 		assertEquals(UserStatus.IDLE,u.getStatus());
 	}
 
 	@Test
 	public void testUserStatusOnline() {
-		User u = new User();
-		u.setStatus(UserStatus.ONLINE);
+		User u = new User.UserBuilder()
+				.setStatus(UserStatus.ONLINE)
+				.build();
 		assertEquals(UserStatus.ONLINE,u.getStatus());
 	}
 
 	@Test
 	public void testUserStatusOffline() {
-		User u = new User();
-		u.setStatus(UserStatus.OFFLINE);
+		User u = new User.UserBuilder()
+				.setStatus(UserStatus.OFFLINE)
+				.build();
 		assertEquals(UserStatus.OFFLINE,u.getStatus());
 	}
 
 	@Test
 	public void testUserId() {
-		User u = new User();
-		u.setId(12);
+		User u = new User.UserBuilder()
+				.setId(12)
+				.build();
 		assertEquals(12,u.getId());
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testUserIdNeg() {
-		User u = new User();
-		u.setId(-412);
+		User u = new User.UserBuilder()
+				.setId(-412)
+				.build();
 	}
 
 	@Test
 	public void testBot() {
-		User u = new User("Mike",true);
+		
+		User u = new User.UserBuilder()
+				.setName("Mike")
+				.setBot(true)
+				.build();
 		assertTrue(u.userIsBot());
 	}
 
 	@Test
 	public void testSearchable() {
-		User u = new User();
-		u.setSearchable(true);
+		User u = new User.UserBuilder()
+				.setSearchable(true)
+				.build();
 		assertTrue(u.getSearchable());
 	}
 

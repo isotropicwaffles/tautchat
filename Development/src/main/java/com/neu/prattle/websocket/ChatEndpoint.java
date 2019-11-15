@@ -8,6 +8,7 @@ package com.neu.prattle.websocket;
  */
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
@@ -152,9 +153,12 @@ public class ChatEndpoint {
     @OnClose
     public void onClose(Session session) {
         chatEndpoints.remove(this);
-        Message message = new Message();
-        message.setFrom(users.get(session.getId()));
-        message.setContent("Disconnected!");
+        
+        Message message = Message.messageBuilder()
+                .setMessageContent("Disconnected!")
+                .setFrom(users.get(session.getId()))
+                .setDateSent(new Date())
+                .build();
         
         broadcast(message);
     }

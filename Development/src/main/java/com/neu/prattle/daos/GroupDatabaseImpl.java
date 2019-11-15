@@ -74,12 +74,16 @@ public class GroupDatabaseImpl implements GroupDAO {
     }
     int index = 0;
     while (index < idList.size()) {
-      User user = new User(nameList.get(index), isBotList.get(index));
-      user.setId(idList.get(index));
-      user.setStatus(userDatabase.stringToUserStatus(statusList.get(index)));
-      user.setSearchable(isSearchableList.get(index));
-      groupMembers.add(user);
-      index++;
+        User user = new User.UserBuilder()
+        		.setName(nameList.get(index))
+        		.setId(idList.get(index))
+        		.setBot(isBotList.get(index))
+        		.setSearchable(isSearchableList.get(index))
+        		.setStatus(userDatabase.stringToUserStatus(statusList.get(index)))
+        		.build();
+
+        groupMembers.add(user);
+        index++;
     }
     return groupMembers;
   }

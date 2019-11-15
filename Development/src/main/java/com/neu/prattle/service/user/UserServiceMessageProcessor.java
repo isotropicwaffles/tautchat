@@ -148,8 +148,11 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
 		Optional<User> user = UserServiceImpl.getInstance().findUserByName(userName);
 
 		if (!user.isPresent()) {
-
-			UserServiceImpl.getInstance().addUser(new User(userName));
+			User user1 = new User.UserBuilder()
+					.setName(userName)
+					.build();
+			
+			UserServiceImpl.getInstance().addUser(user1);
 
 			response = generateResponseMessage(message.getContentType(),
 							GenericMessageResponses.SUCCESS_RESPONSE.label);

@@ -58,11 +58,13 @@ public class UserDatabaseImpl implements UserDAO {
           String status = results.getString(STATUS);
           boolean isBot = results.getBoolean(ISBOT);
           boolean searchable = results.getBoolean(SEARCHABLE);
-          User user = new User(name, isBot);
-          user.setId(id);
-          user.setStatus(stringToUserStatus(status));
-          user.setSearchable(searchable);
-          return user;
+          return User.userBuilder()
+        		  .setName(name)
+        		  .setBot(isBot)
+        		  .setId(id)
+        		  .setStatus(stringToUserStatus(status))
+        		  .setSearchable(searchable)
+        		  .build();
         }
       }
     } catch (SQLException e) {
@@ -112,10 +114,13 @@ public class UserDatabaseImpl implements UserDAO {
           String status = results.getString(STATUS);
           boolean isBot = results.getBoolean(ISBOT);
           boolean searchable = results.getBoolean(SEARCHABLE);
-          User user = new User(name, isBot);
-          user.setId(id);
-          user.setStatus(stringToUserStatus(status));
-          user.setSearchable(searchable);
+          User user = new User.UserBuilder()
+        		  .setName(name)
+        		  .setBot(isBot)
+        		  .setId(id)
+        		  .setStatus(stringToUserStatus(status))
+        		  .setSearchable(searchable)
+        		  .build();
           users.add(user);
         }
       }

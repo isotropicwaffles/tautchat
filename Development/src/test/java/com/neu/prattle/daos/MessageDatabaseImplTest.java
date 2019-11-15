@@ -23,13 +23,17 @@ public class MessageDatabaseImplTest {
 
 	@Before
 	public void setUp() {
-		testUser = new User();
-		testUser.setName("Bender");
-		testMessage = new Message();
-		testMessage.setTo("HughMann");
-		testMessage.setFrom(testUser.getName());
-		testMessage.setDateSent(new Date());
-		testMessage.setContent("This is a test");
+		testUser = new User.UserBuilder()
+				.setName("Bender")
+				.build();
+		
+        Message testMessage = Message.messageBuilder()
+                .setMessageContent("This is a test")
+                .setFrom(testUser.getName())
+                .setTo("HughMann")
+                .setDateSent(new Date())
+                .build();
+
 		messageDatabase.createMessage(testMessage);
 	}
 

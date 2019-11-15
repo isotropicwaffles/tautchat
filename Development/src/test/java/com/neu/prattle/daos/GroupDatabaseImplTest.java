@@ -25,18 +25,24 @@ public class GroupDatabaseImplTest {
 
   @Before
   public void setUp() {
-    testPerson = new User();
-    testPerson.setName("HughMann");
-    testPerson.setSearchable(true);
-    testPerson.setStatus(UserStatus.ONLINE);
-    testIndividual = new User();
-    testIndividual.setName("NotarObot");
-    testIndividual.setSearchable(true);
-    testIndividual.setStatus(UserStatus.OFFLINE);
-    testHuman = new User();
-    testHuman.setName("Bender");
-    testHuman.setSearchable(false);
-    testHuman.setStatus(UserStatus.ONLINE);
+    testPerson = new User.UserBuilder()
+    		.setName("HughMann")
+    		.setSearchable(true)
+    		.setStatus(UserStatus.ONLINE)
+    		.build();
+    
+    testIndividual = new User.UserBuilder()
+    		.setName("NotarObot")
+    		.setSearchable(true)
+    		.setStatus(UserStatus.OFFLINE)
+    		.build();
+
+    testHuman = new User.UserBuilder()
+    		.setName("Bender")
+    		.setSearchable(false)
+    		.setStatus(UserStatus.ONLINE)
+    		.build();
+
     if (!userImplTest.userExists(testPerson.getName())) {
       userImplTest.createUser(testPerson);
     }

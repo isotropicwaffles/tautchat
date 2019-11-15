@@ -69,7 +69,10 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public Optional<User> findUserByName(String name) {
-    final User user = new User(name);
+    final User user = new User.UserBuilder()
+    		.setName(name)
+    		.build();
+    
     if (userSet.contains(user)) {
       return Optional.of(user);
     } else {

@@ -2,20 +2,15 @@ package com.neu.prattle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.neu.prattle.daos.UserDatabaseImpl;
 import com.neu.prattle.model.Group;
-import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
 import com.neu.prattle.service.user.UserService;
 import com.neu.prattle.service.user.UserServiceImpl;
@@ -37,7 +32,9 @@ public class GroupTest {
 	@Test
 	public void testDeactivateReactivate() {
 	
-		User mod = new User("Sojiro");
+		User mod = new User.UserBuilder()
+				.setName("Sojiro")
+				.build();
 		
 		UserService serv = UserServiceImpl.getInstance();
 		
@@ -62,8 +59,12 @@ public class GroupTest {
 	@Test
 	public void testAddRemoveUser() {
 		
-		User mod = new User("Kawakami");
-		User user = new User("Makoto");
+		User mod = new User.UserBuilder()
+				.setName("Kawakami")
+				.build();
+		User user = new User.UserBuilder()
+				.setName("Makoto")
+				.build();
 		
 		UserService serv = UserServiceImpl.getInstance();
 		
@@ -90,12 +91,20 @@ public class GroupTest {
 	
 	@Test
 	public void testBuilder() {
-		User supermod = new User("Ren");
+		User supermod = new User.UserBuilder()
+				.setName("Ren")
+				.build();
 		
-		User midmod = new User("Ann");
-		User user = new User("Morgana");
+		User midmod = new User.UserBuilder()
+				.setName("Ann")
+				.build();
+		User user = new User.UserBuilder()
+				.setName("Morgana")
+				.build();
 		
-		User submod = new User("Ryuji");
+		User submod = new User.UserBuilder()
+				.setName("Ryuji")
+				.build();
 		
 		UserService serv = UserServiceImpl.getInstance();
 		
@@ -126,8 +135,12 @@ public class GroupTest {
 	
 	@Test
 	public void testAddRemoveSubgroup() {
-		User mod = new User("mod");
-		User u2 = new User("u2");
+		User mod = new User.UserBuilder()
+				.setName("mod")
+				.build();
+		User u2 = new User.UserBuilder()
+				.setName("u2")
+				.build();
 		
 		UserService serv = UserServiceImpl.getInstance();
 		try {
@@ -148,8 +161,13 @@ public class GroupTest {
 	
 	@Test
 	public void testAddRemoveSupergroup() {
-		User mod = new User("mod2");
-		User u2 = new User("u3");
+		User mod = new User.UserBuilder()
+				.setName("mod2")
+				.build();
+		
+		User u2 = new User.UserBuilder()
+				.setName("u3")
+				.build();
 		
 		UserService serv = UserServiceImpl.getInstance();
 		try {
@@ -170,14 +188,22 @@ public class GroupTest {
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testInvalidGroupCreation() {
-		User bot = new User("Gank", true);
+		User bot = new User.UserBuilder()
+				.setName("Gank")
+				.setBot(true)
+				.build();
+		
 		Group g = new Group.GroupBuilder().addModerator(bot).setName("test").build();
 	}
 	
 	@Test
 	public void testAddModerator() {
-		User mod1 = new User("Futaba");
-		User mod2 = new User("Wakaba");
+		User mod1 = new User.UserBuilder()
+				.setName("Futaba")
+				.build();
+		User mod2 = new User.UserBuilder()
+				.setName("Wakaba")
+				.build();
 		
 		UserService serv = UserServiceImpl.getInstance();
 		try {

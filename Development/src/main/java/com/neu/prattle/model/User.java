@@ -20,68 +20,40 @@ public class User {
 	private int id;
 	
 	/** The is bot. */
-	private final boolean isBot;
+	private boolean isBot;
 	
 	/** The searchable. */
 	private boolean searchable;
 	
-	public User() {
+	private User() {
 		this.isBot = false;
 	}
 	
-	public User(String name) {
-		this.name = name;
-		this.isBot = false;
-		this.setSearchable(true);
-	}
+    public static UserBuilder userBuilder()   {
+        return new UserBuilder();
+    }
 	
-	public User(String name, boolean isBot) {
-		this.name = name;
-		this.isBot = isBot;
-		this.setSearchable(true);
-	}
-	
-  /**
-	 * Sets the name.
-	 *
-	 * @param name the name
-	 */
+    //Set the name
 	public void setName(String name) {
 		this.name = name;
 	}
 	
-	/**
-	 * Gets the name.
-	 *
-	 * @return the name
-	 */
+	//Gets the name.
 	public String getName() {
 		return name;
 	}
 	
-	/**
-	 * Sets the status.
-	 *
-	 * @param status the status
-	 */
+	//Sets the status.
 	public void setStatus(UserStatus status) {
 		this.status = status;
 	}
 	
-	/**
-	 * Gets the status.
-	 *
-	 * @return the status
-	 */
+	//Gets the status.
 	public UserStatus getStatus() {
 		return status;
 	}
 	
-	/**
-	 * Sets the id number.
-	 *
-	 * @param id the id number
-	 */
+	//Sets the id number.
 	public void setId(int id) {
 		if (id > 0) {
 			this.id = id;
@@ -91,31 +63,27 @@ public class User {
 		}
 	}
 	
-	/**
-	 * Gets the id number.
-	 *
-	 * @return the id number
-	 */
+	//Gets the id number.
 	public int getId() {
 		return id;
 	}
 
-	/**
-	 * Sets the searchable.
-	 *
-	 * @param searchable the searchable
-	 */
+	//Sets if user is searchable.
 	public void setSearchable(boolean searchable) {
 		this.searchable = searchable;
 	}
 	
-	/**
-	 * Gets if user is searchable.
-	 *
-	 * @return if user is searchable
-	 */
+	//Gets if user is searchable.
 	public boolean getSearchable() {
 		return searchable;
+	}
+	
+	public boolean getBot() {
+		return isBot;
+	}
+	
+	public void setBot(boolean isBot) {
+		this.isBot = isBot;
 	}
 	
 
@@ -150,11 +118,56 @@ public class User {
         return user.name.equals(this.name);
     }
 
-    /**
-     * Determines if the current user is a bot or not.
-     * @return true if user is a bot
-     */
+    //Determines if the current user is a bot or not.
 	public boolean userIsBot() {
 		return this.isBot;
 	}
+	
+	//Builder
+	public static class UserBuilder {
+		
+		User user;
+		
+		//User Builder - Default to being searchable
+		public UserBuilder() {
+			user = new User();
+			user.setSearchable(true);
+			user.setStatus(UserStatus.ONLINE);
+		}
+		
+		//Set the name
+		public UserBuilder setName(String name) {
+			user.setName(name);
+			return this;
+		}
+		
+		//Set the ID #
+		public UserBuilder setId(int id) {
+			user.setId(id);
+			return this;
+		}
+		
+		//Set user status
+		public UserBuilder setStatus(UserStatus status) {
+			user.setStatus(status);
+			return this;
+		}
+		
+		//Set if the user is searchable
+		public UserBuilder setSearchable(boolean searchable) {
+			user.setSearchable(searchable);
+			return this;
+		}
+		
+		public UserBuilder setBot(boolean isBot) {
+			user.setBot(isBot);
+			return this;
+		}
+		
+		public User build() {
+			return user;
+		}
+		
+	}
+	
 }

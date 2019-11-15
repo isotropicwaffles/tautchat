@@ -22,18 +22,24 @@ public class UserDatabaseImplTest {
 
 	@Before
 	public void setUp() {
-		testPerson = new User();
-		testPerson.setName("HughMann");
-		testPerson.setSearchable(true);
-		testPerson.setStatus(UserStatus.ONLINE);
-		testIndividual = new User();
-		testIndividual.setName("NotarObot");
-		testIndividual.setSearchable(true);
-		testIndividual.setStatus(UserStatus.OFFLINE);
-		testHuman = new User();
-		testHuman.setName("Bender");
-		testHuman.setSearchable(false);
-		testHuman.setStatus(UserStatus.ONLINE);
+	    testPerson = new User.UserBuilder()
+	    		.setName("HughMann")
+	    		.setSearchable(true)
+	    		.setStatus(UserStatus.ONLINE)
+	    		.build();
+	    
+	    testIndividual = new User.UserBuilder()
+	    		.setName("NotarObot")
+	    		.setSearchable(true)
+	    		.setStatus(UserStatus.OFFLINE)
+	    		.build();
+
+	    testHuman = new User.UserBuilder()
+	    		.setName("Bender")
+	    		.setSearchable(false)
+	    		.setStatus(UserStatus.ONLINE)
+	    		.build();
+		
 		if (!userImplTest.userExists(testPerson.getName())) {
 			userImplTest.createUser(testPerson);
 		}
@@ -54,10 +60,11 @@ public class UserDatabaseImplTest {
 
 	@Test
 	public void createUserTest() {
-		User testMan = new User();
-		testMan.setName("Testerberg");
-		testMan.setSearchable(true);
-		testMan.setStatus(UserStatus.IDLE);
+		User testMan = new User.UserBuilder()
+				.setName("Testerberg")
+				.setSearchable(true)
+				.setStatus(UserStatus.IDLE)
+				.build();
 		userImplTest.createUser(testMan);
 		ArrayList<User> testList = new ArrayList<>();
 		testList = (ArrayList<User>) userImplTest.findAllUsers();
@@ -106,10 +113,11 @@ public class UserDatabaseImplTest {
 
 	@Test
 	public void updateUserTest() {
-		User changer = new User();
-		changer.setName("Original");
-		changer.setSearchable(true);
-		changer.setStatus(UserStatus.AWAY);
+		User changer = new User.UserBuilder()
+				.setName("Original")
+				.setSearchable(true)
+				.setStatus(UserStatus.AWAY)
+				.build();
 		if (!userImplTest.userExists(changer.getName())) {
 			userImplTest.createUser(changer);
 		}
@@ -121,10 +129,11 @@ public class UserDatabaseImplTest {
 
 	@Test
 	public void deleteUserByIdTest() {
-		User doomed = new User();
-		doomed.setName("condemned");
-		doomed.setStatus(UserStatus.IDLE);
-		doomed.setSearchable(false);
+		User doomed = new User.UserBuilder()
+				.setName("condemned")
+				.setStatus(UserStatus.IDLE)
+				.setSearchable(false)
+				.build();
 		if (!userImplTest.userExists(doomed.getName())) {
 			userImplTest.createUser(doomed);
 		}
@@ -136,10 +145,11 @@ public class UserDatabaseImplTest {
 
 	@Test
 	public void deleteUserByUsernameTest() {
-		User doomed = new User();
-		doomed.setName("condemned");
-		doomed.setStatus(UserStatus.IDLE);
-		doomed.setSearchable(false);
+		User doomed = new User.UserBuilder()
+				.setName("condemned")
+				.setStatus(UserStatus.IDLE)
+				.setSearchable(false)
+				.build();
 		if (!userImplTest.userExists(doomed.getName())) {
 			userImplTest.createUser(doomed);
 		}

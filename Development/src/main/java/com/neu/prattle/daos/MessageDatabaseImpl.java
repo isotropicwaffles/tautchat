@@ -60,13 +60,17 @@ public class MessageDatabaseImpl implements MessageDAO {
           String from = results.getString("sender_username");
           String to = results.getString("recipient_username");
           Date sendDate = results.getDate("date_sent");
-          Message message = new Message();
-          message.setId(id);
-          message.setContent(content);
-          message.setFrom(from);
-          message.setTo(to);
-          message.setDateSent(sendDate);
+          
+          Message message = Message.messageBuilder()
+                  .setId(id)
+                  .setMessageContent(content)
+                  .setFrom(from)
+                  .setTo(to)
+                  .setDateSent(sendDate)
+                  .build();
+          
           messages.add(message);
+          
         }
       }
     } catch (SQLException e) {
@@ -88,13 +92,14 @@ public class MessageDatabaseImpl implements MessageDAO {
           String from = resultSet.getString("sender_username");
           String to = resultSet.getString("recipient_username");
           Date sendDate = resultSet.getDate("date_sent");
-          Message message = new Message();
-          message.setId(id);
-          message.setContent(content);
-          message.setFrom(from);
-          message.setTo(to);
-          message.setDateSent(sendDate);
-          return message;
+          return Message.messageBuilder()
+                  .setId(id)
+                  .setMessageContent(content)
+                  .setFrom(from)
+                  .setTo(to)
+                  .setDateSent(sendDate)
+                  .build();
+
         }
       }
     } catch (SQLException e) {

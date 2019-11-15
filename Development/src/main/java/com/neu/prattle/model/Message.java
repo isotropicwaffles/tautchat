@@ -158,6 +158,11 @@ public class Message {
             return this;
         }
         
+        public MessageBuilder setId(int id) {
+        	message.setId(id);
+        	return this;
+        }
+        
         public MessageBuilder setDateSent(Date date)    {
             message.setDateSent(date);
             return this;
