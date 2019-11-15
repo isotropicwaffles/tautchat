@@ -5,6 +5,7 @@ import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -41,7 +42,18 @@ public class MessageDatabaseImpl implements MessageDAO {
             + "`recipient_username`, `date_sent`) VALUES ('" + message.getContent() + "', '"
             + message.getFrom() + "', '" + message.getTo() + "', '"
             + simpleDateFormat.format(message.getDateSent()) +"')";
-    executeUpdateQueryHelper(createMessageSQL);
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement preparedStatement = connection.
+                 prepareStatement(createMessageSQL, Statement.RETURN_GENERATED_KEYS)) {
+      preparedStatement.executeUpdate();
+      try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+        if (resultSet.next()) {
+          message.setId((int) resultSet.getLong(1));
+        }
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Create Message Query SQL blew up: " + e.toString());
+    }
   }
 
   @Override
@@ -67,6 +79,8 @@ public class MessageDatabaseImpl implements MessageDAO {
                   .setFrom(from)
                   .setTo(to)
                   .setDateSent(sendDate)
+                  .setType("direct message")
+                  .setContentType("text")
                   .build();
           
           messages.add(message);
@@ -79,51 +93,52 @@ public class MessageDatabaseImpl implements MessageDAO {
     return messages;
   }
 
-  @Override
-  public Message findMessageById(int messageId) {
-    String findMessageByIdSQL = "SELECT * FROM `tautdb`.`messages` WHERE `id` =" + messageId;
+  Message findMessage(Message message) {
 
+    String findMessageSQL = "SELECT * FROM `tautdb`.`messages` WHERE  `id`=" + message.getId();
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
-      try (ResultSet resultSet = statement.executeQuery(findMessageByIdSQL)) {
-        if (resultSet.next()) {
-          int id = resultSet.getInt("id");
-          String content = resultSet.getString("content");
-          String from = resultSet.getString("sender_username");
-          String to = resultSet.getString("recipient_username");
-          Date sendDate = resultSet.getDate("date_sent");
-          return Message.messageBuilder()
+      try (ResultSet results = statement.executeQuery(findMessageSQL)) {
+        if (results.next()) {
+          int id = results.getInt("id");
+          String content = results.getString("content");
+          String from = results.getString("sender_username");
+          String to = results.getString("recipient_username");
+          Date sendDate = results.getDate("date_sent");
+
+         return Message.messageBuilder()
                   .setId(id)
                   .setMessageContent(content)
                   .setFrom(from)
                   .setTo(to)
                   .setDateSent(sendDate)
+                  .setType("filler")
+                  .setContentType("filler")
                   .build();
-
         }
       }
     } catch (SQLException e) {
-      logging.log(Level.INFO, "Find Message by ID SQL blew up: " + e.toString());
+      logging.log(Level.INFO, "Find Message SQL blew up: " + e.toString());
     }
     return null;
   }
 
   @Override
-  public void updateMessage(int messageId, Message message) {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+  public void updateMessage(Message message) {
     String updateMessageSQL = "UPDATE `tautdb`.`messages` SET "
             + "`content`= '" + message.getContent()
-            + "', `sender_username`= '" + message.getFrom()
-            + "', `recipient_username`= '" + message.getTo()
-            + "', `date_sent`= '" + simpleDateFormat.format(message.getDateSent())
-            + "' WHERE `id`=" + messageId;
+            + "' WHERE  `id`= " + message.getId();
     executeUpdateQueryHelper(updateMessageSQL);
   }
 
   @Override
-  public void deleteMessage(int messageId) {
-    String deleteMessageSQL = "DELETE FROM `tautdb`.`messages` WHERE `id`=" + messageId;
+  public void deleteMessage(Message message) {
+    String deleteMessageSQL = "DELETE FROM `tautdb`.`messages` WHERE  `id`= " + message.getId();
     executeUpdateQueryHelper(deleteMessageSQL);
+  }
+
+  void truncateMessages() {
+    String truncateMessagesSQL = "DELETE FROM `tautdb`.`messages`";
+    executeUpdateQueryHelper(truncateMessagesSQL);
   }
 }

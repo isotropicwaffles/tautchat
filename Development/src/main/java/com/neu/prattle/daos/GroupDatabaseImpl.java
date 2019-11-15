@@ -134,7 +134,9 @@ public class GroupDatabaseImpl implements GroupDAO {
   public void addUserToGroup(User user, Group group) {
     String createUserSQL = "INSERT INTO `tautdb`.`group_members` (`group_name`, "
             + "`username`) VALUES ('" + group.getName() + "', '" + user.getName() + "')";
-    executeUpdateQueryHelper(createUserSQL);
+    if (!isUserMemberOfGroup(user, group)) {
+      executeUpdateQueryHelper(createUserSQL);
+    }
   }
 
   @Override
@@ -199,8 +201,8 @@ public class GroupDatabaseImpl implements GroupDAO {
   @Override
   public void updateGroup(Group group) {
     String updateGroupSQL = "UPDATE `tautdb`.`groups` SET `is_active`=" + group.isActive()
-            + ", `group_name`='" + group.getName() + "', `primary_moderator`='"
-            + group.getModerators().iterator().next().getName() + "' WHERE `id`=" + group.getId();
+            + ", `primary_moderator`='" + group.getModerators().iterator().next().getName()
+            + "' WHERE `group_name`='" + group.getName() + "'";
     executeUpdateQueryHelper(updateGroupSQL);
   }
 
@@ -348,5 +350,30 @@ public class GroupDatabaseImpl implements GroupDAO {
       logging.log(Level.INFO, "Find All SubGroups SQL blew up: " + e.toString());
     }
     return null;
+  }
+
+  public void truncateGroups() {
+    String truncateGroupsSQL = "DELETE FROM `tautdb`.`groups`";
+    executeUpdateQueryHelper(truncateGroupsSQL);
+  }
+
+  public void truncateGroupMembers() {
+    String truncateGroupMembers = "DELETE FROM `tautdb`.`group_members`";
+    executeUpdateQueryHelper(truncateGroupMembers);
+  }
+
+  public void truncateModerators() {
+    String truncateModeratorsSQL = "DELETE FROM `tautdb`.`moderators`";
+    executeUpdateQueryHelper(truncateModeratorsSQL);
+  }
+
+  public void truncateSubgroups() {
+    String truncateSubgroupsSQL = "DELETE FROM `tautdb`.`subgroups`";
+    executeUpdateQueryHelper(truncateSubgroupsSQL);
+  }
+
+  public void truncateMemberAliases() {
+    String truncateMemberAliasesSQL = "DELETE FROM `tautdb`.`member_aliases`";
+    executeUpdateQueryHelper(truncateMemberAliasesSQL);
   }
 }

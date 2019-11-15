@@ -27,26 +27,17 @@ public interface MessageDAO {
   Collection<Message> findAllMessagesOfUser(User user);
 
   /**
-   * Find message by message id.
-   *
-   * @param messageId the message id
-   * @return the message
-   */
-  Message findMessageById(int messageId);
-
-  /**
    * Update message. Useful for flagging/monitoring purposes.
    *
-   * @param messageId the message id
    * @param message   the message
    */
-  void updateMessage(int messageId, Message message);
+  void updateMessage(Message message);
 
   /**
    * Delete a stored message. Do we ever need this in practice?
    *
-   * @param messageId id for message record
+   * @param message object for message record
    */
-  void deleteMessage(int messageId);
+  void deleteMessage(Message message);
 }
 

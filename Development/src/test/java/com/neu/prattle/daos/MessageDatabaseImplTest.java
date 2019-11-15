@@ -15,87 +15,82 @@ import static junit.framework.TestCase.assertTrue;
 
 public class MessageDatabaseImplTest {
 
-	private MessageDatabaseImpl messageDatabase = new MessageDatabaseImpl();
-	private Message testMessage;
-	private User testUser;
+  private MessageDatabaseImpl messageDatabase = new MessageDatabaseImpl();
+  private Message testMessage;
+  private User testUser;
 
-	private UserDatabaseImpl userImplTest = new UserDatabaseImpl();
+  @Before
+  public void setUp() {
+    testUser = new User.UserBuilder()
+            .setName("Bender")
+            .build();
 
-	@Before
-	public void setUp() {
-		testUser = new User.UserBuilder()
-				.setName("Bender")
-				.build();
-		
-        Message testMessage = Message.messageBuilder()
-                .setMessageContent("This is a test")
-                .setFrom(testUser.getName())
-                .setTo("HughMann")
-                .setDateSent(new Date())
-                .build();
+    testMessage = Message.messageBuilder()
+            .setMessageContent("This is a test")
+            .setFrom(testUser.getName())
+            .setTo("HughMann")
+            .setDateSent(new Date())
+            .build();
 
-		messageDatabase.createMessage(testMessage);
-	}
+    messageDatabase.createMessage(testMessage);
+  }
 
-	@After
-	public void tearDown() {
-		List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		for (Message message : testing) {
-			messageDatabase.deleteMessage(message.getId());
-		}
-		testUser = null;
-		testMessage = null;
-	}
+  @After
+  public void tearDown() {
+    testUser = null;
+    testMessage = null;
+    messageDatabase.truncateMessages();
+  }
 
-	@Test
-	public void createMessageTest() {
-		List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		for (Message message : testing) {
-			assertTrue(message.getContent().equals(testMessage.getContent()));
-		}
-	}
+  @Test
+  public void createMessageTest() {
+    List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
+    for (Message message : testing) {
+      assertTrue(message.getContent().equals(testMessage.getContent()));
+    }
+  }
 
-	@Test
-	public void findAllMessagesOfUserTest() {
-		List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		for (Message message : testing) {
-			assertTrue(message.getFrom().equals(testMessage.getFrom()));
-		}
-	}
+  @Test
+  public void findAllMessagesOfUserTest() {
+    List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
+    for (Message message : testing) {
+      assertTrue(message.getFrom().equals(testMessage.getFrom()));
+    }
+  }
 
-	@Test
-	public void findMessageByIdTest() {
-		List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		int testId = 0;
-		for (Message message : testing) {
-			testId = message.getId();
-		}
-		Message rightMessage = messageDatabase.findMessageById(testId);
-		assertTrue(rightMessage.getContent().equals(testMessage.getContent()));
-	}
+  @Test
+  public void updateMessageTest() {
+    testMessage.setContent("Updates have occurred");
+    messageDatabase.updateMessage(testMessage);
+    List<Message> bunchOMessages = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
+    Message rightMessage = new Message();
+    for (Message message : bunchOMessages) {
+      if (message.equals(testMessage))
+        messageDatabase.deleteMessage(message);
+      rightMessage = message;
+    }
+    assertTrue(rightMessage.getContent().equals(testMessage.getContent()));
+  }
 
-	@Test
-	public void updateMessageTest() {
-		testMessage.setContent("Updates have occurred");
-		messageDatabase.updateMessage(testMessage.getId(), testMessage);
-		List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		int testId = 0;
-		for (Message message : testing) {
-			testId = message.getId();
-		}
-		messageDatabase.updateMessage(testId, testMessage);
-		Message rightMessage = messageDatabase.findMessageById(testId);
-		assertTrue(rightMessage.getContent().equals(testMessage.getContent()));
-	}
+  @Test
+  public void deleteMessageTest() {
+    List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
+    for (Message message : testing) {
+      messageDatabase.deleteMessage(message);
+    }
+    List<Message> testing2 = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
+    assertEquals(0, testing2.size());
+  }
 
-	@Test
-	public void deleteMessageTest() {
-		List<Message> testing = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		for (Message message : testing) {
-			messageDatabase.deleteMessage(message.getId());
-		}
-		List<Message> testing2 = (List<Message>) messageDatabase.findAllMessagesOfUser(testUser);
-		assertEquals(0, testing2.size());
-	}
+  @Test
+  public void findMessage() {
+    Message beingTested = messageDatabase.findMessage(testMessage);
+    assertTrue(beingTested.getContent().equalsIgnoreCase(testMessage.getContent()));
+  }
 
+  @Test
+  public void truncateMessages() {
+    messageDatabase.truncateMessages();
+    assertTrue(messageDatabase.findAllMessagesOfUser(testUser).isEmpty());
+  }
 }
