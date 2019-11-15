@@ -22,21 +22,66 @@ public class UserDatabaseImpl implements UserDAO {
   private LogManager logManager = LogManager.getLogManager();
   private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  @Override
-  public void createUser(User user) {
-    String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
-            + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
-            + user.userIsBot() + ", " + user.getSearchable() + ")";
+  private static final String STATUS = "status";
+  private static final String ISBOT = "is_bot";
+  private static final String SEARCHABLE = "searchable";
+  private static final String SELECTALLUSER = "SELECT * FROM `tautdb`.`users` WHERE `name`='";
 
+  private void executeUpdateHelper(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          Statement statement = connection.createStatement()) {
-      statement.executeUpdate(createUserSQL);
+      statement.executeUpdate(string);
     } catch (SQLException e) {
-      logging.log(Level.INFO, "Create User SQL blew up: " + e.toString());
+      logging.log(Level.INFO, "Execute Update SQL blew up: " + e.toString());
     }
   }
 
-  public UserStatus stringToUserStatus(String string) {
+  private boolean executeBooleanQuery(String string) {
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         Statement statement = connection.createStatement()) {
+      try (ResultSet results = statement.executeQuery(string)) {
+        return results.next();
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Execute Boolean Query SQL blew up: " + e.toString());
+    }
+    return false;
+  }
+
+  private User returnUserQuery(String string) {
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         Statement statement = connection.createStatement()) {
+      try (ResultSet results = statement.executeQuery(string)) {
+        if (results.next()) {
+          int id = results.getInt("id");
+          String name = results.getString("name");
+          String status = results.getString(STATUS);
+          boolean isBot = results.getBoolean(ISBOT);
+          boolean searchable = results.getBoolean(SEARCHABLE);
+          User user = new User(name, isBot);
+          user.setId(id);
+          user.setStatus(stringToUserStatus(status));
+          user.setSearchable(searchable);
+          return user;
+        }
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Return User SQL blew up: " + e.toString());
+    }
+    return null;
+  }
+
+  @Override
+  public void createUser(User user) {
+    if (!userExists(user.getName())) {
+      String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
+              + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
+              + user.userIsBot() + ", " + user.getSearchable() + ")";
+      executeUpdateHelper(createUserSQL);
+    }
+  }
+
+  UserStatus stringToUserStatus(String string) {
     if (string.equalsIgnoreCase("donotdisturb")) {
       return UserStatus.DONOTDISTURB;
     } else if (string.equalsIgnoreCase("away")) {
@@ -64,9 +109,9 @@ public class UserDatabaseImpl implements UserDAO {
           int id = results.getInt("id");
           String name = results.getString("name");
 
-          String status = results.getString("status");
-          boolean isBot = results.getBoolean("is_bot");
-          boolean searchable = results.getBoolean("searchable");
+          String status = results.getString(STATUS);
+          boolean isBot = results.getBoolean(ISBOT);
+          boolean searchable = results.getBoolean(SEARCHABLE);
           User user = new User(name, isBot);
           user.setId(id);
           user.setStatus(stringToUserStatus(status));
@@ -83,151 +128,60 @@ public class UserDatabaseImpl implements UserDAO {
   @Override
   public User findUserById(int userId) {
     String findAllUsersSQL = "SELECT * FROM `tautdb`.`users` WHERE `id`=" + userId;
-
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findAllUsersSQL)) {
-        while (results.next()) {
-          int id = results.getInt("id");
-          String name = results.getString("name");
-
-          String status = results.getString("status");
-          boolean isBot = results.getBoolean("is_bot");
-          boolean searchable = results.getBoolean("searchable");
-          User user = new User(name, isBot);
-          user.setId(id);
-          user.setStatus(stringToUserStatus(status));
-          user.setSearchable(searchable);
-          return user;
-        }
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Find User by ID SQL blew up: " + e.toString());
-    }
-    return null;
+    return returnUserQuery(findAllUsersSQL);
   }
 
   @Override
   public User findUserByUsername(String username) {
-    String findAllUsersSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + username + "'";
-
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(findAllUsersSQL)) {
-        while (results.next()) {
-          int id = results.getInt("id");
-          String name = results.getString("name");
-          String status = results.getString("status");
-          boolean isBot = results.getBoolean("is_bot");
-          boolean searchable = results.getBoolean("searchable");
-          User user = new User(name, isBot);
-          user.setId(id);
-          user.setStatus(stringToUserStatus(status));
-          user.setSearchable(searchable);
-          return user;
-        }
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Find User by Username SQL blew up: " + e.toString());
-    }
-    return null;
+    String findAllUsersSQL = SELECTALLUSER + username + "'";
+    return returnUserQuery(findAllUsersSQL);
   }
 
   @Override
   public boolean userExists(String username) {
-    String userExistsSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + username + "'";
-
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(userExistsSQL)) {
-        return results.next();
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Does User exist SQL blew up: " + e.toString());
-    }
-    return false;
+    String userExistsSQL = SELECTALLUSER + username + "'";
+    return executeBooleanQuery(userExistsSQL);
   }
 
   @Override
-  public int updateUser(User user) {
+  public void updateUser(User user) {
     String updateMessageSQL = "UPDATE `tautdb`.`users` SET "
             + "`name`= '" + user.getName() + "', `status`= '" + user.getStatus().toString()
             + "', `is_bot` = " + user.userIsBot() + ", `searchable`=" + user.getSearchable()
             + " WHERE `id`=" + user.getId();
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(updateMessageSQL);
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Update User SQL blew up: " + e.toString());
-    }
-    return 0;
+    executeUpdateHelper(updateMessageSQL);
   }
 
   @Override
-  public int deleteUserById(int userId) {
+  public void deleteUserById(int userId) {
     String deleteMessageSQL = "DELETE FROM `tautdb`.`users` WHERE `id`=" + userId;
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(deleteMessageSQL);
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Delete User by ID SQL blew up: " + e.toString());
-    }
-    return 0;
+    executeUpdateHelper(deleteMessageSQL);
   }
 
   @Override
-  public int deleteUserByUsername(String username) {
+  public void deleteUserByUsername(String username) {
     String deleteMessageSQL = "DELETE FROM `tautdb`.`users` WHERE `name`='" + username + "'";
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(deleteMessageSQL);
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Delete User by username SQL blew up: " + e.toString());
-    }
-    return 0;
+    executeUpdateHelper(deleteMessageSQL);
   }
 
   @Override
   public void deleteAllUsers() {
     String deleteMessageSQL = "DELETE FROM `tautdb`.`users`";
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      statement.executeUpdate(deleteMessageSQL);
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Delete All Users SQL blew up: " + e.toString());
-    }
+    executeUpdateHelper(deleteMessageSQL);
   }
 
   @Override
   public boolean isBot(User user) {
-    String userIsBotSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + user.getName()
+    String userIsBotSQL = SELECTALLUSER + user.getName()
             + "' AND `is_bot` = 1";
-
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(userIsBotSQL)) {
-        return results.next();
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Is User a bot SQL blew up: " + e.toString());
-    }
-    return false;
+    return executeBooleanQuery(userIsBotSQL);
   }
 
   @Override
   public boolean isSearchable(User user) {
-    String userIsSearchableSQL = "SELECT * FROM `tautdb`.`users` WHERE `name`='" + user.getName()
+    String userIsSearchableSQL = SELECTALLUSER + user.getName()
             + "' AND `searchable` = 1";
-
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         Statement statement = connection.createStatement()) {
-      try (ResultSet results = statement.executeQuery(userIsSearchableSQL)) {
-        return results.next();
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Is User searchable SQL blew up: " + e.toString());
-    }
-    return false;
+    return executeBooleanQuery(userIsSearchableSQL);
   }
 
   @Override
@@ -239,7 +193,7 @@ public class UserDatabaseImpl implements UserDAO {
          Statement statement = connection.createStatement()) {
       try (ResultSet results = statement.executeQuery(userStatusSQL)) {
         if (results.next()) {
-          String status = results.getString("status");
+          String status = results.getString(STATUS);
           return stringToUserStatus(status);
         }
       }

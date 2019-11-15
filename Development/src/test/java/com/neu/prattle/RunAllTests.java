@@ -12,7 +12,9 @@ import com.neu.prattle.messaging.SendingMessagesTest;
 
 
 @RunWith(Suite.class)
-@SuiteClasses({UserTest.class, MessageTest.class, ChatEndpointTest.class, SendingMessagesTest.class, UserServiceMessageProcessorTest.class, GroupServiceManagementTest.class, GroupServiceQueryTest.class, MessageDatabaseImplTest.class, UserDatabaseImplTest.class})
+@SuiteClasses({UserTest.class, MessageTest.class, ChatEndpointTest.class, SendingMessagesTest.class,
+        UserServiceMessageProcessorTest.class, GroupServiceManagementTest.class,
+        GroupServiceQueryTest.class, MessageDatabaseImplTest.class, UserDatabaseImplTest.class})
 public class RunAllTests {
 
 }

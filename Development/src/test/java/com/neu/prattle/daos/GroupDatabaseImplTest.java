@@ -206,7 +206,7 @@ public class GroupDatabaseImplTest {
   public void deleteModeratorForGroup() {
     groupDatabase.createModeratorForGroup(testHuman, testGroup);
     groupDatabase.deleteModeratorForGroup(testHuman, testGroup);
-    assertEquals(0, groupDatabase.findAllModeratorsByGroup(testGroup).size());
+    assertEquals(1, groupDatabase.findAllModeratorsByGroup(testGroup).size());
   }
 
   @Test

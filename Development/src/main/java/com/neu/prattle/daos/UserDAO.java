@@ -52,25 +52,22 @@ public interface UserDAO {
    * Update user data.
    *
    * @param user the user
-   * @return 0 denoting completion of method
    */
-  int updateUser(User user);
+  void updateUser(User user);
 
   /**
    * DO EITHER OF THESE DELETES NEED TO EXIST Delete user by id.
    *
    * @param userId the user id
-   * @return 0 denoting completion of method
    */
-  int deleteUserById(int userId);
+  void deleteUserById(int userId);
 
   /**
    * Deletes user by Username.
    *
    * @param username identifying name of User
-   * @return 0 denoting completion of method
    */
-  int deleteUserByUsername(String username);
+  void deleteUserByUsername(String username);
 
   /**
    * Delete all users.
