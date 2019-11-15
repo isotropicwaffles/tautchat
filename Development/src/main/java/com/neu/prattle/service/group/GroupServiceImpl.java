@@ -4,7 +4,6 @@ import com.neu.prattle.exceptions.GroupAlreadyPresentException;
 import com.neu.prattle.exceptions.GroupNotPresentException;
 import com.neu.prattle.model.Group;
 import com.neu.prattle.model.User;
-import com.neu.prattle.service.user.UserServiceImpl;
 
 import java.util.Iterator;
 

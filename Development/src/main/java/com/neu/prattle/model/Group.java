@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.neu.prattle.service.user.UserService;
 import com.neu.prattle.service.user.UserServiceImpl;
-import com.neu.prattle.websocket.ChatEndpoint;
 
 /**
  * Group object which can be composed of an arbitrary
@@ -112,12 +111,10 @@ public class Group {
 
 		// Need a moderator to add the sub/supergroups, so
 		// I grab it here while iterating.
-		User adderMod = null;
 		for (User mod : moderators) {
 			if (!validUser(mod, serv)) {
 				throw new IllegalArgumentException("User is not authorized to moderate this group.");
 			}
-			adderMod = mod;
 		}
 		
 		this.groupName = name;
@@ -140,10 +137,10 @@ public class Group {
 		return serv.findUserByName(moderator.getName()).isPresent() && !moderator.userIsBot();
 	}
 	
-	public void addModerator(User mod, User new_mod) {
+	public void addModerator(User mod, User newMod) {
 		if (authenticateAsMod(mod, this)) {
-			this.moderators.add(new_mod);
-			this.memberAliases.put(new_mod, new_mod.getName());
+			this.moderators.add(newMod);
+			this.memberAliases.put(newMod, newMod.getName());
 		}
 	}
 	
@@ -338,26 +335,6 @@ public class Group {
 			supergroup.removeSubgroup(mod, this);
 		}
 	}
-	
-	/**
-	 * Sends a message to all members of the addressed Group
-	 * and its subgroups.  A member belonging to multiple of
-	 * these Groups will receive the message once for each
-	 * included Group they are a part of.
-	 * @param message the sent message
-	 */
-	public void messageMembers(Message message) {
-		message.setFrom(this.groupName);
-		
-		for (Group subgroup : this.subgroups) {
-			subgroup.messageMembers(message);
-		}
-		
-		for (User member : this.memberAliases.keySet()) {
-			message.setTo(member.getName());
-			ChatEndpoint.directedMessage(message);
-		}
-	}
 
 	public Set<Group> getSubGroups() {
 		return this.subgroups;
@@ -418,8 +395,8 @@ public class Group {
 			this.supergroups = new LinkedHashSet<>();
 		}
 		
-		public Group build() throws IllegalArgumentException {
-		  if (groupName.isEmpty() && !moderators.isEmpty()) {
+		public Group build() {
+		  if (!groupName.isEmpty() && !moderators.isEmpty()) {
 				return new Group(groupName, moderators, 
 						memberAliases, subgroups, supergroups);
 			}
@@ -440,8 +417,6 @@ public class Group {
 		public GroupBuilder addModerator(User user) {
 			if (user != null) {
 				this.moderators.add(user);
-				// TODO Added this to allow mods to have aliases, also--otherwise,
-				// TODO they wouldn't be found when looking in user list.
 				this.memberAliases.put(user, user.getName());
 			}
 			
