@@ -151,13 +151,6 @@ public class GroupDatabaseImplTest {
   }
 
   @Test
-  public void deleteModeratorForGroup() {
-    groupDatabase.createModeratorForGroup(testHuman, testGroup);
-    groupDatabase.deleteModeratorForGroup(testHuman, testGroup);
-    assertEquals(1, groupDatabase.findAllModeratorsByGroup(testGroup).size());
-  }
-
-  @Test
   public void moderatorForGroupExists() {
     assertTrue(groupDatabase.moderatorForGroupExists(testPerson, testGroup));
   }
