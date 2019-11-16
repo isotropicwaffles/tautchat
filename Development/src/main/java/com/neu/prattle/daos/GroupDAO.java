@@ -60,10 +60,10 @@ public interface GroupDAO {
   /**
    * Find group by name group.
    *
-   * @param groupName the group name
+   * @param group the group name
    * @return the group
    */
-  Group findGroupByName(String groupName);
+  Group findGroupByName(Group group);
 
   /**
    * Group exists boolean.
@@ -71,7 +71,7 @@ public interface GroupDAO {
    * @param groupName the group name
    * @return the boolean
    */
-  boolean groupExists(String groupName);
+  boolean groupExists(Group group);
 
   /**
    * Update group.

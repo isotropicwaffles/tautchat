@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ public class GroupDatabaseImpl implements GroupDAO {
   private static final String ISACTIVE = "is_active";
   private static final String PRIMARYMODERATOR = "primary_moderator";
   private static final String SELECTALLGROUP = "SELECT * FROM `tautdb`.`groups` WHERE `group_name`='";
+  private static final String SELECTALLGROUPID = "SELECT * FROM `tautdb`.`groups` WHERE `id`=";
 
   private void executeUpdateQueryHelper(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
@@ -123,11 +125,22 @@ public class GroupDatabaseImpl implements GroupDAO {
 
   @Override
   public void createGroup(Group group) {
-    String createUserSQL = "INSERT INTO `tautdb`.`groups` (`is_active`, `group_name`, "
+    String createGroupSQL = "INSERT INTO `tautdb`.`groups` (`is_active`, `group_name`, "
             + "`primary_moderator`)"
             + " VALUES (" + group.isActive() + ", '" + group.getName() + "', '"
             + group.getModerators().iterator().next().getName() + "')";
-    executeUpdateQueryHelper(createUserSQL);
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement preparedStatement = connection.
+                 prepareStatement(createGroupSQL, Statement.RETURN_GENERATED_KEYS)) {
+      preparedStatement.executeUpdate();
+      try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+        if (resultSet.next()) {
+          group.setId((int) resultSet.getLong(1));
+        }
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Create Group Query SQL blew up: " + e.toString());
+    }
   }
 
   @Override
@@ -168,8 +181,8 @@ public class GroupDatabaseImpl implements GroupDAO {
   }
 
   @Override
-  public Group findGroupByName(String groupName) {
-    String findGroupByNameSQL = SELECTALLGROUP + groupName + "'";
+  public Group findGroupByName(Group group) {
+    String findGroupByNameSQL = SELECTALLGROUP + group.getName() + "'";
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement statement = connection.prepareStatement(findGroupByNameSQL)) {
@@ -181,7 +194,7 @@ public class GroupDatabaseImpl implements GroupDAO {
           User mod = userDatabase.findUserByUsername(primaryModerator);
           Group groupFromDB = new Group(mod);
           groupFromDB.setId(id);
-          groupFromDB.setName(mod, groupName);
+          groupFromDB.setName(mod, group.getName());
           groupFromDB.setActive(isActive);
           return groupFromDB;
         }
@@ -193,8 +206,8 @@ public class GroupDatabaseImpl implements GroupDAO {
   }
 
   @Override
-  public boolean groupExists(String groupName) {
-    String groupExistsSQL = SELECTALLGROUP + groupName + "'";
+  public boolean groupExists(Group group) {
+    String groupExistsSQL = SELECTALLGROUPID + group.getId();
     return executeBooleanQuery(groupExistsSQL);
   }
 
@@ -202,14 +215,14 @@ public class GroupDatabaseImpl implements GroupDAO {
   public void updateGroup(Group group) {
     String updateGroupSQL = "UPDATE `tautdb`.`groups` SET `is_active`=" + group.isActive()
             + ", `primary_moderator`='" + group.getModerators().iterator().next().getName()
-            + "' WHERE `group_name`='" + group.getName() + "'";
+            + "' WHERE `id`=" + group.getId();
     executeUpdateQueryHelper(updateGroupSQL);
   }
 
   @Override
   public void deleteGroup(Group group) {
-    String deleteGroupSQL = "DELETE FROM `tautdb`.`groups` WHERE `group_name`='"
-            + group.getName() + "'";
+    String deleteGroupSQL = "DELETE FROM `tautdb`.`groups` WHERE `id`="
+            + group.getId();
     executeUpdateQueryHelper(deleteGroupSQL);
   }
 
@@ -352,27 +365,27 @@ public class GroupDatabaseImpl implements GroupDAO {
     return null;
   }
 
-  public void truncateGroups() {
+  void truncateGroups() {
     String truncateGroupsSQL = "DELETE FROM `tautdb`.`groups`";
     executeUpdateQueryHelper(truncateGroupsSQL);
   }
 
-  public void truncateGroupMembers() {
+  void truncateGroupMembers() {
     String truncateGroupMembers = "DELETE FROM `tautdb`.`group_members`";
     executeUpdateQueryHelper(truncateGroupMembers);
   }
 
-  public void truncateModerators() {
+  void truncateModerators() {
     String truncateModeratorsSQL = "DELETE FROM `tautdb`.`moderators`";
     executeUpdateQueryHelper(truncateModeratorsSQL);
   }
 
-  public void truncateSubgroups() {
+  void truncateSubgroups() {
     String truncateSubgroupsSQL = "DELETE FROM `tautdb`.`subgroups`";
     executeUpdateQueryHelper(truncateSubgroupsSQL);
   }
 
-  public void truncateMemberAliases() {
+  void truncateMemberAliases() {
     String truncateMemberAliasesSQL = "DELETE FROM `tautdb`.`member_aliases`";
     executeUpdateQueryHelper(truncateMemberAliasesSQL);
   }

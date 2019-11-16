@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -75,11 +76,20 @@ public class UserDatabaseImpl implements UserDAO {
 
   @Override
   public void createUser(User user) {
-    if (!userExists(user.getName())) {
       String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
               + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
               + user.userIsBot() + ", " + user.getSearchable() + ")";
-      executeUpdateHelper(createUserSQL);
+    try (Connection connection = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement preparedStatement = connection.
+                 prepareStatement(createUserSQL, Statement.RETURN_GENERATED_KEYS)) {
+      preparedStatement.executeUpdate();
+      try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+        if (resultSet.next()) {
+          user.setId((int) resultSet.getLong(1));
+        }
+      }
+    } catch (SQLException e) {
+      logging.log(Level.INFO, "Create User Query SQL blew up: " + e.toString());
     }
   }
 
