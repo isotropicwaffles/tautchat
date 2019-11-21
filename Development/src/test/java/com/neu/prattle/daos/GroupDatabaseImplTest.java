@@ -214,11 +214,11 @@ public class GroupDatabaseImplTest {
   public void breakSQLQuery() {
     ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     System.setErr(new PrintStream(outContent));
-    groupDatabase.createGroup(testGroup);
+    //groupDatabase.createGroup(testGroup);
 /*    groupDatabase.findPrimaryModerator(testGroup);
     groupDatabase.executeUpdateHelper("Invalid string");
-    groupDatabase.findGroupByName(testGroup);
-    groupDatabase.executeBooleanQuery("Not a SQL query");*/
+    groupDatabase.findGroupByName(testGroup); */
+    groupDatabase.executeBooleanQuery("Not a SQL query");
 
     assertTrue(outContent.toString().contains("SQL blew up"));
   }

@@ -136,6 +136,8 @@ public class UserDatabaseImplTest {
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setErr(new PrintStream(outContent));
 		userImplTest.createUser(testPerson);
+		userImplTest.createUser(testPerson);
+
 /*		userImplTest.findAllUsers();
 		userImplTest.createUser(testPerson);
 		System.out.println(outContent.toString());*/
