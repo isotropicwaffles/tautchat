@@ -7,6 +7,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
@@ -36,7 +39,7 @@ public class UserDatabaseImplTest {
 	    		.setSearchable(false)
 	    		.setStatus(UserStatus.ONLINE)
 	    		.build();
-		
+
 			userImplTest.createUser(testPerson);
 			userImplTest.createUser(testIndividual);
 			userImplTest.createUser(testHuman);
@@ -76,13 +79,10 @@ public class UserDatabaseImplTest {
 				.setSearchable(true)
 				.setStatus(UserStatus.AWAY)
 				.build();
-		if (!userImplTest.userExists(changer.getName())) {
-			userImplTest.createUser(changer);
-		}
-		changer.setId(userImplTest.findUserByUsername("HughMann").getId());
-		changer.setName("NewName");
+		userImplTest.createUser(changer);
+		changer.setStatus(UserStatus.DONOTDISTURB);
 		userImplTest.updateUser(changer);
-		assertEquals("NewName", userImplTest.findUserByUsername("NewName").getName());
+		assertEquals(UserStatus.DONOTDISTURB, userImplTest.retrieveStatus(changer));
 	}
 
 	@Test
@@ -101,11 +101,19 @@ public class UserDatabaseImplTest {
 		assertTrue(userImplTest.findAllUsers().size() < dbSize);
 	}
 
-/*	@Test
-	public void deleteAllUsersTest() {
-		userImplTest.deleteAllUsers();
-		assertEquals(0, userImplTest.findAllUsers().size());
-	}*/
+	@Test
+	public void deleteUserUsernameTest() {
+		User doomed = new User.UserBuilder()
+						.setName("condemned")
+						.setStatus(UserStatus.IDLE)
+						.setSearchable(false)
+						.build();
+		if (!userImplTest.userExists(doomed.getName())) {
+			userImplTest.createUser(doomed);
+		}
+		userImplTest.deleteUserByUsername(doomed.getName());
+		assertFalse(userImplTest.userExists(doomed.getName()));
+	}
 
 	@Test
 	public void isBotTest() {
@@ -123,4 +131,22 @@ public class UserDatabaseImplTest {
 		assertEquals(UserStatus.ONLINE, userImplTest.retrieveStatus(testPerson));
 	}
 
+	@Test
+	public void breakCreateUser() {
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(outContent));
+		userImplTest.createUser(testPerson);
+		userImplTest.findAllUsers();
+		userImplTest.createUser(testPerson);
+		System.out.println(outContent.toString());
+		assertTrue(outContent.toString().contains("SQL blew up"));
+	}
+
+
+	@Test
+	public void deleteAllUsersTest() {
+		userImplTest.deleteAllUsers();
+		assertEquals(0, userImplTest.findAllUsers().size());
+		setUp();
+	}
 }

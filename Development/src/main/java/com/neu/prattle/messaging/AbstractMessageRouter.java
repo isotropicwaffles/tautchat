@@ -9,7 +9,7 @@ import com.neu.prattle.model.Message;
 
 /**
 *
-* This is an message process router that routes messages to sub messsage processors
+* This is an message process router that routes messages to sub message processors
 *
 * @author Richard Alexander Showalter-Bucher
 * @version 1.0 11/01/2019
@@ -33,7 +33,7 @@ public abstract class AbstractMessageRouter implements IMessageProcessor {
 	}
 	
 	 /**
-	 * This processes the message and sends the message to the appropreiate message processor
+	 * This processes the message and sends the message to the appropriate message processor
 	 * 
 	 * @param message - a message to be processed
 	 * @throws IOException 

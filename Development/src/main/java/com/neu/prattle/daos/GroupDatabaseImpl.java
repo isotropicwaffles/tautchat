@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class GroupDatabaseImpl implements GroupDAO {
+public class GroupDatabaseImpl extends AbstractJDBC implements GroupDAO {
 
   private LogManager logManager = LogManager.getLogManager();
   private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -30,27 +30,6 @@ public class GroupDatabaseImpl implements GroupDAO {
   private static final String PRIMARYMODERATOR = "primary_moderator";
   private static final String SELECTALLGROUP = "SELECT * FROM `tautdb`.`groups` WHERE `group_name`='";
   private static final String SELECTALLGROUPID = "SELECT * FROM `tautdb`.`groups` WHERE `id`=";
-
-  private void executeUpdateQueryHelper(String string) {
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         PreparedStatement statement = connection.prepareStatement(string)) {
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Update Group Query SQL blew up: " + e.toString());
-    }
-  }
-
-  private boolean executeBooleanQuery(String string) {
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         PreparedStatement statement = connection.prepareStatement(string)) {
-      try (ResultSet results = statement.executeQuery()) {
-        return results.next();
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Execute Boolean Query (Group) SQL blew up: " + e.toString());
-    }
-    return false;
-  }
 
   private List<User> executeQueryUserList(String string) {
     ArrayList<User> groupMembers = new ArrayList<>();
@@ -148,7 +127,7 @@ public class GroupDatabaseImpl implements GroupDAO {
     String createUserSQL = "INSERT INTO `tautdb`.`group_members` (`group_name`, "
             + "`username`) VALUES ('" + group.getName() + "', '" + user.getName() + "')";
     if (!isUserMemberOfGroup(user, group)) {
-      executeUpdateQueryHelper(createUserSQL);
+      executeUpdateHelper(createUserSQL);
     }
   }
 
@@ -156,7 +135,7 @@ public class GroupDatabaseImpl implements GroupDAO {
   public void deleteUserFromGroup(User user, Group group) {
     String deleteGroupSQL = "DELETE FROM `tautdb`.`group_members` WHERE `group_name`='"
             + group.getName() + ANDUSERNAME + user.getName() + "'";
-    executeUpdateQueryHelper(deleteGroupSQL);
+    executeUpdateHelper(deleteGroupSQL);
   }
 
   @Override
@@ -216,14 +195,14 @@ public class GroupDatabaseImpl implements GroupDAO {
     String updateGroupSQL = "UPDATE `tautdb`.`groups` SET `is_active`=" + group.isActive()
             + ", `primary_moderator`='" + group.getModerators().iterator().next().getName()
             + "' WHERE `id`=" + group.getId();
-    executeUpdateQueryHelper(updateGroupSQL);
+    executeUpdateHelper(updateGroupSQL);
   }
 
   @Override
   public void deleteGroup(Group group) {
     String deleteGroupSQL = "DELETE FROM `tautdb`.`groups` WHERE `id`="
             + group.getId();
-    executeUpdateQueryHelper(deleteGroupSQL);
+    executeUpdateHelper(deleteGroupSQL);
   }
 
   @Override
@@ -253,14 +232,14 @@ public class GroupDatabaseImpl implements GroupDAO {
   public void createModeratorForGroup(User user, Group group) {
     String createModeratorForGroupSQL = "INSERT INTO `tautdb`.`moderators` (`group_name`, `username`) "
             + " VALUES ('" + group.getName() + "', '" + user.getName() + "')";
-    executeUpdateQueryHelper(createModeratorForGroupSQL);
+    executeUpdateHelper(createModeratorForGroupSQL);
   }
 
   @Override
   public void deleteModeratorForGroup(User user, Group group) {
     String deleteModeratorSQL = "DELETE FROM `tautdb`.`moderators` WHERE `group_name`='"
             + group.getName() + ANDUSERNAME + user.getName() + "'";
-    executeUpdateQueryHelper(deleteModeratorSQL);
+    executeUpdateHelper(deleteModeratorSQL);
   }
 
   @Override
@@ -291,7 +270,7 @@ public class GroupDatabaseImpl implements GroupDAO {
     String createSubGroupForGroupSQL = "INSERT INTO `tautdb`.`subgroups` (`subgroup_name`, "
             + "`parent_group_name`) VALUES ('" + subgroup.getName() + "', '" + parentGroup.getName()
             + "')";
-    executeUpdateQueryHelper(createSubGroupForGroupSQL);
+    executeUpdateHelper(createSubGroupForGroupSQL);
   }
 
   @Override
@@ -305,7 +284,7 @@ public class GroupDatabaseImpl implements GroupDAO {
   public void deleteSubGroupForGroup(Group parentGroup, Group subgroup) {
     String deleteModeratorSQL = "DELETE FROM `tautdb`.`subgroups` WHERE `parent_group_name`='"
             + parentGroup.getName() + "' AND `subgroup_name`='" + subgroup.getName() + "'";
-    executeUpdateQueryHelper(deleteModeratorSQL);
+    executeUpdateHelper(deleteModeratorSQL);
   }
 
 
@@ -329,14 +308,14 @@ public class GroupDatabaseImpl implements GroupDAO {
     String createUserAliasForGroupSQL = "INSERT INTO `tautdb`.`member_aliases` (`username`, "
             + "`group_name`, `alias`) VALUES ('" + user.getName() + "', '" + group.getName()
             + "', '" + alias + "')";
-    executeUpdateQueryHelper(createUserAliasForGroupSQL);
+    executeUpdateHelper(createUserAliasForGroupSQL);
   }
 
   @Override
   public void deleteUserAliasForGroup(User user, Group group) {
     String deleteModeratorSQL = "DELETE FROM `tautdb`.`member_aliases` WHERE `group_name`='"
             + group.getName() + ANDUSERNAME + user.getName() + "'";
-    executeUpdateQueryHelper(deleteModeratorSQL);
+    executeUpdateHelper(deleteModeratorSQL);
   }
 
   @Override
@@ -367,26 +346,26 @@ public class GroupDatabaseImpl implements GroupDAO {
 
   void truncateGroups() {
     String truncateGroupsSQL = "DELETE FROM `tautdb`.`groups`";
-    executeUpdateQueryHelper(truncateGroupsSQL);
+    executeUpdateHelper(truncateGroupsSQL);
   }
 
   void truncateGroupMembers() {
     String truncateGroupMembers = "DELETE FROM `tautdb`.`group_members`";
-    executeUpdateQueryHelper(truncateGroupMembers);
+    executeUpdateHelper(truncateGroupMembers);
   }
 
   void truncateModerators() {
     String truncateModeratorsSQL = "DELETE FROM `tautdb`.`moderators`";
-    executeUpdateQueryHelper(truncateModeratorsSQL);
+    executeUpdateHelper(truncateModeratorsSQL);
   }
 
   void truncateSubgroups() {
     String truncateSubgroupsSQL = "DELETE FROM `tautdb`.`subgroups`";
-    executeUpdateQueryHelper(truncateSubgroupsSQL);
+    executeUpdateHelper(truncateSubgroupsSQL);
   }
 
   void truncateMemberAliases() {
     String truncateMemberAliasesSQL = "DELETE FROM `tautdb`.`member_aliases`";
-    executeUpdateQueryHelper(truncateMemberAliasesSQL);
+    executeUpdateHelper(truncateMemberAliasesSQL);
   }
 }

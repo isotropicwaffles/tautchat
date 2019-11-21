@@ -8,6 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -134,6 +137,14 @@ public class GroupDatabaseImplTest {
   }
 
   @Test
+  public void deleteModerator() {
+    groupDatabase.createModeratorForGroup(testPerson, testSubGroup);
+    assertEquals(4, groupDatabase.findAllModerators().size());
+    groupDatabase.deleteModeratorForGroup(testPerson, testSubGroup);
+    assertEquals(3, groupDatabase.findAllModerators().size());
+  }
+
+  @Test
   public void findAllSubGroupsByGroup() {
     assertTrue(groupDatabase.findAllSubGroupsByGroup(testGroup).size() > 0);
     assertFalse(groupDatabase.findAllSubGroupsByGroup(testSubGroup).size() > 0);
@@ -197,6 +208,19 @@ public class GroupDatabaseImplTest {
   @Test
   public void findAllGroupMembersTest() {
     assertTrue(groupDatabase.findAllGroupMembers(testGroup).size() > 2);
+  }
+
+  @Test
+  public void breakSQLQuery() {
+    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    System.setErr(new PrintStream(outContent));
+    groupDatabase.createGroup(testGroup);
+    groupDatabase.findPrimaryModerator(testGroup);
+    groupDatabase.executeUpdateHelper("Invalid string");
+    groupDatabase.executeBooleanQuery("Not a SQL query");
+    groupDatabase.findGroupByName(testGroup);
+
+    assertTrue(outContent.toString().contains("SQL blew up"));
   }
 
 }

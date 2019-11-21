@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * The JDBC implementation of User<-->database connection methods.
  */
-public class UserDatabaseImpl implements UserDAO {
+public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
   private LogManager logManager = LogManager.getLogManager();
   private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -28,26 +28,7 @@ public class UserDatabaseImpl implements UserDAO {
   private static final String SEARCHABLE = "searchable";
   private static final String SELECTALLUSER = "SELECT * FROM `tautdb`.`users` WHERE `name`='";
 
-  private void executeUpdateHelper(String string) {
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         PreparedStatement statement = connection.prepareStatement(string)) {
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Execute Update SQL blew up: " + e.toString());
-    }
-  }
 
-  private boolean executeBooleanQuery(String string) {
-    try (Connection connection = DatabaseConnection.getInstance().getConnection();
-         PreparedStatement statement = connection.prepareStatement(string)) {
-      try (ResultSet results = statement.executeQuery()) {
-        return results.next();
-      }
-    } catch (SQLException e) {
-      logging.log(Level.INFO, "Execute Boolean Query SQL blew up: " + e.toString());
-    }
-    return false;
-  }
 
   private User returnUserQuery(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
