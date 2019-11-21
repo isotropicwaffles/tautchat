@@ -9,9 +9,15 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UserDatabaseImplTest {
 
@@ -131,18 +137,20 @@ public class UserDatabaseImplTest {
 		assertEquals(UserStatus.ONLINE, userImplTest.retrieveStatus(testPerson));
 	}
 
-	@Test
+	@Test(expected = SQLException.class)
 	public void breakCreateUser() {
-		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-		System.setErr(new PrintStream(outContent));
-		userImplTest.createUser(testPerson);
-		userImplTest.createUser(testPerson);
-
-/*		userImplTest.findAllUsers();
-		userImplTest.createUser(testPerson);
-		System.out.println(outContent.toString());*/
-		assertTrue(outContent.toString().contains("SQL blew up"));
+		UserDatabaseImpl mockImpl = mock(UserDatabaseImpl.class);
+		doThrow(SQLException.class).when(mockImpl).createUser(any(User.class));
+		mockImpl.createUser(testPerson);
 	}
+
+	@Test(expected = SQLException.class)
+	public void breakFindAllUsers() {
+		UserDatabaseImpl mockImpl = mock(UserDatabaseImpl.class);
+		when(mockImpl.findAllUsers()).thenThrow(SQLException.class);
+		mockImpl.findAllUsers();
+	}
+
 
 
 	@Test

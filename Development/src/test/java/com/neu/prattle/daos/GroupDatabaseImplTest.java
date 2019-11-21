@@ -10,10 +10,16 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GroupDatabaseImplTest {
 
@@ -210,17 +216,52 @@ public class GroupDatabaseImplTest {
     assertTrue(groupDatabase.findAllGroupMembers(testGroup).size() > 2);
   }
 
-  @Test
+/*  @Test
   public void breakSQLQuery() {
     ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     System.setErr(new PrintStream(outContent));
     //groupDatabase.createGroup(testGroup);
-/*    groupDatabase.findPrimaryModerator(testGroup);
+*//*    groupDatabase.findPrimaryModerator(testGroup);
     groupDatabase.executeUpdateHelper("Invalid string");
-    groupDatabase.findGroupByName(testGroup); */
+    groupDatabase.findGroupByName(testGroup); *//*
     groupDatabase.executeBooleanQuery("Not a SQL query");
 
     assertTrue(outContent.toString().contains("SQL blew up"));
+  }*/
+
+
+  @Test(expected = SQLException.class)
+  public void breakCreateGroup() {
+    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
+    doThrow(SQLException.class).when(mockImpl).createGroup(any(Group.class));
+    mockImpl.createGroup(testGroup);
   }
 
+  @Test(expected = SQLException.class)
+  public void breakUpdateHelper() {
+    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
+    doThrow(SQLException.class).when(mockImpl).executeUpdateHelper(anyString());
+    mockImpl.executeUpdateHelper("filler");
+  }
+
+  @Test(expected = SQLException.class)
+  public void breakBooleanQuery() {
+    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
+    when(mockImpl.executeBooleanQuery(anyString())).thenThrow(SQLException.class);
+    mockImpl.executeBooleanQuery("Filler text");
+  }
+
+  @Test(expected = SQLException.class)
+  public void breakPrimaryMod() {
+    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
+    when(mockImpl.findPrimaryModerator(any(Group.class))).thenThrow(SQLException.class);
+    mockImpl.findPrimaryModerator(testGroup);
+  }
+
+  @Test(expected = SQLException.class)
+  public void breakFindGroupByName() {
+    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
+    when(mockImpl.findGroupByName(any(Group.class))).thenThrow(SQLException.class);
+    mockImpl.findGroupByName(testGroup);
+  }
 }
