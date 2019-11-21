@@ -139,9 +139,9 @@ public class GroupDatabaseImplTest {
   @Test
   public void deleteModerator() {
     groupDatabase.createModeratorForGroup(testPerson, testSubGroup);
-    assertEquals(4, groupDatabase.findAllModerators().size());
+    assertTrue(groupDatabase.moderatorForGroupExists(testPerson, testSubGroup));
     groupDatabase.deleteModeratorForGroup(testPerson, testSubGroup);
-    assertEquals(3, groupDatabase.findAllModerators().size());
+    assertFalse(groupDatabase.moderatorForGroupExists(testPerson, testSubGroup));
   }
 
   @Test
@@ -217,8 +217,8 @@ public class GroupDatabaseImplTest {
     groupDatabase.createGroup(testGroup);
     groupDatabase.findPrimaryModerator(testGroup);
     groupDatabase.executeUpdateHelper("Invalid string");
-    groupDatabase.executeBooleanQuery("Not a SQL query");
     groupDatabase.findGroupByName(testGroup);
+    groupDatabase.executeBooleanQuery("Not a SQL query");
 
     assertTrue(outContent.toString().contains("SQL blew up"));
   }
