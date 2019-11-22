@@ -8,9 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -31,6 +31,9 @@ public class GroupDatabaseImplTest {
   private static Group testGroup;
   private static Group testSubGroup;
   private static Group testGroupOther;
+  private static GroupDatabaseImpl mockImpl;
+  private static ResultSet mockResultSet;
+  private static Logger mockLogger;
 
   @BeforeClass
   public static void setUp() {
@@ -85,6 +88,10 @@ public class GroupDatabaseImplTest {
     groupDatabase.addUserToGroup(testHuman, testGroupOther);
     groupDatabase.addUserToGroup(testIndividual, testGroup);
     groupDatabase.addUserToGroup(testHuman, testGroup);
+
+    mockImpl = mock(GroupDatabaseImpl.class);
+    mockResultSet = mock(ResultSet.class);
+    mockLogger = mock(Logger.class);
   }
 
   @AfterClass
@@ -232,35 +239,34 @@ public class GroupDatabaseImplTest {
 
   @Test(expected = SQLException.class)
   public void breakCreateGroup() {
-    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
     doThrow(SQLException.class).when(mockImpl).createGroup(any(Group.class));
     mockImpl.createGroup(testGroup);
   }
 
   @Test(expected = SQLException.class)
   public void breakUpdateHelper() {
-    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
     doThrow(SQLException.class).when(mockImpl).executeUpdateHelper(anyString());
     mockImpl.executeUpdateHelper("filler");
   }
 
-  @Test(expected = SQLException.class)
+  @Test
   public void breakBooleanQuery() {
-    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
-    when(mockImpl.executeBooleanQuery(anyString())).thenThrow(SQLException.class);
-    mockImpl.executeBooleanQuery("Filler text");
+    try {
+      when(mockResultSet.next()).thenThrow(SQLException.class);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    assertFalse(mockImpl.executeBooleanQuery("Filler text"));
   }
 
   @Test(expected = SQLException.class)
   public void breakPrimaryMod() {
-    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
     when(mockImpl.findPrimaryModerator(any(Group.class))).thenThrow(SQLException.class);
     mockImpl.findPrimaryModerator(testGroup);
   }
 
   @Test(expected = SQLException.class)
   public void breakFindGroupByName() {
-    GroupDatabaseImpl mockImpl = mock(GroupDatabaseImpl.class);
     when(mockImpl.findGroupByName(any(Group.class))).thenThrow(SQLException.class);
     mockImpl.findGroupByName(testGroup);
   }
