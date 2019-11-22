@@ -465,40 +465,11 @@ public class Group {
 		isActive = active;
 	}
 
-
-	public Map<User, String> getMemberAliases() {
-		return memberAliases;
-	}
-
-	public void setMemberAliases(Map<User, String> memberAliases) {
-		this.memberAliases = memberAliases;
-	}
-
-	public Set<User> getJoinUserQueue() {
-		return joinUserQueue;
-	}
-
-	public void setJoinUserQueue(Set<User> joinUserQueue) {
-		this.joinUserQueue = joinUserQueue;
-	}
-
-	public Set<Group> getJoinSubGroupQueue() {
-		return joinSubGroupQueue;
-	}
-
-	public void setJoinSubGroupQueue(Set<Group> joinSubGroupQueue) {
-		this.joinSubGroupQueue = joinSubGroupQueue;
-	}
-
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public void setModerators(Set<User> moderators) {
-		this.moderators = moderators;
 	}
 }
