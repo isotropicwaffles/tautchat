@@ -46,7 +46,16 @@ public class GroupTest {
     Group g = new Group(mod);
     g.setName(mod, "LeBlanc");
 
+    Group gSuper = new Group(mod);
+    Group gSub = new Group(mod);
+    g.addSupergroup(mod, gSuper);
+    g.addSubgroup(mod, gSub);
+    assertFalse(g.getSubGroups().isEmpty());
+    assertFalse(g.getSuperGroups().isEmpty());
+
     g.deactivate(mod);
+    assertTrue(g.getSuperGroups().isEmpty());
+    assertTrue(g.getSubGroups().isEmpty());
     g.setName(mod, "Not LeBlanc");
 
     assertEquals("LeBlanc", g.getName());
