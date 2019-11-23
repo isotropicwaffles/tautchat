@@ -252,6 +252,11 @@ public class GroupDatabaseImplTest {
     } catch (Exception e2) {
       assertTrue(outContent.toString().contentEquals("SQL blew up"));
     }
+    try{
+      groupDatabase.executeUpdateHelper("nonsense again");
+    } catch (Exception e3) {
+      assertTrue(outContent.toString().contentEquals("SQL blew up"));
+    }
   }
 
   @Test(expected = SQLException.class)

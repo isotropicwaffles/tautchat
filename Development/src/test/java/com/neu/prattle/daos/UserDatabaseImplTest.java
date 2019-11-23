@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
@@ -94,17 +95,13 @@ public class UserDatabaseImplTest {
 	@Test
 	public void deleteUserByIdTest() {
 		User doomed = new User.UserBuilder()
-				.setName("condemned")
+				.setName("theJudged")
 				.setStatus(UserStatus.IDLE)
 				.setSearchable(false)
 				.build();
-		if (!userImplTest.userExists(doomed.getName())) {
-			userImplTest.createUser(doomed);
-		}
-		int dbSize = userImplTest.findAllUsers().size();
-		User testUser = userImplTest.findUserByUsername(doomed.getName());
-		userImplTest.deleteUserById(testUser.getId());
-		assertTrue(userImplTest.findAllUsers().size() < dbSize);
+		userImplTest.createUser(doomed);
+		userImplTest.deleteUserById(doomed.getId());
+		assertFalse(userImplTest.userExists(doomed.getName()));
 	}
 
 	@Test
