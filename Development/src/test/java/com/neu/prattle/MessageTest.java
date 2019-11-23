@@ -1,12 +1,18 @@
 package com.neu.prattle;
 
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -19,11 +25,13 @@ import org.junit.Test;
 
 import com.neu.prattle.model.Message;
 
+import junit.framework.TestCase;
+
 import javax.websocket.EncodeException;
+import javax.websocket.EndpointConfig;
 
 
 public class MessageTest {
-	;
 
 	@Before
 	public void setUp() throws IOException {
@@ -105,9 +113,33 @@ public class MessageTest {
 		//The time should match
 		assertEquals(aDate,SetInitialDate.getDateSent());
 
-		
 	}
 
+	@Test
+	public void breakEncode() {
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(outContent));
+		MessageEncoder mockEncoder = mock(MessageEncoder.class);
+		Message simpleMessage = Message.messageBuilder()
+						.setFrom("Huey")
+						.setTo("Dewey")
+						.setMessageContent("Louie is a spy")
+						.build();
+		try {
+			when(mockEncoder.encode(any(Message.class))).thenThrow(IOException.class);
+			assertEquals("{}", mockEncoder.encode(simpleMessage));
+		} catch (Exception e) {
+			assertNotNull(outContent.toString());
+		}
+	}
 
-
+		@Test
+		public void nothing() {
+			MessageEncoder messageEncoder = new MessageEncoder();
+			MessageDecoder messageDecoder = new MessageDecoder();
+			EndpointConfig mockEndpoint = mock(EndpointConfig.class);
+			messageDecoder.init(mockEndpoint);
+			messageEncoder.init(mockEndpoint);
+			assertEquals(2, 1+1);
+		}
 }

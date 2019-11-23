@@ -33,7 +33,7 @@ public class MessageEncoder implements Encoder.Text<Message> {
   /**
    * Encode.
    *
-   * Constucts a JSON structure from a Message object, in effect serializing the Message by
+   * Constructs a JSON structure from a Message object, in effect serializing the Message by
    * converting it into a String.
    *
    * @param message What needs to be serialized
