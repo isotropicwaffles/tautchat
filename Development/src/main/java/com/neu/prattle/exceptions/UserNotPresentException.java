@@ -12,12 +12,12 @@ import com.neu.prattle.model.User;
  * @version dated 2019-11-11
  */
 public class UserNotPresentException extends RuntimeException {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4845176561270017896L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4845176561270017896L;
 
-	public UserNotPresentException(String message)  {
-        super(message);
-    }
+  public UserNotPresentException(String message) {
+    super(message);
+  }
 }

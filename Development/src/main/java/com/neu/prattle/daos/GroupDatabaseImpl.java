@@ -17,10 +17,6 @@ import java.util.logging.Logger;
 
 public class GroupDatabaseImpl extends AbstractJDBC implements GroupDAO {
 
-  private LogManager logManager = LogManager.getLogManager();
-  private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
-  private UserDatabaseImpl userDatabase = new UserDatabaseImpl();
   private static final String ANDUSERNAME = "' AND `username`='";
   private static final String STATUS = "status";
   private static final String ISBOT = "is_bot";
@@ -30,6 +26,9 @@ public class GroupDatabaseImpl extends AbstractJDBC implements GroupDAO {
   private static final String PRIMARYMODERATOR = "primary_moderator";
   private static final String SELECTALLGROUP = "SELECT * FROM `tautdb`.`groups` WHERE `group_name`='";
   private static final String SELECTALLGROUPID = "SELECT * FROM `tautdb`.`groups` WHERE `id`=";
+  private LogManager logManager = LogManager.getLogManager();
+  private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
+  private UserDatabaseImpl userDatabase = new UserDatabaseImpl();
 
   private List<User> executeQueryUserList(String string) {
     ArrayList<User> groupMembers = new ArrayList<>();
@@ -55,16 +54,16 @@ public class GroupDatabaseImpl extends AbstractJDBC implements GroupDAO {
     }
     int index = 0;
     while (index < idList.size()) {
-        User user = new User.UserBuilder()
-        		.setName(nameList.get(index))
-        		.setId(idList.get(index))
-        		.setBot(isBotList.get(index))
-        		.setSearchable(isSearchableList.get(index))
-        		.setStatus(userDatabase.stringToUserStatus(statusList.get(index)))
-        		.build();
+      User user = new User.UserBuilder()
+              .setName(nameList.get(index))
+              .setId(idList.get(index))
+              .setBot(isBotList.get(index))
+              .setSearchable(isSearchableList.get(index))
+              .setStatus(userDatabase.stringToUserStatus(statusList.get(index)))
+              .build();
 
-        groupMembers.add(user);
-        index++;
+      groupMembers.add(user);
+      index++;
     }
     return groupMembers;
   }
@@ -112,7 +111,7 @@ public class GroupDatabaseImpl extends AbstractJDBC implements GroupDAO {
          PreparedStatement preparedStatement = connection.
                  prepareStatement(createGroupSQL, Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.executeUpdate();
-      try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+      try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
         if (resultSet.next()) {
           group.setId((int) resultSet.getLong(1));
         }

@@ -29,7 +29,7 @@ public interface MessageDAO {
   /**
    * Update message. Useful for flagging/monitoring purposes.
    *
-   * @param message   the message
+   * @param message the message
    */
   void updateMessage(Message message);
 

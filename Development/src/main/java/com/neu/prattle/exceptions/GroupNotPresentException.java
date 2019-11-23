@@ -12,12 +12,12 @@ import com.neu.prattle.model.Group;
  * @version dated 2019-11-11
  */
 public class GroupNotPresentException extends RuntimeException {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4845176561270017896L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4845176561270017896L;
 
-	public GroupNotPresentException(String message)  {
-        super(message);
-    }
+  public GroupNotPresentException(String message) {
+    super(message);
+  }
 }

@@ -12,17 +12,14 @@ import java.util.logging.Logger;
 @SuppressWarnings("squid:S2068") // This is not a hard coded password.
 public class DatabaseConnection {
 
-  private static DatabaseConnection instance;
-  private java.sql.Connection connection;
   private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-
   private static final String USER = "team5";
   private static final String PASSWORD = "tautchat";
   private static final String SCHEMA = "tautdb";
   private static final String DB_HOSTNAME = "tautdb.c6y6bex5zmy8.us-east-2.rds.amazonaws.com";
-
   private static final String URL = String.format("jdbc:mysql://%s/%s", DB_HOSTNAME, SCHEMA);
-
+  private static DatabaseConnection instance;
+  private java.sql.Connection connection;
   private LogManager logManager = LogManager.getLogManager();
   private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -35,17 +32,6 @@ public class DatabaseConnection {
     }
   }
 
-
-  /**
-   * Gets connection to database.
-   *
-   * @return the connection
-   */
-  public java.sql.Connection getConnection() {
-    return connection;
-  }
-
-
   /**
    * Singleton implementation to avoid multiple connections to the db causing race conditions.
    *
@@ -57,5 +43,14 @@ public class DatabaseConnection {
       instance = new DatabaseConnection();
     }
     return instance;
+  }
+
+  /**
+   * Gets connection to database.
+   *
+   * @return the connection
+   */
+  public java.sql.Connection getConnection() {
+    return connection;
   }
 }

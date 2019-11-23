@@ -20,15 +20,12 @@ import java.util.logging.Logger;
  */
 public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
-  private LogManager logManager = LogManager.getLogManager();
-  private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
   private static final String STATUS = "status";
   private static final String ISBOT = "is_bot";
   private static final String SEARCHABLE = "searchable";
   private static final String SELECTALLUSER = "SELECT * FROM `tautdb`.`users` WHERE `name`='";
-
-
+  private LogManager logManager = LogManager.getLogManager();
+  private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   User returnUserQuery(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
@@ -41,12 +38,12 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
           boolean isBot = results.getBoolean(ISBOT);
           boolean searchable = results.getBoolean(SEARCHABLE);
           return User.userBuilder()
-        		  .setName(name)
-        		  .setBot(isBot)
-        		  .setId(id)
-        		  .setStatus(stringToUserStatus(status))
-        		  .setSearchable(searchable)
-        		  .build();
+                  .setName(name)
+                  .setBot(isBot)
+                  .setId(id)
+                  .setStatus(stringToUserStatus(status))
+                  .setSearchable(searchable)
+                  .build();
         }
       }
     } catch (SQLException e) {
@@ -57,14 +54,14 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
   @Override
   public void createUser(User user) {
-      String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
-              + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
-              + user.userIsBot() + ", " + user.getSearchable() + ")";
+    String createUserSQL = "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
+            + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
+            + user.userIsBot() + ", " + user.getSearchable() + ")";
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement preparedStatement = connection.
                  prepareStatement(createUserSQL, Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.executeUpdate();
-      try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+      try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
         if (resultSet.next()) {
           user.setId((int) resultSet.getLong(1));
         }
@@ -106,12 +103,12 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
           boolean isBot = results.getBoolean(ISBOT);
           boolean searchable = results.getBoolean(SEARCHABLE);
           User user = new User.UserBuilder()
-        		  .setName(name)
-        		  .setBot(isBot)
-        		  .setId(id)
-        		  .setStatus(stringToUserStatus(status))
-        		  .setSearchable(searchable)
-        		  .build();
+                  .setName(name)
+                  .setBot(isBot)
+                  .setId(id)
+                  .setStatus(stringToUserStatus(status))
+                  .setSearchable(searchable)
+                  .build();
           users.add(user);
         }
       }

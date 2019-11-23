@@ -26,6 +26,16 @@ public class UserServiceImpl implements UserService {
    * Database instance for persistence.
    */
   private static UserDatabaseImpl userDatabase = new UserDatabaseImpl();
+  /***
+   * Variable to store the singleton instance
+   *
+   */
+  private static UserService accountService = null;
+  /**
+   * Set of user objects
+   */
+  private static Set<User> userSet;
+
 
   /***
    * UserServiceImpl is a Singleton class.
@@ -34,20 +44,13 @@ public class UserServiceImpl implements UserService {
 
   }
 
-  /***
-   * Variable to store the singleton instance
-   *
-   */
-  private static UserService accountService = null;
-
-
   /**
    * Call this method to return an instance of this service.
    *
    * @return this
    */
   public static UserService getInstance() {
-    
+
     if (accountService == null) {
       userSet = new HashSet<>();
       userSet.addAll(userDatabase.findAllUsers());
@@ -56,11 +59,20 @@ public class UserServiceImpl implements UserService {
     return accountService;
   }
 
+  /**
+   * Call this method to clear the current instance of this service.
+   */
+  public static void clear() {
+    accountService = null;
+    userSet = null;
+  }
 
   /**
-   * Set of user objects
+   * Call this method to clear the current set of users stored
    */
-  private static Set<User> userSet;
+  public static void clearAllUsers() {
+    userSet = new HashSet<>();
+  }
 
   /***
    *
@@ -70,9 +82,9 @@ public class UserServiceImpl implements UserService {
   @Override
   public Optional<User> findUserByName(String name) {
     final User user = new User.UserBuilder()
-    		.setName(name)
-    		.build();
-    
+            .setName(name)
+            .build();
+
     if (userSet.contains(user)) {
       return Optional.of(user);
     } else {
@@ -81,26 +93,26 @@ public class UserServiceImpl implements UserService {
   }
 
   /***
-	 * Queries partial name and returns all searchable users that names partially match
-	 *
-	 *
-	 * @param partialName -> The name of the user.
-	 * @return Set of users with matching parital name.
-	 */
-	@Override
-	public Set<User> findUserByPartialName(String partialName) {
+   * Queries partial name and returns all searchable users that names partially match
+   *
+   *
+   * @param partialName -> The name of the user.
+   * @return Set of users with matching parital name.
+   */
+  @Override
+  public Set<User> findUserByPartialName(String partialName) {
 
-		Set<User> partialMatches = new LinkedHashSet<>();
-		for(User user : userSet) {
+    Set<User> partialMatches = new LinkedHashSet<>();
+    for (User user : userSet) {
 
-			if(user.getName().toLowerCase().contains(partialName.toLowerCase()) &&
-					user.getSearchable()) {
-				partialMatches.add(user);
-			}
-		}
+      if (user.getName().toLowerCase().contains(partialName.toLowerCase()) &&
+              user.getSearchable()) {
+        partialMatches.add(user);
+      }
+    }
 
-		return partialMatches;
-	}
+    return partialMatches;
+  }
 
   /***
    * Attempts to return the user associated with the name and throws and error if the user doesn't exist
@@ -122,7 +134,6 @@ public class UserServiceImpl implements UserService {
     }
   }
 
-
   /**
    * Adds users to Service
    *
@@ -140,24 +151,6 @@ public class UserServiceImpl implements UserService {
       userDatabase.createUser(user);
     }
   }
-
-  /**
-   * Call this method to clear the current instance of this service.
-   */
-  public static void clear() {
-    accountService = null;
-    userSet = null;
-  }
-  
-  
-
-  /**
-   * Call this method to clear the current set of users stored
-   */
-  public static void clearAllUsers() {
-    userSet = new HashSet<>();
-  }
-
 
 
 }

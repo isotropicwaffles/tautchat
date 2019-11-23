@@ -41,12 +41,12 @@ public class MessageDatabaseImpl implements MessageDAO {
     String createMessageSQL = "INSERT INTO `tautdb`.`messages` (`content`, `sender_username`, "
             + "`recipient_username`, `date_sent`) VALUES ('" + message.getContent() + "', '"
             + message.getFrom() + "', '" + message.getTo() + "', '"
-            + simpleDateFormat.format(message.getDateSent()) +"')";
+            + simpleDateFormat.format(message.getDateSent()) + "')";
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement preparedStatement = connection.
                  prepareStatement(createMessageSQL, Statement.RETURN_GENERATED_KEYS)) {
       preparedStatement.executeUpdate();
-      try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+      try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
         if (resultSet.next()) {
           message.setId((int) resultSet.getLong(1));
         }
@@ -72,7 +72,7 @@ public class MessageDatabaseImpl implements MessageDAO {
           String from = results.getString("sender_username");
           String to = results.getString("recipient_username");
           Date sendDate = results.getDate("date_sent");
-          
+
           Message message = Message.messageBuilder()
                   .setId(id)
                   .setMessageContent(content)
@@ -82,9 +82,9 @@ public class MessageDatabaseImpl implements MessageDAO {
                   .setType("direct message")
                   .setContentType("text")
                   .build();
-          
+
           messages.add(message);
-          
+
         }
       }
     } catch (SQLException e) {
@@ -106,7 +106,7 @@ public class MessageDatabaseImpl implements MessageDAO {
           String to = results.getString("recipient_username");
           Date sendDate = results.getDate("date_sent");
 
-         return Message.messageBuilder()
+          return Message.messageBuilder()
                   .setId(id)
                   .setMessageContent(content)
                   .setFrom(from)

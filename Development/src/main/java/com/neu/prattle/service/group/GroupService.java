@@ -1,7 +1,8 @@
 package com.neu.prattle.service.group;
 
 import com.neu.prattle.messaging.ReservedCharacters;
-import com.neu.prattle.model.*;
+import com.neu.prattle.model.Group;
+import com.neu.prattle.model.User;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -20,66 +21,66 @@ import java.util.StringJoiner;
  *
  */
 public interface GroupService {
-	
-    /***
-     * Returns a string representation of a list of groups 
-     * @param groups - generates string list of groups
-     * @return string list of group object names.
-     */
-	static String generateGroupList(Set<Group> groups) {
 
-		StringJoiner list = new StringJoiner(ReservedCharacters.LIST_SEPARATORS.label);
+  /***
+   * Returns a string representation of a list of groups
+   * @param groups - generates string list of groups
+   * @return string list of group object names.
+   */
+  static String generateGroupList(Set<Group> groups) {
 
-		for(Group subgroup : groups){
-			list.add(subgroup.getName());
-		}
-		
-		return list.toString();
-	}
-    
-	
-    /***
-     * Returns an optional object which might be empty or wraps an object
-     * if the System contains a {@link Group} object having the same name
-     * as the parameter.
-     *
-     * @param name The name of the group
-     * @return Optional object.
-     */
-    Optional<Group> findGroupByName(String name);
+    StringJoiner list = new StringJoiner(ReservedCharacters.LIST_SEPARATORS.label);
 
-    
-    /***
-     * Attempts to return the name of a group and throws and error if the group doesn't exist
-     *
-     * @param name -> The name of the group.
-     * @return The associated group.
-     * @throws error if group does not exist
-     */
-	Group protectedFindGroupByName(String name);
-    
-    /***
-     * Tries to add a group in the system
-     * @param group Group object
-     * @throws IOException when fileWriter blows up.
-     *
-     */
-    void addGroup(Group group) throws IOException;
-    
-    /***
-     * Tries to delete a user in the system
-     * @param group Group object
-     *
-     */
-    void deleteGroup(Group group);
-    
+    for (Group subgroup : groups) {
+      list.add(subgroup.getName());
+    }
 
-    /***
-     * Returns a set if Groups that the memember is a part of
-     * @param user - The user to query groups for
-     * @return Set of group objects.
-     */
-    Set<Group> getUserGroupMemberships(User user);
-    
+    return list.toString();
+  }
+
+
+  /***
+   * Returns an optional object which might be empty or wraps an object
+   * if the System contains a {@link Group} object having the same name
+   * as the parameter.
+   *
+   * @param name The name of the group
+   * @return Optional object.
+   */
+  Optional<Group> findGroupByName(String name);
+
+
+  /***
+   * Attempts to return the name of a group and throws and error if the group doesn't exist
+   *
+   * @param name -> The name of the group.
+   * @return The associated group.
+   * @throws error if group does not exist
+   */
+  Group protectedFindGroupByName(String name);
+
+  /***
+   * Tries to add a group in the system
+   * @param group Group object
+   * @throws IOException when fileWriter blows up.
+   *
+   */
+  void addGroup(Group group) throws IOException;
+
+  /***
+   * Tries to delete a user in the system
+   * @param group Group object
+   *
+   */
+  void deleteGroup(Group group);
+
+
+  /***
+   * Returns a set if Groups that the memember is a part of
+   * @param user - The user to query groups for
+   * @return Set of group objects.
+   */
+  Set<Group> getUserGroupMemberships(User user);
+
 
 }

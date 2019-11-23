@@ -12,12 +12,12 @@ import com.neu.prattle.model.Group;
  * @version dated 2019-11-10
  */
 public class GroupAlreadyPresentException extends RuntimeException {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4845176561270017896L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4845176561270017896L;
 
-	public GroupAlreadyPresentException(String message)  {
-        super(message);
-    }
+  public GroupAlreadyPresentException(String message) {
+    super(message);
+  }
 }

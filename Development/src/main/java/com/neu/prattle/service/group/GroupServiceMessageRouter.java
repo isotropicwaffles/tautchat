@@ -1,8 +1,5 @@
 package com.neu.prattle.service.group;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.neu.prattle.daos.MessageDatabaseImpl;
 import com.neu.prattle.messaging.AbstractMessageRouter;
 import com.neu.prattle.messaging.IMessageProcessor;
@@ -11,61 +8,63 @@ import com.neu.prattle.messaging.MessageProcessorFactory;
 import com.neu.prattle.messaging.TypeOfMessageProcessor;
 import com.neu.prattle.model.Message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
-*
-* This is a general message processor it will route messages to sub processorss
-*
-* @author Richard Alexander Showalter-Bucher
-* @version 1.0 11/11/2019
-*/
+ * This is a general message processor it will route messages to sub processorss
+ *
+ * @author Richard Alexander Showalter-Bucher
+ * @version 1.0 11/11/2019
+ */
 public class GroupServiceMessageRouter extends AbstractMessageRouter {
 
-	/**
-	*	An instance of this message processor	
-	*/
-	private static IMessageProcessor instance = new GroupServiceMessageRouter();
-	
-	/**
-	*	Constructor for object
-	*/
-	private GroupServiceMessageRouter(){
+  /**
+   * An instance of this message processor
+   */
+  private static IMessageProcessor instance = new GroupServiceMessageRouter();
 
-		List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
+  /**
+   * Constructor for object
+   */
+  private GroupServiceMessageRouter() {
 
-	
-		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.GROUP_SERVICE_GROUP_MANAGEMENT_PROCESSOR));
-		subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.GROUP_SERVICE_GROUP_QUERY_PROCESSOR));
+    List<IMessageProcessor> subMessageProcessors = new ArrayList<>();
 
-		
-		super.setSubMessageProcessors(subMessageProcessors);
 
-	}
-	
-	/**
-	*	Returns an instance of this message processor
-	*	
-	*	@returns instance - an instance of this object
-	*/
-	public static IMessageProcessor getInstance()  {
+    subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.GROUP_SERVICE_GROUP_MANAGEMENT_PROCESSOR));
+    subMessageProcessors.add(MessageProcessorFactory.getInstance().getInstanceOf(TypeOfMessageProcessor.GROUP_SERVICE_GROUP_QUERY_PROCESSOR));
 
-		return GroupServiceMessageRouter.instance;
-	}
 
-	 /**
-	 * Evaluates whether the message can be processed by this processor
-	 * 
-	 * @param message - a message to be processed
-	 * @returns boolean - Returns true if it can process message
-	 */
-	@Override
-	public boolean canProcessMessage(Message message) {
-		MessageDatabaseImpl messageDatabase = new MessageDatabaseImpl();
-		messageDatabase.createMessage(message);
-		return message.getType().contentEquals(MessageAddresses.GROUP_SERVICE.label)
-						&& super.canProcessMessage(message);
+    super.setSubMessageProcessors(subMessageProcessors);
 
-	}
-	
+  }
+
+  /**
+   * Returns an instance of this message processor
+   *
+   * @returns instance - an instance of this object
+   */
+  public static IMessageProcessor getInstance() {
+
+    return GroupServiceMessageRouter.instance;
+  }
+
+  /**
+   * Evaluates whether the message can be processed by this processor
+   *
+   * @param message - a message to be processed
+   * @returns boolean - Returns true if it can process message
+   */
+  @Override
+  public boolean canProcessMessage(Message message) {
+    MessageDatabaseImpl messageDatabase = new MessageDatabaseImpl();
+    messageDatabase.createMessage(message);
+    return message.getType().contentEquals(MessageAddresses.GROUP_SERVICE.label)
+            && super.canProcessMessage(message);
+
+  }
+
 
 }

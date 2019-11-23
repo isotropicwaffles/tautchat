@@ -17,91 +17,90 @@ import com.neu.prattle.websocket.SessionServiceMessageProcessor;
 public class MessageProcessorFactory implements IMessageProcessorFactory {
 
 
-	/**
-	 * An instance of this message factory
-	 */
-	private static MessageProcessorFactory instance = new MessageProcessorFactory();
+  /**
+   * An instance of this message factory
+   */
+  private static MessageProcessorFactory instance = new MessageProcessorFactory();
 
-	/**
-	 * Private constructor
-	 */	
-	private MessageProcessorFactory() {
+  /**
+   * Private constructor
+   */
+  private MessageProcessorFactory() {
 
-	}
+  }
 
-	/**
-	 * Returns an instance of this message factory
-	 */	
-	public static MessageProcessorFactory getInstance() {
+  /**
+   * Returns an instance of this message factory
+   */
+  public static MessageProcessorFactory getInstance() {
 
-		return MessageProcessorFactory.instance;
-	}
+    return MessageProcessorFactory.instance;
+  }
 
-	/**
-	 *	Get an IMessageProcessor instance of specified by given TypeOfMessageProcessor
-	 *	
-	 *	@param messageProcessor: type of message processor desired
-	 *	@returns iMessageProcessor: an instance o the requested messageProcessor
-	 */
-	@Override
-	public IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor) {
+  /**
+   * Get an IMessageProcessor instance of specified by given TypeOfMessageProcessor
+   *
+   * @param messageProcessor: type of message processor desired
+   * @returns iMessageProcessor: an instance o the requested messageProcessor
+   */
+  @Override
+  public IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor) {
 
-		IMessageProcessor createdProcessor = null;
+    IMessageProcessor createdProcessor = null;
 
-		switch(messageProcessor)
-		{
-		case GENERAL_MESSAGE_PROCESSOR:
+    switch (messageProcessor) {
+      case GENERAL_MESSAGE_PROCESSOR:
 
-			createdProcessor = GeneralMessageRouter.getInstance();
-			break; 
-		case GROUP_SERVICE_ROUTER:
+        createdProcessor = GeneralMessageRouter.getInstance();
+        break;
+      case GROUP_SERVICE_ROUTER:
 
-			createdProcessor = GroupServiceMessageRouter.getInstance();
-			break; 
+        createdProcessor = GroupServiceMessageRouter.getInstance();
+        break;
 
-		case GROUP_SERVICE_GROUP_QUERY_PROCESSOR:
+      case GROUP_SERVICE_GROUP_QUERY_PROCESSOR:
 
-			createdProcessor = GroupServiceGroupQueryMessageProcessor.getInstance();
-			break; 
+        createdProcessor = GroupServiceGroupQueryMessageProcessor.getInstance();
+        break;
 
-		case GROUP_SERVICE_GROUP_MANAGEMENT_PROCESSOR:
+      case GROUP_SERVICE_GROUP_MANAGEMENT_PROCESSOR:
 
-			createdProcessor = GroupServiceGroupManagementMessageProcessor.getInstance();
-			break; 
+        createdProcessor = GroupServiceGroupManagementMessageProcessor.getInstance();
+        break;
 
-		case SYSTEM_MESSAGE_PROCESSOR:
+      case SYSTEM_MESSAGE_PROCESSOR:
 
-			createdProcessor = SystemMessageRouter.getInstance();
+        createdProcessor = SystemMessageRouter.getInstance();
 
-			break; 
+        break;
 
-		case OUTGOING_MESSAGE_PROCESSOR :
+      case OUTGOING_MESSAGE_PROCESSOR:
 
-			createdProcessor =  OutgoingMessageProcessor.getInstance();
-			break;	
+        createdProcessor = OutgoingMessageProcessor.getInstance();
+        break;
 
-		case USER_SERVICE_PROCESSOR :
+      case USER_SERVICE_PROCESSOR:
 
-			createdProcessor = UserServiceMessageProcessor.getInstance();
+        createdProcessor = UserServiceMessageProcessor.getInstance();
 
-			break;
+        break;
 
-		case SESSION_SERVICE_MESSAGE_PROCESSOR :
+      case SESSION_SERVICE_MESSAGE_PROCESSOR:
 
-			createdProcessor = SessionServiceMessageProcessor.getInstance();
+        createdProcessor = SessionServiceMessageProcessor.getInstance();
 
-			break;
+        break;
 
-		case GROUP_MESSAGE_PROCESSOR :
-			createdProcessor = GroupMessageProcessor.getInstance();
+      case GROUP_MESSAGE_PROCESSOR:
+        createdProcessor = GroupMessageProcessor.getInstance();
 
-			break;
+        break;
 
-		default : 
-			throw new IllegalArgumentException("Invalid Message Processor");
-		}
+      default:
+        throw new IllegalArgumentException("Invalid Message Processor");
+    }
 
-		return createdProcessor;
+    return createdProcessor;
 
-	}
+  }
 }
