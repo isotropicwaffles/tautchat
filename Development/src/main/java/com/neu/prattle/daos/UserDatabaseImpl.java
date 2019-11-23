@@ -30,7 +30,7 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
 
 
-  private User returnUserQuery(String string) {
+  User returnUserQuery(String string) {
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement statement = connection.prepareStatement(string)) {
       try (ResultSet results = statement.executeQuery()) {

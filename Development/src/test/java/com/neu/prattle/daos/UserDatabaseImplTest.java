@@ -10,12 +10,10 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -148,7 +146,29 @@ public class UserDatabaseImplTest {
 		mockImpl.findAllUsers();
 	}
 
+	@Test(expected = SQLException.class)
+	public void blowUpStatus() {
+		UserDatabaseImpl mockImpl = mock(UserDatabaseImpl.class);
+		when(mockImpl.retrieveStatus(testPerson)).thenThrow(SQLException.class);
+		assertNull(mockImpl.retrieveStatus(testPerson));
+	}
 
+	@Test
+	public void breakUserQuery() {
+		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(outContent));
+		try{
+			userImplTest.returnUserQuery("breaking on purpose");
+		} catch (Exception e) {
+			assertTrue(outContent.toString().contentEquals("SQL blew up"));
+		}
+	}
+
+	@Test
+	public void testStringToUserStatus() {
+		assertEquals(UserStatus.AWAY, userImplTest.stringToUserStatus("away"));
+		assertNull(userImplTest.stringToUserStatus("not an option"));
+	}
 
 	@Test
 	public void deleteAllUsersTest() {
