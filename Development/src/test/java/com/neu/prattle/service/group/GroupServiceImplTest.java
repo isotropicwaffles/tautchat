@@ -21,7 +21,7 @@ public class GroupServiceImplTest {
   public void getUserGroupMemberships() {
 
     User mod = new User.UserBuilder()
-            .setName("Sojiro")
+            .setName("BobLoblaw")
             .build();
 
     UserService serv = UserServiceImpl.getInstance();
@@ -32,7 +32,7 @@ public class GroupServiceImplTest {
     }
 
     Group g = new Group(mod);
-    g.setName(mod, "LeBlanc");
+    g.setName(mod, "PowerRangers");
 
     Set testing = groupService.getUserGroupMemberships(mod);
     assertNotNull(testing);
