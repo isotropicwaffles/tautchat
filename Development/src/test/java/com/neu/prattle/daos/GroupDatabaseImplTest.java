@@ -8,6 +8,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
@@ -236,6 +238,21 @@ public class GroupDatabaseImplTest {
     assertTrue(outContent.toString().contains("SQL blew up"));
   }*/
 
+  @Test
+  public void testtest() {
+    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    System.setErr(new PrintStream(outContent));
+    try{
+      groupDatabase.createGroup(testGroup);
+    } catch (Exception e) {
+      assertTrue(outContent.toString().contentEquals("SQL blew up"));
+    }
+    try{
+      assertFalse(groupDatabase.executeBooleanQuery("nonsense"));
+    } catch (Exception e2) {
+      assertTrue(outContent.toString().contentEquals("SQL blew up"));
+    }
+  }
 
   @Test(expected = SQLException.class)
   public void breakCreateGroup() {
