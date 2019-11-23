@@ -85,7 +85,7 @@ public class GroupServiceImpl implements GroupService {
      *
      * @param name -> The name of the group.
      * @return The associated group.
-     * @throws error if group does not exist
+     * @throws GroupNotPresentException if group does not exist
      */
     @Override
 	public Group protectedFindGroupByName(String name) {
@@ -122,7 +122,7 @@ public class GroupServiceImpl implements GroupService {
     
     
     /**
- 	*	Delets group to Service 
+ 	*	Deletes group to Service
 	*	
 	*	@param group : group to add
  	*/
@@ -134,7 +134,7 @@ public class GroupServiceImpl implements GroupService {
     
     
     /***
-     * Returns a set if Groups that the memember is a part of
+     * Returns a set if Groups that the member is a part of
      * @param user - The user to query groups for
      * @return Set of group objects.
      */
