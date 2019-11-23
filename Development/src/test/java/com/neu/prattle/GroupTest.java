@@ -18,7 +18,7 @@ import com.neu.prattle.service.user.UserServiceImpl;
 public class GroupTest {
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() {
     UserServiceImpl.getInstance();
     UserServiceImpl.clearAllUsers();
 
