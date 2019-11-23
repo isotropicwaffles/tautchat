@@ -16,6 +16,7 @@ import com.neu.prattle.service.user.UserService;
 import com.neu.prattle.service.user.UserServiceImpl;
 
 public class GroupTest {
+
   @Before
   public void setUp() throws IOException {
     UserServiceImpl.getInstance();
@@ -23,11 +24,9 @@ public class GroupTest {
 
   }
 
-
   @After
   public void destroy() {
     UserServiceImpl.clear();
-    ;
   }
 
   @Test

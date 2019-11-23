@@ -6,6 +6,8 @@ import com.neu.prattle.model.User;
 import com.neu.prattle.service.user.UserService;
 import com.neu.prattle.service.user.UserServiceImpl;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +18,17 @@ import static org.junit.Assert.*;
 public class GroupServiceImplTest {
 
   private static GroupService groupService = GroupServiceImpl.getInstance();
+
+  @Before
+  public void setUp() {
+    UserServiceImpl.getInstance();
+    UserServiceImpl.clearAllUsers();
+  }
+
+  @After
+  public void destroy() {
+    UserServiceImpl.clear();
+  }
 
   @Test
   public void getUserGroupMemberships() {
