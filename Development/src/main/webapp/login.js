@@ -1,7 +1,5 @@
 var ws;
-var username;
-var error_label = document.getElementById("login_status");
-var displayname = document.getElementById("login_name");
+var username
 
 /* Enumeration for colors
  * 
@@ -43,14 +41,11 @@ function connect() {
 
 			console.log(event.data);
 
-			generalMessageRouter(JSON.parse(event.data));
+			//generalMessageRouter(JSON.parse(event.data));
 	    
 		};
 	}
 }
-
-
-
 
 
 /* Sends a user login request to server
@@ -58,7 +53,7 @@ function connect() {
  */
 function login() {
 	username = document.getElementById("username_login").value;
-	sendLoginMessage(username);
+	//sendLoginMessage(username);
 }
 
 /*Sends a user creation request to server
@@ -66,7 +61,7 @@ function login() {
  */
 function createUser() {
 	username = document.getElementById("username_login").value;
-	sendCreateUserMessage(username)	
+	//sendCreateUserMessage(username)	
 }
 
 
