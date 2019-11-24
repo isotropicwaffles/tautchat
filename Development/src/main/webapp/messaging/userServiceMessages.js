@@ -1,0 +1,74 @@
+
+/* Sends a user login request to server
+ * 
+ * @param username - user name to login into
+ */
+function sendLoginMessage(username) {
+	
+	//Send user creation request
+    var json = JSON.stringify({
+    	"type": messageTypes.USER_SERVICE,
+		"contentType": userServiceContent.LOGIN,
+        "content": username
+    });
+    
+    //Time out set to insure that the connection has estabilished already
+    setTimeout(function(){ ws.send(json);},500);
+    
+}
+
+/*Sends a user creation request to server
+ * 
+ * @param username - user name to create
+ */
+function sendCreateUserMessage(username) {
+
+	//Send user creation request
+    var json = JSON.stringify({
+    	"type": messageTypes.USER_SERVICE,
+		"contentType": userServiceContent.USER_CREATE,
+        "content": username
+   });
+    
+    //Time out set to insure that the connection has estabilished already
+    setTimeout(function(){ ws.send(json);},500);
+}
+
+
+
+/*Sends a user name search request to server
+ * 
+ * @param username - user name search for, could be partial characters
+ */
+function sendSearchForUsernameMessage(username) {
+
+	connect();
+
+	//Send user creation request
+    var json = JSON.stringify({
+    	"type": messageTypes.USER_SERVICE,
+		"contentType": userServiceContent.SEARCH_USERS_BY_NAME,
+        "content": username
+   });
+    
+   ws.send(json);
+}
+
+/*Sends a user friend request to server
+ * 
+ * @param username - user name to friend
+ */
+function sendFriendUser(username) {
+
+	connect();
+
+	//Send user creation request
+    var json = JSON.stringify({
+    	"type": messageTypes.USER_SERVICE,
+		"contentType": userServiceContent.FRIEND_USER,
+        "content": username
+   });
+    
+   ws.send(json);
+}
+
