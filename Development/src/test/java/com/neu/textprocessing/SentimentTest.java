@@ -97,7 +97,9 @@ public class SentimentTest {
 		String emptytext = "";
 
 		Pair<String[],Sentiment[]> sentimentText = SentimentAnalysis.analyzeText(emptytext);
-		
+		assertEquals("", sentimentText.getLeft()[0]);
+		assertEquals(Sentiment.NEUTRAL, sentimentText.getRight()[0]);
+
 				
 	}
 	

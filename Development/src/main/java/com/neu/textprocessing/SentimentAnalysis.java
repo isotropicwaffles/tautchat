@@ -23,7 +23,6 @@ public class SentimentAnalysis {
 	private SentimentAnalysis() {}
 	
 	
-	
 	/**
 	* Parses given text into sentences and analysizes text for sentiment
 	* 
@@ -36,6 +35,39 @@ public class SentimentAnalysis {
 		String[] sentences = parseIntoSentences(text);
 		
 		return Pair.of(sentences, getSentiments(sentences));
+		
+	}
+	
+	
+	/**
+	* Returns character by character sentiment content
+	* 
+	* @param String text- a string to perform sentiment analysis on
+	*
+	* @return charSentiments - character by character sentiments of the string
+	*/
+	public static String characterByCharacterSentiment(String text) {
+		
+		try {
+		Pair<String[],Sentiment[]> sentimentPair = analyzeText(text);
+		
+		StringBuilder charSentimentBuilder = new StringBuilder();
+		
+		 for (int i = 0; i < sentimentPair.getLeft().length; i++) {
+			 
+			 
+			 for (int j = 0; j <  sentimentPair.getLeft()[i].length(); j++){
+				 
+				 charSentimentBuilder.append(sentimentPair.getRight()[i].label);
+			 }
+		
+		 }
+
+			return charSentimentBuilder.toString();
+			
+		}catch(IOException e){
+			return "";
+		}
 		
 	}
 	

@@ -13,7 +13,7 @@ function sendBroadCastMessage(contentType, content) {
         "content":content,
     });
 
-    ws.send(json);
+    send(json);
 }
 
 /* Sends a direct user message from chat
@@ -32,26 +32,9 @@ function sendDirectMessage(contentType, content, username) {
     "content":content,
    });
 
-   ws.send(json);
+   send(json);
 }
 
-/* Sends a direct user message with sentiment analysis from chat
-*
-* @param content - the content to send
-* @param username - username to send message to 
-*
-*/
-function sendDirectSentimentAnalyizedMessage(content, username) {
-	
-   var json = JSON.stringify({
-   	"to": username,
-   	"type": messsageType.SENTIMENT_ANALYSIS,
-   	"content_type": contentTypes.ASCII,
-    "content":content,
-   });
-
-   ws.send(json);
-}
 
 /* Sends a group ascii message rom chat
 *
@@ -68,6 +51,6 @@ function sendGroupMessage( content, groupname) {
     "content":content,
    });
 
-   ws.send(json);
+   send(json);
 }
 

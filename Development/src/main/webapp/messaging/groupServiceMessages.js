@@ -11,7 +11,7 @@ function sendGroupCreateMessage(groupName) {
         "content": groupName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -27,7 +27,7 @@ function sendGroupDeleteMessage(groupName) {
         "content": groupName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -45,7 +45,7 @@ function sendInviteUserToGroupMessage(groupName, userName) {
         "content": userName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -63,7 +63,7 @@ function sendGroupApproveAddUserMessage(groupName, userName) {
         "content": userName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -81,7 +81,7 @@ function sendGroupApproveAddGroupMessage(superGroupName, subGroupName) {
         "content": subGroupName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -99,7 +99,7 @@ function sendRemoveUserFromGroupMessage(groupName, userName) {
         "content": userName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -117,7 +117,7 @@ function sendRemoveGroupFromGroupMessage(superGroupName, subGroupName) {
         "content": subGroupName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -136,7 +136,7 @@ function sendRequestToAddUserToGroupMessage(groupName, userName) {
         "content": userName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -155,7 +155,7 @@ function sendAddGroupToGroupMessage(superGroupName, subGroupName) {
         "content": subGroupName
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -171,7 +171,7 @@ function sendQueryGroupUsersMessage(groupName) {
 		"contentType": GroupServiceContent.GET_GROUP_USERS,
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -188,7 +188,7 @@ function sendQueryGroupSubGroupsMessage(groupName) {
 		"contentType": GroupServiceContent.GET_GROUP_SUBGROUPS,
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
@@ -204,7 +204,7 @@ function sendQueryGroupSuperGroupsMessage(groupName) {
 		"contentType": GroupServiceContent.GET_GROUP_SUPERGROUPS,
    });
     
-   ws.send(json);
+   send(json);
 }
 
 /* Query request for group moderators
@@ -219,7 +219,7 @@ function sendQueryGroupModeratorsMessage(groupName) {
 		"contentType": GroupServiceContent.GET_GROUP_MODERATORS,
    });
     
-   ws.send(json);
+   send(json);
 }
 
 /* Query request for group pending user requests
@@ -234,7 +234,7 @@ function sendQueryGroupPendingUsersMessage(groupName) {
 		"contentType": GroupServiceContent.GET_PENDING_USER_REQUESTS,
    });
     
-   ws.send(json);
+  send(json);
 }
 
 
@@ -250,7 +250,7 @@ function sendQueryGroupPendingSubgroupsMessage(groupName) {
 		"contentType": GroupServiceContent.GET_PENDING_SUBGROUP_REQUESTS,
    });
     
-   ws.send(json);
+   send(json);
 }
 
 
