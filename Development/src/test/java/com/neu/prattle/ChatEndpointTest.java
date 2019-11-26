@@ -60,6 +60,7 @@ public class ChatEndpointTest {
 	@Before
 	public void setUp() throws IOException, EncodeException {
 
+	    UserServiceImpl.setEnableDBConnection(false);  
 
 		// Create an instance of argument captor. As the name goes, useful to capture argumemnts passed
 		// to our mock object.
@@ -93,6 +94,8 @@ public class ChatEndpointTest {
 		chatEndpoint2 = null;
 		session1 = null;
 		session2 = null;
+	    UserServiceImpl.setEnableDBConnection(true);  
+
 	}
 
 	/***

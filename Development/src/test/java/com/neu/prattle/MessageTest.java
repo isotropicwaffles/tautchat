@@ -24,8 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.neu.prattle.model.Message;
-
-import junit.framework.TestCase;
+import com.neu.prattle.service.user.UserServiceImpl;
 
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
@@ -35,12 +34,15 @@ public class MessageTest {
 
 	@Before
 	public void setUp() throws IOException {
+	    UserServiceImpl.setEnableDBConnection(false);  
 
 	}
 
 
 	@After
 	public void destroy() {
+    UserServiceImpl.setEnableDBConnection(true);  
+
 	}
 
 
