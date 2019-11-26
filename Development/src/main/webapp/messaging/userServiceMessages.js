@@ -12,8 +12,7 @@ function sendLoginMessage(username) {
         "content": username
     });
     
-    //Time out set to insure that the connection has estabilished already
-    setTimeout(function(){ ws.send(json);},500);
+    send(json);
     
 }
 
@@ -29,9 +28,7 @@ function sendCreateUserMessage(username) {
 		"contentType": userServiceContent.USER_CREATE,
         "content": username
    });
-    
-    //Time out set to insure that the connection has estabilished already
-    setTimeout(function(){ ws.send(json);},500);
+   send(json);
 }
 
 
@@ -41,9 +38,6 @@ function sendCreateUserMessage(username) {
  * @param username - user name search for, could be partial characters
  */
 function sendSearchForUsernameMessage(username) {
-
-	connect();
-
 	//Send user creation request
     var json = JSON.stringify({
     	"type": messageTypes.USER_SERVICE,
@@ -51,7 +45,7 @@ function sendSearchForUsernameMessage(username) {
         "content": username
    });
     
-   ws.send(json);
+   send(json);
 }
 
 /*Sends a user friend request to server
@@ -60,8 +54,6 @@ function sendSearchForUsernameMessage(username) {
  */
 function sendFriendUser(username) {
 
-	connect();
-
 	//Send user creation request
     var json = JSON.stringify({
     	"type": messageTypes.USER_SERVICE,
@@ -69,6 +61,6 @@ function sendFriendUser(username) {
         "content": username
    });
     
-   ws.send(json);
+   send(json);
 }
 

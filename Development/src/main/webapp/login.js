@@ -1,6 +1,6 @@
 var ws;
-var username
-
+var username;
+var active_socket = false;
 /* Enumeration for colors
  * 
  */
@@ -26,10 +26,12 @@ function connect() {
 		
 		ws.onopen = function(){
 			console.log('Connection open!');
+			active_socket = true;
 			}
 
 		ws.onclose = function(code) {
 			console.log("websocket closing. Code:", code );
+			active_socket = false;
 		}
 	
 		ws.onerror= function(evt){
@@ -41,10 +43,25 @@ function connect() {
 
 			console.log(event.data);
 
-			//generalMessageRouter(JSON.parse(event.data));
+			generalMessageRouter(JSON.parse(event.data));
 	    
 		};
 	}
+}
+
+/* Sends a message to the server
+*
+*/
+function send(message){
+	//If the server is already open then sent the message
+	if (active_socket){
+		ws.send(message)
+	}else{
+		//if server is not connected, then connect first
+		connect();
+	    setTimeout(function(){ ws.send(message);},500);
+	}
+	
 }
 
 
@@ -53,7 +70,7 @@ function connect() {
  */
 function login() {
 	username = document.getElementById("username_login").value;
-	//sendLoginMessage(username);
+	sendLoginMessage(username);
 }
 
 /*Sends a user creation request to server
@@ -61,7 +78,7 @@ function login() {
  */
 function createUser() {
 	username = document.getElementById("username_login").value;
-	//sendCreateUserMessage(username)	
+	sendCreateUserMessage(username)	
 }
 
 

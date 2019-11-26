@@ -1,3 +1,4 @@
+var status_label;
 
 /* Enumeration for message types service messages
  * 
@@ -30,6 +31,9 @@ const userServiceContent = {
  * @param json message - json of user service type message
  */
 function userServiveMessageRouter(message) {
+
+	status_label = document.getElementById("login_status");
+	
 	//  Check if it's a login response
 	if (message.contentType == userServiceContent.LOGIN) {
 		processLoginResponse(message);
@@ -58,14 +62,14 @@ function userServiveMessageRouter(message) {
 * @param json message - json of user service type message of login response
 */
 function processLoginResponse(message){
-	if (message.content.includes(userServiceContent.SUCCESS_RESPONSE)){
+	if (message.content.includes(genericMessageResponses.SUCCESS)){
 	    // If unsuccessful this should run
-	    error_label.style.color = colors.GREEN;
-		error_label.innerHTML =  "SUCCESS: User successfully logged into session.";	
-	}else if (message.content.includes(userServiceContent.FAILURE_RESPONSE)){
+		status_label.style.color = colors.GREEN;
+	    status_label.innerHTML =  "SUCCESS: User successfully logged into session.";	
+	}else if (message.content.includes(genericMessageResponses.FAILURE)){
 	    // If unsuccessful this should run
-	    error_label.style.color = colors.RED;
-		error_label.innerHTML =  "ERROR: User Name Does not Exist. Please Create User First.";	
+		status_label.style.color = colors.RED;
+	    status_label.innerHTML =  "ERROR: User Name Does not Exist. Please Create User First.";	
 	}
 }
 
@@ -78,13 +82,13 @@ function processLoginResponse(message){
 function processUserCreateResponse(message){
 	if (message.content.includes(genericMessageResponses.SUCCESS)){
 	   	//If successful this should run
-	    error_label.style.color = colors.GREEN;
-	    error_label.innerHTML =  "User Successfully Created!";
+		status_label.style.color = colors.GREEN;
+		status_label.innerHTML =  "User Successfully Created!";
 	}else if (message.content.includes(genericMessageResponses.FAILURE)){
 	    
 	    // If unsuccessful this should run
-	    error_label.style.color = colors.RED;
-	    error_label.innerHTML =  "ERROR: Could Not Create User Name. Please Try Another Name.";	
+		status_label.style.color = colors.RED;
+		status_label.innerHTML =  "ERROR: Could Not Create User Name. Please Try Another Name.";	
 	}
 }
 
