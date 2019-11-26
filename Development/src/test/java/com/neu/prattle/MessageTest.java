@@ -26,8 +26,6 @@ import org.junit.Test;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.service.user.UserServiceImpl;
 
-import junit.framework.TestCase;
-
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 

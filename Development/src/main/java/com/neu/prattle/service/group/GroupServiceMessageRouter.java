@@ -1,6 +1,5 @@
 package com.neu.prattle.service.group;
 
-import com.neu.prattle.daos.MessageDatabaseImpl;
 import com.neu.prattle.messaging.AbstractMessageRouter;
 import com.neu.prattle.messaging.IMessageProcessor;
 import com.neu.prattle.messaging.MessageAddresses;

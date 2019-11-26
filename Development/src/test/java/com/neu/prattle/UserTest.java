@@ -2,7 +2,6 @@ package com.neu.prattle;
 
 
 import com.neu.prattle.controller.UserController;
-import com.neu.prattle.daos.UserDatabaseImpl;
 import com.neu.prattle.model.Icon;
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
@@ -167,7 +166,7 @@ public class UserTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testUserIdNeg() {
-    User u = new User.UserBuilder()
+    new User.UserBuilder()
             .setId(-412)
             .build();
   }

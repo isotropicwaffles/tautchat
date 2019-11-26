@@ -105,7 +105,7 @@ public class GroupTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalBuild() {
-    Group g = new Group.GroupBuilder().build();
+    new Group.GroupBuilder().build();
   }
 
 
@@ -222,7 +222,7 @@ public class GroupTest {
             .setBot(true)
             .build();
 
-    Group g = new Group.GroupBuilder().addModerator(bot).setName("test").build();
+    new Group.GroupBuilder().addModerator(bot).setName("test").build();
   }
 
   @Test

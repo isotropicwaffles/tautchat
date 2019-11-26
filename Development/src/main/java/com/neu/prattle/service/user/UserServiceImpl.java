@@ -169,10 +169,9 @@ public class UserServiceImpl implements UserService {
     userSet.add(user);
     user.setSearchable(true);
     user.setStatus(UserStatus.IDLE);
-    if (enableDBConnection) {
-    	if (!userDatabase.userExists(user.getName())) {
+    if (enableDBConnection && !userDatabase.userExists(user.getName())) {
+    	
     		userDatabase.createUser(user);
-    	}
     }
   }
 
