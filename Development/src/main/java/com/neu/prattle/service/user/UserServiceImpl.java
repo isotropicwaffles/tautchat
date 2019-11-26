@@ -26,17 +26,24 @@ public class UserServiceImpl implements UserService {
    * Database instance for persistence.
    */
   private static UserDatabaseImpl userDatabase = new UserDatabaseImpl();
+  
   /***
    * Variable to store the singleton instance
    *
    */
   private static UserService accountService = null;
+  
   /**
    * Set of user objects
    */
   private static Set<User> userSet;
 
-
+  /**
+   * This variable is used to set whether or not the UserServiceMessageProcessor should talk with the database
+   * This is mostly used for testing purposes (Default is true)
+   */
+  private static boolean enableDBConnection = true;
+  
   /***
    * UserServiceImpl is a Singleton class.
    */
@@ -53,12 +60,27 @@ public class UserServiceImpl implements UserService {
 
     if (accountService == null) {
       userSet = new HashSet<>();
-      userSet.addAll(userDatabase.findAllUsers());
+      	
+      if (enableDBConnection) {
+    	  userSet.addAll(userDatabase.findAllUsers());
+      }
+      
       accountService = new UserServiceImpl();
     }
     return accountService;
   }
 
+
+  /**
+   * Enables/Disables userservice talking to remote DB
+   *
+   * @returns instance - instance of this clas
+   */
+  public static void setEnableDBConnection(boolean enable) {
+
+	  enableDBConnection = enable;
+  }
+  
   /**
    * Call this method to clear the current instance of this service.
    */
@@ -147,8 +169,10 @@ public class UserServiceImpl implements UserService {
     userSet.add(user);
     user.setSearchable(true);
     user.setStatus(UserStatus.IDLE);
-    if (!userDatabase.userExists(user.getName())) {
-      userDatabase.createUser(user);
+    if (enableDBConnection) {
+    	if (!userDatabase.userExists(user.getName())) {
+    		userDatabase.createUser(user);
+    	}
     }
   }
 

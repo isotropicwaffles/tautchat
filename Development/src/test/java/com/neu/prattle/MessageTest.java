@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.neu.prattle.model.Message;
+import com.neu.prattle.service.user.UserServiceImpl;
 
 import junit.framework.TestCase;
 
@@ -35,12 +36,15 @@ public class MessageTest {
 
 	@Before
 	public void setUp() throws IOException {
+	    UserServiceImpl.setEnableDBConnection(false);  
 
 	}
 
 
 	@After
 	public void destroy() {
+    UserServiceImpl.setEnableDBConnection(true);  
+
 	}
 
 

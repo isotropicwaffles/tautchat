@@ -81,6 +81,8 @@ public class GroupServiceQueryTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException, TimeoutException {
+	    UserServiceImpl.setEnableDBConnection(false);  
+
 		// Create an instance of argument captor. As the name goes, useful to capture argumemnts passed
 		// to our mock object.
 		messageArgumentCaptor1 = ArgumentCaptor.forClass(Message.class);
@@ -133,7 +135,7 @@ public class GroupServiceQueryTest {
 		session2 = null;
 		session3 = null;
 		
-
+	    UserServiceImpl.setEnableDBConnection(false);  
 
 	}
 	

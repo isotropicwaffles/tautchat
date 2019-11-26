@@ -19,6 +19,7 @@ public class GroupTest {
 
   @Before
   public void setUp() {
+    UserServiceImpl.setEnableDBConnection(false);  
     UserServiceImpl.getInstance();
     UserServiceImpl.clearAllUsers();
 
@@ -27,6 +28,8 @@ public class GroupTest {
   @After
   public void destroy() {
     UserServiceImpl.clear();
+    UserServiceImpl.setEnableDBConnection(true);  
+
   }
 
   @Test

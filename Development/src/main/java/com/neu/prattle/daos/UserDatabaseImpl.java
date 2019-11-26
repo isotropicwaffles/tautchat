@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * The JDBC implementation of User<-->database connection methods.
  */
 public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
-
+  
   private static final String STATUS = "status";
   private static final String ISBOT = "is_bot";
   private static final String SEARCHABLE = "searchable";

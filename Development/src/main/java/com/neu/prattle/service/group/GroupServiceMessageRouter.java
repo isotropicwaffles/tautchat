@@ -59,8 +59,7 @@ public class GroupServiceMessageRouter extends AbstractMessageRouter {
    */
   @Override
   public boolean canProcessMessage(Message message) {
-    MessageDatabaseImpl messageDatabase = new MessageDatabaseImpl();
-    messageDatabase.createMessage(message);
+
     return message.getType().contentEquals(MessageAddresses.GROUP_SERVICE.label)
             && super.canProcessMessage(message);
 

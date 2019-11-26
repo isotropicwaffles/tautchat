@@ -28,16 +28,18 @@ public class UserTest {
 
   @Before
   public void setUp() throws IOException {
+    UserServiceImpl.setEnableDBConnection(false);  
     as = UserServiceImpl.getInstance();
   }
+  
+  
 
 
   @After
   public void destroy() {
     UserServiceImpl.clear();
-    UserDatabaseImpl userDatabase = new UserDatabaseImpl();
-    userDatabase.deleteUserByUsername("Mike");
-    userDatabase.deleteUserByUsername("Tim");
+    UserServiceImpl.setEnableDBConnection(true);  
+
   }
 
   // This method just tries to add
