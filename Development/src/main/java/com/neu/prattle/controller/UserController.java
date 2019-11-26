@@ -2,8 +2,10 @@ package com.neu.prattle.controller;
 
 import com.neu.prattle.exceptions.UserAlreadyPresentException;
 import com.neu.prattle.model.User;
-import com.neu.prattle.service.UserService;
-import com.neu.prattle.service.UserServiceImpl;
+import com.neu.prattle.service.user.UserService;
+import com.neu.prattle.service.user.UserServiceImpl;
+
+import java.io.IOException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -12,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /***
- * A Resource class responsible for handling CRUD operations
+ * A Resource class responsible f`or handling CRUD operations
  * on User objects.
  *
  * @author CS5500 Fall 2019 Teaching staff
@@ -21,25 +23,25 @@ import javax.ws.rs.core.Response;
 @Path(value = "/user")
 public class UserController {
 
-    // Usually Dependency injection will be used to inject the service at run-time
-    private UserService accountService = UserServiceImpl.getInstance();
+  // Usually Dependency injection will be used to inject the service at run-time
+  private UserService accountService = UserServiceImpl.getInstance();
 
-    /***
-     * Handles a HTTP POST request for user creation
-     * 
-     * @param user -> The User object decoded from the payload of POST request.
-     * @return -> A Response indicating the outcome of the requested operation.
-     */
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUserAccount(User user) {
-        try {
-            accountService.addUser(user);
-        } catch (UserAlreadyPresentException e) {
-            return Response.status(409).build();
-        }
-
-        return Response.ok().build();
+  /***
+   * Handles a HTTP POST request for user creation
+   *
+   * @param user -> The User object decoded from the payload of POST request.
+   * @return -> A Response indicating the outcome of the requested operation.
+   * @throws IOException if there is an issue with addUser
+   */
+  @POST
+  @Path("/create")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response createUserAccount(User user) throws IOException {
+    try {
+      accountService.addUser(user);
+    } catch (UserAlreadyPresentException e) {
+      return Response.status(409).build();
     }
+    return Response.ok().build();
+  }
 }
