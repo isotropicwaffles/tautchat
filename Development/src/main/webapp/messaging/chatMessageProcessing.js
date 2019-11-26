@@ -8,16 +8,11 @@ const contentTypes = {
 	* Represents Standard ASCII Text content
 	*/
 	ASCII: 'ASCII',
-	/**
-	* Represents SENTIMENT Analyized text content
-	*/
-	SENTIMENT_TEXT: 'SENTIMENT_TEXT',
-	
+
 	/**
 	* Represents GROUP_MESSAGE ASCII content
 	*/
 	GROUP_MESSAGE: 'GROUP_MESSAGE',
-	
 	
 }
 
@@ -33,12 +28,7 @@ function chatMessageRouter(message) {
 	} else if (message.type == messsageType.DIRECT_MESSAGE) {
 		//Process Direct Message 
 		
-		// Process Sentiement Text Message
-		if (message.contentType == contentTypes.SENTIMENT_TEXT){
-			
-			processSentimentAnalyizedChatMessage(message);
-			
-		}else if (message.contentType == contentTypes.GROUP_MESSAGE){
+		if (message.contentType == contentTypes.GROUP_MESSAGE){
 			//Process Group Message
 			processGroupMessage(message);
 		}
@@ -61,14 +51,6 @@ function processDirectChatMessage(message) {
 
 }
 
-/* Processes recieved sentiment analyized message chat
- * 
- * @param json message - json of chat type message
- */
-function processSentimentAnalyizedChatMessage(message) {
-	//TODO Chad put in GUI logic
-
-}
 
 /* Processes recieved broadcast message chat
  * 
@@ -88,5 +70,64 @@ function processBroadcastChatMessage(message) {
 function processGroupMessage(message) {
 	//TODO Chad put in GUI logic
 }
+
+
+// TODO Chad, you can use these colors or do something else
+// I was just putting them here as an example
+
+/* Enumeration colors to use for sentiment
+ * 
+ */
+const sentimentColors = {
+    NEGATIVE:  '#d00', //Red
+    NEUTRAL: '	#383838', //Dark Gray
+    POSITIVE: '#009d00' //Green
+}
+
+
+/* Enumeration representing positive, negative, and neutral sentiments
+* 
+*/
+const sentiment = {
+    NEGATIVE:  '0', 
+    NEUTRAL: '1',	 
+    POSITIVE: '2' 
+}
+
+//TODO Chad, I'm not sure how you'll want to display the sentiment information
+// in the GUI. Below is just an example of a template you can use to iterate through
+// The sentiments of the content.
+// The message.content should be the same size as the message.sentiment
+// Each character of the content has a sentiment value associated with it, either 0,1, or 2 (see the sentiment enumeration above)
+
+
+/* Template function that shows how content and sentiment are associate
+ * Feel free to update this to something with useful functionality
+ *  
+ * @param json message - json of chat type message
+ */
+function processSentimentContent(message){
+	
+	
+	for (var i = 0; i < message.content.length; i++) {
+		  
+		switch(message.sentiment.charAt(i)){
+			
+			case sentiment.NEGATIVE:
+				//TODO chad feel free to add logic
+				break;
+				
+			case sentiment.POSITIVE:
+				//TODO chad feel free to add logic
+				break;
+				
+			case sentiment.NEUTRAL:
+				//TODO chad feel free to add logic
+
+		}
+	}
+	
+}
+
 
 

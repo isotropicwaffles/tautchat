@@ -25,10 +25,7 @@ const messageTypes = {
 	* Represents a broadcast message address
 	*/
 	BROADCAST_MESSAGE: 'BROADCAST_MESSAGE',
-	/**
-	* Represents a sentiment analyses message address
-	*/
-	SENTIMENT_ANALYSIS: 'SENTIMENT_ANALYSIS',
+
 }
 
 
