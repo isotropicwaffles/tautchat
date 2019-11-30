@@ -1,4 +1,4 @@
-
+import {genericMessageResponses} from './generalMessageRouter';
 /* Enumeration for message types service messages
  * 
  */

@@ -1,14 +1,13 @@
+import {generalMessageRouter} from './messaging/generalMessageRouter'
+import {sendLoginMessage, sendCreateUserMessage} from './messaging/userServiceMessages'
+
 var ws;
 var username;
 var active_socket = false;
 /* Enumeration for colors
  * 
  */
-const colors = {
-	    RED:  '#d00',
-	    GREEN: '#009d00'
-}
-
+ 
 /* Connects to the server and sets up call back for messaging events
  * 
  */
@@ -21,8 +20,9 @@ function connect() {
 
 		var host = document.location.host;
 		var pathname = document.location.pathname;
-		    
-		ws = new WebSocket("ws://" +host  + pathname + "chat/");
+
+		 ws = new WebSocket("ws://localhost:8080/prattle/chat/");
+		// ws = new WebSocket("ws://" +host  + pathname + "chat/");
 		
 		ws.onopen = function(){
 			console.log('Connection open!');
@@ -40,9 +40,7 @@ function connect() {
 		}
 		ws.onmessage = function(event) {
 			console.log('Received Message');
-
 			console.log(event.data);
-
 			generalMessageRouter(JSON.parse(event.data));
 	    
 		};
@@ -68,18 +66,17 @@ function send(message){
 /* Sends a user login request to server
  * 
  */
-function login() {
-	username = document.getElementById("username_login").value;
+function login(username) {
 	sendLoginMessage(username);
 }
 
 /*Sends a user creation request to server
  * 
  */
-function createUser() {
-	username = document.getElementById("username_login").value;
+function createUser(username) {
 	sendCreateUserMessage(username)	
 }
 
 
 
+export {login, createUser, send};

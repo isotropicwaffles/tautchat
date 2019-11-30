@@ -1,3 +1,6 @@
+import {messageTypes} from './generalMessageRouter'
+import {userServiceContent} from './userServiceMessageProcessing'
+import {send} from '../login'
 
 /* Sends a user login request to server
  * 
@@ -64,3 +67,4 @@ function sendFriendUser(username) {
    send(json);
 }
 
+export {sendLoginMessage, sendCreateUserMessage};

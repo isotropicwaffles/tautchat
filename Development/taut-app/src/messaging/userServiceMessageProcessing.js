@@ -1,8 +1,17 @@
+import {genericMessageResponses} from './generalMessageRouter';
+import { withRouter } from 'react-router'
+
 var status_label;
 
 /* Enumeration for message types service messages
  * 
  */
+
+const colors = {
+	    RED:  '#d00',
+	    GREEN: '#009d00'
+}
+ 
 const userServiceContent = {
 	
 	  /**
@@ -63,13 +72,17 @@ function userServiveMessageRouter(message) {
 */
 function processLoginResponse(message){
 	if (message.content.includes(genericMessageResponses.SUCCESS)){
-	    // If unsuccessful this should run
-		status_label.style.color = colors.GREEN;
-	    status_label.innerHTML =  "SUCCESS: User successfully logged into session.";	
+		console.log("SUCCESS: User successfully logged into session.");
+		alert("User successfully logged into session.");
+		// If unsuccessful this should run
+		// status_label.style.color = colors.GREEN;
+	    // status_label.innerHTML =  "SUCCESS: User successfully logged into session.";	
 	}else if (message.content.includes(genericMessageResponses.FAILURE)){
-	    // If unsuccessful this should run
-		status_label.style.color = colors.RED;
-	    status_label.innerHTML =  "ERROR: User Name Does not Exist. Please Create User First.";	
+		console.log("ERROR: User Name Does not Exist. Please Create User First.");
+		alert("User Name Does not Exist. Please Create User First.");
+		// If unsuccessful this should run
+		// status_label.style.color = colors.RED;
+	    // status_label.innerHTML =  "ERROR: User Name Does not Exist. Please Create User First.";	
 	}
 }
 
@@ -81,14 +94,17 @@ function processLoginResponse(message){
  */
 function processUserCreateResponse(message){
 	if (message.content.includes(genericMessageResponses.SUCCESS)){
-	   	//If successful this should run
-		status_label.style.color = colors.GREEN;
-		status_label.innerHTML =  "User Successfully Created!";
+		console.log("User Successfully Created!");   
+		alert("User Successfully Created!"); 
+		//If successful this should run
+		// status_label.style.color = colors.GREEN;
+		// status_label.innerHTML =  "User Successfully Created!";
 	}else if (message.content.includes(genericMessageResponses.FAILURE)){
-	    
+		console.log("ERROR: Could Not Create User Name. Please Try Another Name.");
+		alert("This User Name is already taken. Please Try Another Name.");
 	    // If unsuccessful this should run
-		status_label.style.color = colors.RED;
-		status_label.innerHTML =  "ERROR: Could Not Create User Name. Please Try Another Name.";	
+		// status_label.style.color = colors.RED;
+		// status_label.innerHTML =  "ERROR: Could Not Create User Name. Please Try Another Name.";	
 	}
 }
 
@@ -117,3 +133,4 @@ function processUserSearchResponse(message){
 }
 
 
+export {userServiveMessageRouter, userServiceContent};

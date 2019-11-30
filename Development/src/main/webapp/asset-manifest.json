@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/prattle/static/css/main.b100e6da.chunk.css",
+    "main.js": "/prattle/static/js/main.8682faad.chunk.js",
+    "main.js.map": "/prattle/static/js/main.8682faad.chunk.js.map",
+    "runtime-main.js": "/prattle/static/js/runtime-main.5fd5dd22.js",
+    "runtime-main.js.map": "/prattle/static/js/runtime-main.5fd5dd22.js.map",
+    "static/css/2.c4418c31.chunk.css": "/prattle/static/css/2.c4418c31.chunk.css",
+    "static/js/2.749ca6f2.chunk.js": "/prattle/static/js/2.749ca6f2.chunk.js",
+    "static/js/2.749ca6f2.chunk.js.map": "/prattle/static/js/2.749ca6f2.chunk.js.map",
+    "index.html": "/prattle/index.html",
+    "precache-manifest.cd8a4a7785811d0a2ec5cedad6bfaeb6.js": "/prattle/precache-manifest.cd8a4a7785811d0a2ec5cedad6bfaeb6.js",
+    "service-worker.js": "/prattle/service-worker.js",
+    "static/css/2.c4418c31.chunk.css.map": "/prattle/static/css/2.c4418c31.chunk.css.map",
+    "static/css/main.b100e6da.chunk.css.map": "/prattle/static/css/main.b100e6da.chunk.css.map",
+    "static/media/logo.svg": "/prattle/static/media/logo.25bf045c.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5fd5dd22.js",
+    "static/css/2.c4418c31.chunk.css",
+    "static/js/2.749ca6f2.chunk.js",
+    "static/css/main.b100e6da.chunk.css",
+    "static/js/main.8682faad.chunk.js"
+  ]
+}

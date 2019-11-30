@@ -1,4 +1,6 @@
 
+import {userServiveMessageRouter} from './userServiceMessageProcessing'
+
 /* Enumeration for message types service messages
  * 
  */
@@ -49,10 +51,10 @@ const genericMessageResponses = {
  */
 function generalMessageRouter(message) {
 	
-	if (message.type == messageTypes.BROADCAST_MESSAGE) {
-		//  process chat message
-		processChatMessage(message);
-	}
+	// if (message.type == messageTypes.BROADCAST_MESSAGE) {
+	// process chat message
+	// processChatMessage(message);
+	// }
 	
 	
 	if (message.from == messageTypes.USER_SERVICE) {
@@ -61,3 +63,6 @@ function generalMessageRouter(message) {
 	}
 	
 }
+
+
+export {generalMessageRouter, messageTypes, genericMessageResponses};
