@@ -1,8 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { login, createUser } from './login'
-import { useAlert } from 'react-alert'
+import '../App.css';
+import {generalMessageRouter} from './messaging/GeneralMessageRouter'
+import {sendLoginMessage, sendCreateUserMessage} from './messaging/UserServiceMessages'
 
 class LoginPage extends React.Component {
 
@@ -22,12 +21,12 @@ class LoginPage extends React.Component {
 
     handleLogin(event) {
         event.preventDefault();
-        login(this.state.value);
+        sendLoginMessage(this.state.value);
     }
 
     handleCreate(event) {
         event.preventDefault();
-        createUser(this.state.value);
+        sendCreateUserMessage(this.state.value);
     }
 
     render() {

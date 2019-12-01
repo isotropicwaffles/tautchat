@@ -1,5 +1,5 @@
 
-import {userServiveMessageRouter} from './userServiceMessageProcessing'
+import {userServiveMessageRouter} from './UserServiceMessageProcessing'
 
 /* Enumeration for message types service messages
  * 
@@ -18,11 +18,11 @@ const messageTypes = {
 	/**
 	* Represents group message address
 	*/
-    GROUP_MESSAGE: 'GROUP_MESSAGE"',
+    GROUP_MESSAGE: 'GROUP_MESSAGE',
     /**
 	* Represents a direct message address
 	*/
-	DIRECT_MESSAGE: 'DIRECT_MESSAGE"',
+	DIRECT_MESSAGE: 'DIRECT_MESSAGE',
     /**
 	* Represents a broadcast message address
 	*/
@@ -51,10 +51,10 @@ const genericMessageResponses = {
  */
 function generalMessageRouter(message) {
 	
-	// if (message.type == messageTypes.BROADCAST_MESSAGE) {
+	if (message.contentType == messageTypes.BROADCAST_MESSAGE) {
 	// process chat message
 	// processChatMessage(message);
-	// }
+	}
 	
 	
 	if (message.from == messageTypes.USER_SERVICE) {

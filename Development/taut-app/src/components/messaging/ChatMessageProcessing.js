@@ -1,3 +1,4 @@
+import { messageTypes } from "./GeneralMessageRouter";
 
 
 /* Enumeration for non-service message content types
@@ -22,10 +23,10 @@ const contentTypes = {
  */
 function chatMessageRouter(message) {
 	//  Process Broadcast
-	if (message.type == messsageType.BROADCAST_MESSAGE) {
+	if (message.type == messageTypes.BROADCAST_MESSAGE) {
 		processBroadcastChatMessage(message);
 
-	} else if (message.type == messsageType.DIRECT_MESSAGE) {
+	} else if (message.type == messageTypes.DIRECT_MESSAGE) {
 		//Process Direct Message 
 		
 		if (message.contentType == contentTypes.GROUP_MESSAGE){
@@ -129,5 +130,4 @@ function processSentimentContent(message){
 	
 }
 
-
-
+export {contentTypes}

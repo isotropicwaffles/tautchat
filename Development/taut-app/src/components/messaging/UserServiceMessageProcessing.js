@@ -1,4 +1,4 @@
-import {genericMessageResponses} from './generalMessageRouter';
+import {genericMessageResponses} from './GeneralMessageRouter';
 import { withRouter } from 'react-router'
 
 var status_label;
@@ -40,13 +40,10 @@ const userServiceContent = {
  * @param json message - json of user service type message
  */
 function userServiveMessageRouter(message) {
-
-	status_label = document.getElementById("login_status");
 	
 	//  Check if it's a login response
 	if (message.contentType == userServiceContent.LOGIN) {
 		processLoginResponse(message);
-
 	}
 	
 	//  Check if it's a create user response
