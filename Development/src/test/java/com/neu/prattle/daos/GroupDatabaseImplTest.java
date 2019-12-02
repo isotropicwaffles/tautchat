@@ -4,11 +4,13 @@ import com.neu.prattle.model.Group;
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
 
+import org.hsqldb.cmdline.SqlToolError;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,8 +40,10 @@ public class GroupDatabaseImplTest {
   private static Logger mockLogger;
 
   @BeforeClass
-  public static void setUp() {
-    testPerson = new User.UserBuilder()
+  public static void setUp() throws ClassNotFoundException, SqlToolError, SQLException, IOException {
+	DatabaseSupportFunctions.setUpTestDatabase();
+
+	testPerson = new User.UserBuilder()
             .setName("HughMann")
             .setSearchable(true)
             .setStatus(UserStatus.ONLINE)
@@ -97,13 +101,15 @@ public class GroupDatabaseImplTest {
   }
 
   @AfterClass
-  public static void tearDown() {
+  public static void tearDown() throws SQLException {
     groupDatabase.truncateMemberAliases();
     groupDatabase.truncateGroupMembers();
     groupDatabase.truncateSubgroups();
     groupDatabase.truncateModerators();
     groupDatabase.truncateGroups();
     userImplTest.deleteAllUsers();
+	DatabaseSupportFunctions.tearDownTestDatabase();
+
   }
 
   @Test
@@ -271,7 +277,8 @@ public class GroupDatabaseImplTest {
     mockImpl.executeUpdateHelper("filler");
   }
 
-  @Test
+  @SuppressWarnings("unchecked")
+@Test
   public void breakBooleanQuery() {
     try {
       when(mockResultSet.next()).thenThrow(SQLException.class);
@@ -281,13 +288,15 @@ public class GroupDatabaseImplTest {
     assertFalse(mockImpl.executeBooleanQuery("Filler text"));
   }
 
-  @Test(expected = SQLException.class)
+  @SuppressWarnings("unchecked")
+@Test(expected = SQLException.class)
   public void breakPrimaryMod() {
     when(mockImpl.findPrimaryModerator(any(Group.class))).thenThrow(SQLException.class);
     mockImpl.findPrimaryModerator(testGroup);
   }
 
-  @Test(expected = SQLException.class)
+  @SuppressWarnings("unchecked")
+@Test(expected = SQLException.class)
   public void breakFindGroupByName() {
     when(mockImpl.findGroupByName(any(Group.class))).thenThrow(SQLException.class);
     mockImpl.findGroupByName(testGroup);

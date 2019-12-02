@@ -3,10 +3,13 @@ package com.neu.prattle.daos;
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
 
+import org.hsqldb.cmdline.SqlToolError;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +23,9 @@ public class MessageDatabaseImplTest {
   private static User testUser;
 
   @BeforeClass
-  public static void setUp() {
+  public static void setUp() throws ClassNotFoundException, SqlToolError, SQLException, IOException {
+	DatabaseSupportFunctions.setUpTestDatabase();
+
     testUser = new User.UserBuilder()
             .setName("Bender")
             .build();
@@ -36,10 +41,12 @@ public class MessageDatabaseImplTest {
   }
 
   @AfterClass
-  public static void tearDown() {
+  public static void tearDown() throws SQLException {
     testUser = null;
     testMessage = null;
     messageDatabase.truncateMessages();
+	DatabaseSupportFunctions.tearDownTestDatabase();
+
   }
 
   @Test

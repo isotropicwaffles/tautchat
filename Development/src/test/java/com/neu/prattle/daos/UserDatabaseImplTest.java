@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.SQLException;
 
@@ -17,6 +18,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.hsqldb.cmdline.SqlToolError;
 
 public class UserDatabaseImplTest {
 
@@ -25,8 +27,13 @@ public class UserDatabaseImplTest {
 	private static User testIndividual;
 	private static User testHuman;
 
+ 
 	@BeforeClass
-	public static void setUp() {
+	public static void setUp() throws ClassNotFoundException, SQLException, SqlToolError, IOException {
+				 
+        // initialize database
+	//	DatabaseSupportFunctions.setUpTestDatabase();
+        
 	    testPerson = new User.UserBuilder()
 	    		.setName("HughMann")
 	    		.setSearchable(true)
@@ -49,11 +56,16 @@ public class UserDatabaseImplTest {
 			userImplTest.createUser(testIndividual);
 			userImplTest.createUser(testHuman);
 	}
+	
 
 	@AfterClass
-	public static void tearDown() {
+	public static void tearDown() throws SQLException {
 		userImplTest.deleteAllUsers();
+//		DatabaseSupportFunctions.tearDownTestDatabase();
+
 	}
+	
+
 
 	@Test
 	public void findUserByIdTest() {
@@ -139,6 +151,7 @@ public class UserDatabaseImplTest {
 		mockImpl.createUser(testPerson);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test(expected = SQLException.class)
 	public void breakFindAllUsers() {
 		UserDatabaseImpl mockImpl = mock(UserDatabaseImpl.class);
@@ -146,6 +159,7 @@ public class UserDatabaseImplTest {
 		mockImpl.findAllUsers();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test(expected = SQLException.class)
 	public void blowUpStatus() {
 		UserDatabaseImpl mockImpl = mock(UserDatabaseImpl.class);
@@ -171,7 +185,7 @@ public class UserDatabaseImplTest {
 	}
 
 	@Test
-	public void deleteAllUsersTest() {
+	public void deleteAllUsersTest() throws ClassNotFoundException, SQLException, SqlToolError, IOException {
 		userImplTest.deleteAllUsers();
 		assertEquals(0, userImplTest.findAllUsers().size());
 		setUp();
