@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/prattle/static/css/main.b100e6da.chunk.css",
+    "main.js": "/prattle/static/js/main.0e6b5bec.chunk.js",
+    "main.js.map": "/prattle/static/js/main.0e6b5bec.chunk.js.map",
+    "runtime-main.js": "/prattle/static/js/runtime-main.5fd5dd22.js",
+    "runtime-main.js.map": "/prattle/static/js/runtime-main.5fd5dd22.js.map",
+    "static/css/2.c4418c31.chunk.css": "/prattle/static/css/2.c4418c31.chunk.css",
+    "static/js/2.e15da522.chunk.js": "/prattle/static/js/2.e15da522.chunk.js",
+    "static/js/2.e15da522.chunk.js.map": "/prattle/static/js/2.e15da522.chunk.js.map",
+    "index.html": "/prattle/index.html",
+    "precache-manifest.e0e6ededcb499299aa5d7f9d35772b5c.js": "/prattle/precache-manifest.e0e6ededcb499299aa5d7f9d35772b5c.js",
+    "service-worker.js": "/prattle/service-worker.js",
+    "static/css/2.c4418c31.chunk.css.map": "/prattle/static/css/2.c4418c31.chunk.css.map",
+    "static/css/main.b100e6da.chunk.css.map": "/prattle/static/css/main.b100e6da.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5fd5dd22.js",
+    "static/css/2.c4418c31.chunk.css",
+    "static/js/2.e15da522.chunk.js",
+    "static/css/main.b100e6da.chunk.css",
+    "static/js/main.0e6b5bec.chunk.js"
+  ]
+}

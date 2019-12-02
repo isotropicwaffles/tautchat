@@ -1,13 +1,12 @@
+import { generalMessageRouter } from './GeneralMessageRouter'
+import { sendLoginMessage, sendCreateUserMessage } from './UserServiceMessages'
+
 var ws;
 var username;
 var active_socket = false;
 /* Enumeration for colors
  * 
  */
-const colors = {
-	    RED:  '#d00',
-	    GREEN: '#009d00'
-}
 
 /* Connects to the server and sets up call back for messaging events
  * 
@@ -16,35 +15,35 @@ function connect() {
 	console.log('Checking Socket Connection');
 
 	if (typeof ws === 'undefined') {
-				
+
 		console.log('Connecting to Socket');
 
 		var host = document.location.host;
 		var pathname = document.location.pathname;
-		    
-		ws = new WebSocket("ws://" +host  + pathname + "chat/");
-		
-		ws.onopen = function(){
+
+		//Hard coded for testing purposes
+		ws = new WebSocket("ws://localhost:8080/prattle/chat/");
+		// ws = new WebSocket("ws://" +host  + pathname + "chat/");
+
+		ws.onopen = function () {
 			console.log('Connection open!');
 			active_socket = true;
-			}
+		}
 
-		ws.onclose = function(code) {
-			console.log("websocket closing. Code:", code );
+		ws.onclose = function (code) {
+			console.log("websocket closing. Code:", code);
 			active_socket = false;
 		}
-	
-		ws.onerror= function(evt){
+
+		ws.onerror = function (evt) {
 			console.log("Websocket Error");
 			console.log("Error Code: ", evt.data);
 		}
-		ws.onmessage = function(event) {
+		ws.onmessage = function (event) {
 			console.log('Received Message');
-
 			console.log(event.data);
-
 			generalMessageRouter(JSON.parse(event.data));
-	    
+
 		};
 	}
 }
@@ -52,34 +51,15 @@ function connect() {
 /* Sends a message to the server
 *
 */
-function send(message){
+function send(message) {
 	//If the server is already open then sent the message
-	if (active_socket){
+	if (active_socket) {
 		ws.send(message)
-	}else{
+	} else {
 		//if server is not connected, then connect first
 		connect();
-	    setTimeout(function(){ ws.send(message);},500);
+		setTimeout(function () { ws.send(message); }, 500);
 	}
-	
 }
 
-
-/* Sends a user login request to server
- * 
- */
-function login() {
-	username = document.getElementById("username_login").value;
-	sendLoginMessage(username);
-}
-
-/*Sends a user creation request to server
- * 
- */
-function createUser() {
-	username = document.getElementById("username_login").value;
-	sendCreateUserMessage(username)	
-}
-
-
-
+export { send };

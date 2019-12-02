@@ -1,3 +1,6 @@
+import {messageTypes} from './GeneralMessageRouter'
+import {userServiceContent} from './UserServiceMessageProcessing'
+import {send} from './WebSocket'
 
 /* Sends a user login request to server
  * 
@@ -12,6 +15,7 @@ function sendLoginMessage(username) {
         "content": username
     });
     
+    console.log(json);
     send(json);
     
 }
@@ -64,3 +68,4 @@ function sendFriendUser(username) {
    send(json);
 }
 
+export {sendLoginMessage, sendCreateUserMessage};
