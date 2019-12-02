@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 /**
  * JDBC Database connection class for connecting to MySQL database.
  */
+@SuppressWarnings("squid:S2068") // This is not a hard coded password.
 public class DatabaseConnection {
 
   private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
