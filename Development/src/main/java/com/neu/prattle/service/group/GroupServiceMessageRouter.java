@@ -1,6 +1,5 @@
 package com.neu.prattle.service.group;
 
-import com.neu.prattle.daos.MessageDatabaseImpl;
 import com.neu.prattle.messaging.AbstractMessageRouter;
 import com.neu.prattle.messaging.IMessageProcessor;
 import com.neu.prattle.messaging.MessageAddresses;
@@ -59,8 +58,7 @@ public class GroupServiceMessageRouter extends AbstractMessageRouter {
    */
   @Override
   public boolean canProcessMessage(Message message) {
-    MessageDatabaseImpl messageDatabase = new MessageDatabaseImpl();
-    messageDatabase.createMessage(message);
+
     return message.getType().contentEquals(MessageAddresses.GROUP_SERVICE.label)
             && super.canProcessMessage(message);
 

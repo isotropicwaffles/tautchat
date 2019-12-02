@@ -101,7 +101,8 @@ public class SendingMessagesTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException, TimeoutException {
-		
+	    UserServiceImpl.setEnableDBConnection(false);  
+
 		UserServiceImpl.getInstance();
 		
 		UserServiceImpl.clearAllUsers();
@@ -183,6 +184,7 @@ public class SendingMessagesTest {
 		session4 = null;
 		session5 = null;
 		session6 = null;
+	    UserServiceImpl.setEnableDBConnection(true);  
 
 
 	}

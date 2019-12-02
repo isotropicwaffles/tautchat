@@ -45,8 +45,10 @@ public class OutgoingMessageProcessor implements IMessageProcessor {
    */
   @Override
   public void processMessage(Message message) throws IOException {
-
-    if (message.getType().equals(MessageAddresses.BROADCAST_MESSAGE.label)) {
+	 
+	//Process sentiment before sending
+	  
+	if (message.getType().equals(MessageAddresses.BROADCAST_MESSAGE.label)) {
       ChatEndpoint.broadcast(message);
     } else if (message.getType().equals(MessageAddresses.DIRECT_MESSAGE.label)) {
       ChatEndpoint.directedMessage(message);

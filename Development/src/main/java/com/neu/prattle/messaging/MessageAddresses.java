@@ -30,6 +30,10 @@ public enum MessageAddresses {
    */
   DIRECT_MESSAGE("DIRECT_MESSAGE"),
   /**
+   * Represents a sentiment analyses message address
+   */
+  SENTIMENT_ANALYSIS("SENTIMENT_ANALYSIS"),
+  /**
    * Represents a broadcast message address
    */
   BROADCAST_MESSAGE("BROADCAST_MESSAGE");

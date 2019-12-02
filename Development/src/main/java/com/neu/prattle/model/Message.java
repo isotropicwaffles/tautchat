@@ -2,6 +2,8 @@ package com.neu.prattle.model;
 
 import java.util.Date;
 
+import com.neu.textprocessing.SentimentAnalysis;
+
 /***
  * A Basic POJO for Message.
  *
@@ -48,6 +50,12 @@ public class Message {
    * It represents the additional information of the message.
    */
   private String additionalInfo;
+  
+  /***
+   * It represents the sentiment of the content
+   */
+  private String sentiment;
+  
 
   public static MessageBuilder messageBuilder() {
     return new MessageBuilder();
@@ -61,6 +69,7 @@ public class Message {
             .append("Type: ").append(type)
             .append("ContentType: ").append(contentType)
             .append("Content: ").append(content)
+            .append("sentiment").append(sentiment)
             .append("DateSent: ").append(dateSent)
             .append("additionalInfo: ").append(additionalInfo)
             .toString();
@@ -93,7 +102,11 @@ public class Message {
   public String getTo() {
     return to;
   }
-
+  
+  public String getSentiment() {
+	    return sentiment;
+  }
+  
   public void setTo(String to) {
     this.to = to;
   }
@@ -103,6 +116,9 @@ public class Message {
   }
 
   public void setContent(String content) {
+	
+    this.sentiment = SentimentAnalysis.characterByCharacterSentiment(content);
+	
     this.content = content;
   }
 
@@ -113,6 +129,10 @@ public class Message {
   public void setId(int id) {
     this.id = id;
   }
+  
+  public void setSentiment(String sentiment) {
+	  this.sentiment = sentiment;
+}
 
   public Date getDateSent() {
     return dateSent;
