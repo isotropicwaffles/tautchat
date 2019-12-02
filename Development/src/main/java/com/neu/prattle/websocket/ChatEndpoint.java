@@ -55,6 +55,8 @@ public class ChatEndpoint {
   /** The session. */
   private Session session;
 
+  final static Logger log = Logger.getLogger(ChatEndpoint.class.getName());
+
   /**
    * Logins in user
    *
@@ -106,7 +108,14 @@ public class ChatEndpoint {
    * @param message
    */
   public static void directedMessage(Message message) {
-    broadcastToSession(message, findSessionByUsername(message.getTo()));
+	  try {
+		  broadcastToSession(message, findSessionByUsername(message.getTo()));
+	  }
+	  catch(NullPointerException e){
+	      log.log(Level.INFO, "Session not found.");
+
+	  }
+  
   }
 
   /**
@@ -136,7 +145,6 @@ public class ChatEndpoint {
    * @param session
    */
   private static void broadcastToSession(Message message, Session session) {
-    final Logger log = Logger.getLogger(ChatEndpoint.class.getName());
     try {
       RemoteEndpoint.Basic remote = session.getBasicRemote();
       remote.sendObject(message);
