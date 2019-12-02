@@ -1,0 +1,31 @@
+[
+  {
+    "to": "phil",
+    "from": "kathy",
+   	"type": "DIRECT_MESSAGE",
+   	"content_type": "ASCII",
+    "content": "Hey Phil! It's Kath, how are ya?!"
+  },
+  {
+    
+    "to": "tony",
+    "from": "kathy",
+   	"type": "DIRECT_MESSAGE",
+   	"content_type": "ASCII",
+    "content": "Tony, it's Kathy, don't tell Phil I'm messaging you"
+  },
+  {
+    "to": "kathy",
+    "from": "tony",
+   	"type": "DIRECT_MESSAGE",
+   	"content_type": "ASCII",
+    "content": "Don't worry Kath, I won't tell"
+  },
+  {
+    "to": "tony",
+    "from": "phil",
+   	"type": "DIRECT_MESSAGE",
+   	"content_type": "ASCII",
+    "content": "Phil, it's Tony... Kathy's doing it again"
+  }
+]

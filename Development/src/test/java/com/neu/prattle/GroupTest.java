@@ -19,6 +19,7 @@ public class GroupTest {
 
   @Before
   public void setUp() {
+    UserServiceImpl.setEnableDBConnection(false);  
     UserServiceImpl.getInstance();
     UserServiceImpl.clearAllUsers();
 
@@ -27,6 +28,8 @@ public class GroupTest {
   @After
   public void destroy() {
     UserServiceImpl.clear();
+    UserServiceImpl.setEnableDBConnection(true);  
+
   }
 
   @Test
@@ -102,7 +105,7 @@ public class GroupTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalBuild() {
-    Group g = new Group.GroupBuilder().build();
+    new Group.GroupBuilder().build();
   }
 
 
@@ -219,7 +222,7 @@ public class GroupTest {
             .setBot(true)
             .build();
 
-    Group g = new Group.GroupBuilder().addModerator(bot).setName("test").build();
+    new Group.GroupBuilder().addModerator(bot).setName("test").build();
   }
 
   @Test

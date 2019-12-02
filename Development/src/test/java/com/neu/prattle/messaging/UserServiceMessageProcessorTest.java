@@ -66,6 +66,8 @@ public class UserServiceMessageProcessorTest {
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException {
+	    UserServiceImpl.setEnableDBConnection(false);  
+
 		UserServiceImpl.getInstance();
 		
 		UserServiceImpl.clearAllUsers();
@@ -114,6 +116,7 @@ public class UserServiceMessageProcessorTest {
 		session1 = null;
 		session2 = null;
 		session3 = null;
+	    UserServiceImpl.setEnableDBConnection(true);  
 
 
 	}
