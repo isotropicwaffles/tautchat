@@ -2,6 +2,7 @@ package com.neu.prattle.daos;
 
 import com.neu.prattle.model.Message;
 import com.neu.prattle.model.User;
+import com.neu.prattle.daos.DatabaseSupportFunctions;
 
 import org.hsqldb.cmdline.SqlToolError;
 import org.junit.AfterClass;
@@ -24,7 +25,8 @@ public class MessageDatabaseImplTest {
 
   @BeforeClass
   public static void setUp() throws ClassNotFoundException, SqlToolError, SQLException, IOException {
-	DatabaseSupportFunctions.setUpTestDatabase();
+	  
+		DatabaseSupportFunctions.setUpTestDatabase(MessageDatabaseImplTest.class.getClassLoader().getResource("TestConfig.sql").getFile());
 
     testUser = new User.UserBuilder()
             .setName("Bender")

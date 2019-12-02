@@ -38,10 +38,10 @@ public class MessageDatabaseImpl implements MessageDAO {
   public void createMessage(Message message) {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    String createMessageSQL = DatabaseConnection.formatStatement("INSERT INTO 'tautdb'.'messages' ('content', 'sender_username', "
-            + "'recipient_username', 'date_sent') VALUES (\\'" + message.getContent() + "\\', \\'"
-            + message.getFrom() + "\\', \\'" + message.getTo() + "\\', \\'"
-            + simpleDateFormat.format(message.getDateSent()) + "\\')");
+    String createMessageSQL = DatabaseConnection.formatStatement("INSERT INTO `tautdb`.`messages` (`content`, `sender_username`, "
+            + "`recipient_username`, `date_sent`) VALUES ('" + message.getContent() + "', '"
+            + message.getFrom() + "', '" + message.getTo() + "', '"
+            + simpleDateFormat.format(message.getDateSent()) + "')");
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement preparedStatement = connection.
                  prepareStatement(createMessageSQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -58,9 +58,9 @@ public class MessageDatabaseImpl implements MessageDAO {
 
   @Override
   public Collection<Message> findAllMessagesOfUser(User user) {
-    String findAllUserMessagesSQL = DatabaseConnection.formatStatement("SELECT * FROM 'tautdb'.'messages' "
-            + "WHERE 'messages'.'sender_username'=\\'" + user.getName()
-            + "\\' OR 'messages'.'recipient_username'=\\'" + user.getName() + "\\'");
+    String findAllUserMessagesSQL = DatabaseConnection.formatStatement("SELECT * FROM `tautdb`.`messages` "
+            + "WHERE `messages`.`sender_username`='" + user.getName()
+            + "' OR `messages`.`recipient_username`='" + user.getName() + "'");
     ArrayList<Message> messages = new ArrayList<>();
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
@@ -95,7 +95,7 @@ public class MessageDatabaseImpl implements MessageDAO {
 
   Message findMessage(Message message) {
 
-    String findMessageSQL = DatabaseConnection.formatStatement("SELECT * FROM 'tautdb'.'messages' WHERE  'id'=" + message.getId());
+    String findMessageSQL = DatabaseConnection.formatStatement("SELECT * FROM `tautdb`.`messages` WHERE  `id`=" + message.getId());
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement statement = connection.prepareStatement(findMessageSQL)) {
       try (ResultSet results = statement.executeQuery()) {
@@ -125,20 +125,20 @@ public class MessageDatabaseImpl implements MessageDAO {
 
   @Override
   public void updateMessage(Message message) {
-    String updateMessageSQL = DatabaseConnection.formatStatement("UPDATE 'tautdb'.'messages' SET "
-            + "'content'= \\'" + message.getContent()
-            + "\\' WHERE  'id'= " + message.getId());
+    String updateMessageSQL = DatabaseConnection.formatStatement("UPDATE `tautdb`.`messages` SET "
+            + "`content`= '" + message.getContent()
+            + "' WHERE  `id`= " + message.getId());
     executeUpdateQueryHelper(updateMessageSQL);
   }
 
   @Override
   public void deleteMessage(Message message) {
-    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM 'tautdb'.'messages' WHERE  'id'= " + message.getId());
+    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM `tautdb`.`messages` WHERE  `id`= " + message.getId());
     executeUpdateQueryHelper(deleteMessageSQL);
   }
 
   void truncateMessages() {
-    String truncateMessagesSQL = DatabaseConnection.formatStatement("DELETE FROM 'tautdb'.'messages'");
+    String truncateMessagesSQL = DatabaseConnection.formatStatement("DELETE FROM `tautdb`.`messages`");
     executeUpdateQueryHelper(truncateMessagesSQL);
   }
 }

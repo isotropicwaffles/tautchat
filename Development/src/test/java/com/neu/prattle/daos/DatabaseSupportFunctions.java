@@ -13,7 +13,7 @@ import org.hsqldb.cmdline.SqlToolError;
 
 public class DatabaseSupportFunctions {
 
-	private static final String sqlInitFile= DatabaseSupportFunctions.class.getResource("TestConfig.sql").getPath();
+	private static String sqlInitFile;
 
     /**
      * Database initialization for testing i.e.
@@ -42,8 +42,8 @@ public class DatabaseSupportFunctions {
          }
     }
  
-	public static void setUpTestDatabase() throws ClassNotFoundException, SQLException, SqlToolError, IOException {
-				 
+	public static void setUpTestDatabase(String sqlInitFileForTest) throws ClassNotFoundException, SQLException, SqlToolError, IOException {
+		sqlInitFile = sqlInitFileForTest;
         // initialize database
         initDatabase();
 

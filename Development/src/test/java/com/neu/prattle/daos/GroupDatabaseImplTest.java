@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
+import com.neu.prattle.daos.DatabaseSupportFunctions;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -41,7 +42,7 @@ public class GroupDatabaseImplTest {
 
   @BeforeClass
   public static void setUp() throws ClassNotFoundException, SqlToolError, SQLException, IOException {
-	DatabaseSupportFunctions.setUpTestDatabase();
+	DatabaseSupportFunctions.setUpTestDatabase(GroupDatabaseImplTest.class.getClassLoader().getResource("TestConfig.sql").getFile());
 
 	testPerson = new User.UserBuilder()
             .setName("HughMann")

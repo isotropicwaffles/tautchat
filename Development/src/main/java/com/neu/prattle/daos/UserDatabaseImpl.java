@@ -23,7 +23,7 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
   private static final String STATUS = "status";
   private static final String ISBOT = "is_bot";
   private static final String SEARCHABLE = "searchable";
-  private static final String SELECTALLUSER = "SELECT * FROM 'tautdb'.'users' WHERE 'name'=\\'";
+  private static final String SELECTALLUSER = "SELECT * FROM `tautdb`.`users` WHERE `name`='";
   private LogManager logManager = LogManager.getLogManager();
   private Logger logging = logManager.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -54,8 +54,8 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
   @Override
   public void createUser(User user) {
-    String createUserSQL = DatabaseConnection.formatStatement( "INSERT INTO 'tautdb'.'users' ('name', 'status', 'is_bot', 'searchable')"
-           + " VALUES (\\'" + user.getName() + "\\', \\'" + user.getStatus().toString() + "\\', "
+    String createUserSQL = DatabaseConnection.formatStatement( "INSERT INTO `tautdb`.`users` (`name`, `status`, `is_bot`, `searchable`)"
+           + " VALUES ('" + user.getName() + "', '" + user.getStatus().toString() + "', "
            + user.userIsBot() + ", " + user.getSearchable() + ")");
   
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
@@ -90,7 +90,7 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
   @Override
   public Collection<User> findAllUsers() {
-    String findAllUsersSQL = DatabaseConnection.formatStatement("SELECT * FROM 'tautdb'.'users'");
+    String findAllUsersSQL = DatabaseConnection.formatStatement("SELECT * FROM `tautdb`.`users`");
     ArrayList<User> users = new ArrayList<>();
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
@@ -121,67 +121,67 @@ public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
 
   @Override
   public User findUserById(int userId) {
-    String findAllUsersSQL = DatabaseConnection.formatStatement("SELECT * FROM 'tautdb'.'users' WHERE 'id'=" + userId);
+    String findAllUsersSQL = DatabaseConnection.formatStatement("SELECT * FROM `tautdb`.`users` WHERE `id`=" + userId);
     return returnUserQuery(findAllUsersSQL);
   }
 
   @Override
   public User findUserByUsername(String username) {
-    String findAllUsersSQL = DatabaseConnection.formatStatement(SELECTALLUSER + username + "\\'");
+    String findAllUsersSQL = DatabaseConnection.formatStatement(SELECTALLUSER + username + "'");
     return returnUserQuery(findAllUsersSQL);
   }
 
   @Override
   public boolean userExists(String username) {
-    String userExistsSQL = DatabaseConnection.formatStatement(SELECTALLUSER + username + "\\'");
+    String userExistsSQL = DatabaseConnection.formatStatement(SELECTALLUSER + username + "'");
     return executeBooleanQuery(userExistsSQL);
   }
 
   @Override
   public void updateUser(User user) {
-    String updateMessageSQL = DatabaseConnection.formatStatement( "UPDATE 'tautdb'.'users' SET "
-            + "'name'= \\'" + user.getName() + "\\', 'status'= \\'" + user.getStatus().toString()
-            + "\\', 'is_bot' = " + user.userIsBot() + ", 'searchable'=" + user.getSearchable()
-            + " WHERE 'id'=" + user.getId());
+    String updateMessageSQL = DatabaseConnection.formatStatement( "UPDATE `tautdb`.`users` SET "
+            + "`name`= '" + user.getName() + "', `status`= '" + user.getStatus().toString()
+            + "', `is_bot` = " + user.userIsBot() + ", `searchable`=" + user.getSearchable()
+            + " WHERE `id`=" + user.getId());
     executeUpdateHelper(updateMessageSQL);
   }
 
   @Override
   public void deleteUserById(int userId) {
-    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM 'tautdb'.'users' WHERE 'id'=" + userId);
+    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM `tautdb`.`users` WHERE `id`=" + userId);
     executeUpdateHelper(deleteMessageSQL);
   }
 
   @Override
   public void deleteUserByUsername(String username) {
-    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM 'tautdb'.'users' WHERE 'name'=\\'" + username + "\\'");
+    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM `tautdb`.`users` WHERE `name`='" + username + "'");
     executeUpdateHelper(deleteMessageSQL);
   }
 
   @Override
   public void deleteAllUsers() {
-    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM 'tautdb'.'users'");
+    String deleteMessageSQL = DatabaseConnection.formatStatement("DELETE FROM `tautdb`.`users`");
     executeUpdateHelper(deleteMessageSQL);
   }
 
   @Override
   public boolean isBot(User user) {
     String userIsBotSQL = DatabaseConnection.formatStatement( SELECTALLUSER + user.getName()
-            + "\\' AND 'is_bot' = 1");
+            + "' AND `is_bot` = 1");
     return executeBooleanQuery(userIsBotSQL);
   }
 
   @Override
   public boolean isSearchable(User user) {
     String userIsSearchableSQL =DatabaseConnection.formatStatement(SELECTALLUSER + user.getName()
-            + "\\' AND 'searchable' = 1");
+            + "' AND `searchable` = 1");
     return executeBooleanQuery(userIsSearchableSQL);
   }
 
   @Override
   public UserStatus retrieveStatus(User user) {
-    String userStatusSQL = DatabaseConnection.formatStatement( "SELECT 'users'.'status' FROM 'tautdb'.'users' WHERE 'name'=\\'"
-            + user.getName() + "\\'");
+    String userStatusSQL = DatabaseConnection.formatStatement( "SELECT `users`.`status` FROM `tautdb`.`users` WHERE `name`='"
+            + user.getName() + "'");
 
     try (Connection connection = DatabaseConnection.getInstance().getConnection();
          PreparedStatement statement = connection.prepareStatement(userStatusSQL)) {

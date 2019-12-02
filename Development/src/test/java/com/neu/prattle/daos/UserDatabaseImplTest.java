@@ -2,6 +2,7 @@ package com.neu.prattle.daos;
 
 import com.neu.prattle.model.User;
 import com.neu.prattle.model.UserStatus;
+import com.neu.prattle.daos.DatabaseSupportFunctions;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -32,7 +33,7 @@ public class UserDatabaseImplTest {
 	public static void setUp() throws ClassNotFoundException, SQLException, SqlToolError, IOException {
 				 
         // initialize database
-	//	DatabaseSupportFunctions.setUpTestDatabase();
+		DatabaseSupportFunctions.setUpTestDatabase(UserDatabaseImplTest.class.getClassLoader().getResource("TestConfig.sql").getFile());
         
 	    testPerson = new User.UserBuilder()
 	    		.setName("HughMann")
@@ -61,7 +62,7 @@ public class UserDatabaseImplTest {
 	@AfterClass
 	public static void tearDown() throws SQLException {
 		userImplTest.deleteAllUsers();
-//		DatabaseSupportFunctions.tearDownTestDatabase();
+		DatabaseSupportFunctions.tearDownTestDatabase();
 
 	}
 	

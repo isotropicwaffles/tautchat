@@ -63,24 +63,14 @@ public class DatabaseConnection {
   public static String formatStatement(String statement) {
 	
 	StringBuilder formattedStatement = new StringBuilder();
-	boolean foundEscapeChar = false;
 		
-		for (int i = 0; i < statement.length(); i++){
+	for (int i = 0; i < statement.length(); i++){
 
-			if((int) statement.charAt(i) == 39 && testMode)// apostrophe
-			{
-				if (foundEscapeChar) {
-					formattedStatement.append(statement.charAt(i));
-					foundEscapeChar = false;
-				}
-				
-			}else if(statement.charAt(i) == '\\'){
-				foundEscapeChar = true;
-			}
-			else {
-				formattedStatement.append(statement.charAt(i));
-			}
-		}		
+		if(statement.charAt(i) != '`' ||  !testMode)// apostrophe
+		{
+			formattedStatement.append(statement.charAt(i));	
+		}
+	}			
 
 	return formattedStatement.toString();
 	  
