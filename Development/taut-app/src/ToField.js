@@ -16,19 +16,18 @@ export class ToField extends Component {
 
     }
 
+    getStyle() {
+        return {
+            textAlign: 'left'
+        }
+    }
+
+
     render() {
         return (
-            <form style={{ display: 'flex' }}>
-                <input
-                    type="text"
-                    name="messageWith"
-                    placeholder="Who To Message"
-                    style={{ flex: '10', padding: '5px' }}
-                    value={this.state.messageWith}
-                    onChange={this.onChange}
-                />
-            </form>
-
+            <div >
+                <h1 class="subtitle is-3" style={this.getStyle()}>{this.props.messageWith}</h1>
+            </div>
         )
     }
 }

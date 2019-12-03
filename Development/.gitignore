@@ -2,6 +2,8 @@
 /bin/
 /.settings/
 .project
+.idea/
+java-websocket.iml
 .classpath
 users.txt
 *.bak

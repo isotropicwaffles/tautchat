@@ -1,11 +1,8 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import './App.css';
-import { generalMessageRouter } from './GeneralMessageRouter'
-import { sendLoginMessage, sendCreateUserMessage } from './UserServiceMessages'
 
 class LoginPage extends React.Component {
-
 
     constructor(props) {
         super(props);
@@ -59,11 +56,11 @@ class LoginPage extends React.Component {
                     <div className="container">
                         <div className="column is-4 is-offset-4">
                             <div className="box">
-                                <form onSubmit={this.handleSubmit}>
+                                <form onSubmit={this.handleLogin}>
                                     <div className="field">
                                         <label className="label">User Name</label>
                                         <div className="control">
-                                            <input className="input" type="text" name="username" onChange={this.handleChange} />
+                                            <input className="input" type="text" name="username" autoComplete="off" onChange={this.handleChange} />
                                         </div>
                                     </div>
                                     <div className="buttons is-grouped">
