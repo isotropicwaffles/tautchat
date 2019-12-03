@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 public class DatabaseConnection {
 
   private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-  private static final String TEST_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
   private static final String USER = "team5";
   private static final String PASSWORD = "tautchat";
   private static final String SCHEMA = "tautdb";
@@ -29,7 +28,6 @@ public class DatabaseConnection {
   private DatabaseConnection() throws SQLException {
     try {
     	if (testMode) {
-    		Class.forName(TEST_DRIVER);
           	this.connection = DriverManager.getConnection(TEST_URL, USER, PASSWORD);
     	}else {
     		Class.forName(DRIVER);

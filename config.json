@@ -4,7 +4,7 @@
    "DNS": "tautchat.com",
     "user":"ubuntu",
     "directory":"/usr/local/apache-tomcat9/webapps/",
-    "JARNAME": "java-websocket-0.0.1-SNAPSHOT.war",
+    "JARNAME": "prattle.war",
     "PEM": "Prattle.pem"
  }
 ]
