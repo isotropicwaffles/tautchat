@@ -1,23 +1,23 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 
-export class UserItem extends Component {
+export class GroupItem extends Component {
     render() {
 
-        const { chatWith } = this.props.user;
+        const { groupWith } = this.props.group;
 
         return (
             <div>
                 <p>
-                    {chatWith}
+                    {groupWith}
                 </p>
             </div >
         )
     }
 }
 
-UserItem.propTypes = {
-    user: PropTypes.object.isRequired
+GroupItem.propTypes = {
+    group: PropTypes.object.isRequired
 }
 
-export default UserItem
+export default GroupItem

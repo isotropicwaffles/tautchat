@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import UserItem from './UserItem'
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom'
 
 class Users extends Component {
-    render() {
-        // return (this.props.users.map((user) => (
-        //         <li key={user}>
-        //           <Link to="/">Click</Link>
-        //         </li>
-        //       )
-        // )
 
-        
-        return this.props.users.map((user) => (
-            <UserItem user={user} username={this.props.username}/>
+    setMessageWith = (a) => {
+        this.props.setTo(a);
+    }
+
+    filtered = (these) => {
+        return these.filter(item => (item !== this.props.username))
+    }
+
+
+    render() {
+
+        return this.filtered(this.props.users).map((user) => (
+            <li>
+                <button class="button is-white is-fullwidth" onClick={() => this.setMessageWith(user)}>{user}</button>
+            </li>
         ));
     }
 }

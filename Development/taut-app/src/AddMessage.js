@@ -21,15 +21,17 @@ export class AddMessage extends Component {
                     name="content"
                     placeholder="Type Message Here"
                     style={{flex: '10', padding: '5px'}}
+                    autoComplete="off"
                     value={this.state.content}
                     onChange={this.onChange}
                 />
-                <input
+                <button type="submit" class="button is-dark">Submit</button>
+                {/* <input
                     type="submit"
                     value="Submit"
                     className="btn"
                     style = {{flex: '1'}}
-                />
+                /> */}
             </form>
 
         )

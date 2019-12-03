@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
-  Route} from "react-router-dom";
+  Route
+} from "react-router-dom";
 import './App.css';
 import LoginPage from './LoginPage';
 import Header from './components/layout/Header';
@@ -55,7 +56,6 @@ class App extends Component {
       }
       ws.onmessage = (event) => {
         console.log('Received Message');
-        console.log(event.data);
         this.generalMessageRouter(JSON.parse(event.data));
       };
     }
@@ -74,7 +74,6 @@ class App extends Component {
   }
 
   generalMessageRouter = (message) => {
-    console.log("General message router")
     console.log(message);
     if (message.type == "BROADCAST_MESSAGE") {
       this.chatMessageRouter(message);
@@ -95,10 +94,13 @@ class App extends Component {
   }
 
   processDirectChatMessage(message) {
-    console.log("I got something to use");
     console.log(message);
-    this.setState({queuedMessage: message})
+    this.setState({ queuedMessage: message })
+  }
 
+  processGroupMessage(message) {
+    console.log(message);
+    this.setState({ queuedMessage: message })
   }
 
   userServiveMessageRouter(message) {
@@ -112,10 +114,10 @@ class App extends Component {
 
   processLoginResponse(message) {
     if (message.content.includes("SUCCESS")) {
-      this.setState({username: message.to})
+      this.setState({ username: message.to })
       console.log(message)
       console.log("SUCCESS: User successfully logged into session.");
-      this.setState({authenticated: true});
+      this.setState({ authenticated: true });
     } else if (message.content.includes("FAILURE")) {
       alert("User Name Does not Exist. Please Create User First.");
       console.log("ERROR: User Name Does not Exist. Please Create User First.");
@@ -133,17 +135,16 @@ class App extends Component {
     }
   }
 
-
   render() {
     return (
 
       <Router basename="prattle">
         <div className="App">
           <div className="container">
-            <Header username={this.state.username}/>
-            <Route exact path="/" render={(routeProps) => (<LoginPage {...routeProps} connect={this.connect} send={this.send} username={this.state.username}/>)} />
+            <Header username={this.state.username} />
+            <Route exact path="/" render={(routeProps) => (<LoginPage {...routeProps} connect={this.connect} send={this.send} username={this.state.username} />)} />
             <Route path="/about" component={About} />
-            <Route path="/chat/:messageWith?" render={(routeProps) => (<Messenger {...routeProps} connect={this.connect} send={this.send} username={this.state.username} queuedMessage={this.state.queuedMessage}/>)} />
+            <Route path="/chat/:messageWith?" render={(routeProps) => (<Messenger {...routeProps} connect={this.connect} send={this.send} username={this.state.username} queuedMessage={this.state.queuedMessage} />)} />
           </div>
         </div>
       </Router>

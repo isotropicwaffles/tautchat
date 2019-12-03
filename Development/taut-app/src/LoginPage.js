@@ -4,7 +4,6 @@ import './App.css';
 
 class LoginPage extends React.Component {
 
-
     constructor(props) {
         super(props);
         this.state = { value: '' };
@@ -61,7 +60,7 @@ class LoginPage extends React.Component {
                                     <div className="field">
                                         <label className="label">User Name</label>
                                         <div className="control">
-                                            <input className="input" type="text" name="username" onChange={this.handleChange} />
+                                            <input className="input" type="text" name="username" autoComplete="off" onChange={this.handleChange} />
                                         </div>
                                     </div>
                                     <div className="buttons is-grouped">

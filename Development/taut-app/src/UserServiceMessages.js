@@ -51,7 +51,6 @@ function sendSearchForUsernameMessage(username) {
 		"contentType": userServiceContent.SEARCH_USERS_BY_NAME,
         "content": username
    });
-    
    send(json);
 }
 

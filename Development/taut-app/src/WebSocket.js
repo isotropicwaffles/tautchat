@@ -41,7 +41,6 @@ function connect() {
 		}
 		ws.onmessage = function (event) {
 			console.log('Received Message');
-			console.log(event.data);
 			generalMessageRouter(JSON.parse(event.data));
 
 		};
