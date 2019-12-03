@@ -30,7 +30,7 @@ function sendDirectMessage(message) {
 
     //Send user creation request
     var json = JSON.stringify({
-    	"type": messageTypes.DIRECT_MESSAGE,
+    	"type": messageTypes.BROADCAST_MESSAGE,
         "from": message.from,
         "to" :  message.to,
         "contentType": contentTypes.ASCII,
@@ -40,7 +40,6 @@ function sendDirectMessage(message) {
     console.log(json);
     send(json);
 }
-
 
 /* Sends a group ascii message rom chat
 *

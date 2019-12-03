@@ -1,5 +1,5 @@
 import { messageTypes } from "./GeneralMessageRouter";
-
+import Messenger from './Messenger';
 
 /* Enumeration for non-service message content types
  * 
@@ -24,21 +24,14 @@ const contentTypes = {
 function chatMessageRouter(message) {
 	//  Process Broadcast
 	if (message.type == messageTypes.BROADCAST_MESSAGE) {
-		processBroadcastChatMessage(message);
-
+		processDirectChatMessage(message);
 	} else if (message.type == messageTypes.DIRECT_MESSAGE) {
-		//Process Direct Message 
-		
 		if (message.contentType == contentTypes.GROUP_MESSAGE){
-			//Process Group Message
 			processGroupMessage(message);
 		}
 		else{
-			//Process ASCII Message (assumed content for now)
 			processDirectChatMessage(message);
 		}
-			
-	
 	}
 }
 
@@ -48,10 +41,9 @@ function chatMessageRouter(message) {
  * @param json message - json of chat type message
  */
 function processDirectChatMessage(message) {
-	//TODO Chad put in GUI logic
-
+	console.log("I got something to use");
+	console.log(message);
 }
-
 
 /* Processes recieved broadcast message chat
  * 
@@ -130,4 +122,4 @@ function processSentimentContent(message){
 	
 }
 
-export {contentTypes}
+export {contentTypes, chatMessageRouter}
