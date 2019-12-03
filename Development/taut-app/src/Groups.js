@@ -8,7 +8,6 @@ class Groups extends Component {
     }
 
     render() {
-
         return this.props.groups.map((group) => (
             <li>
                 <button class="button is-white is-fullwidth" onClick={() => this.setGroup(group)}>{group}</button>

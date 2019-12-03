@@ -5,37 +5,35 @@ import Messages from './Messages';
 import ToField from './ToField';
 import Users from './Users';
 import Groups from './Groups'
+import NewGroup from './NewGroup'
 
 class Messenger extends Component {
 
     state = {
         messageWith: '',
         messages: [],
-        users: ["Phil", "Karen", "Carl", "Mike", "Felipe", "George", "Sara", "Max"],
-        groups: ["Kitty Lovers", "Science Project", "Taut Admins"]
     }
 
     componentDidUpdate(prevProps) {
         // Typical usage (don't forget to compare props):
-        if (this.props.queuedMessage !== prevProps.queuedMessage) { 
+        if (this.props.queuedMessage !== prevProps.queuedMessage) {
             this.setState({
                 messages: [...this.state.messages, this.props.queuedMessage]
             }, () => {
                 console.log(this.state.messages)
                 // this.filterMessages();
-            });     
+            });
             // this.setState      
             // this.addToChatBox(this.props.queuedMessage)
         }
     }
 
     componentDidMount() {
-        // console.log(this.props.username)
     }
 
     filterMessages = () => {
 
-        if (this.state.groups.includes(this.state.messageWith)) {
+        if (this.props.groups.includes(this.state.messageWith)) {
             //Filter Group Message
             const messageWith = this.state.messageWith
             const currentUser = this.props.username
@@ -66,14 +64,26 @@ class Messenger extends Component {
     }
 
     setTo = (to) => {
-        this.setState({messageWith: to})//, () => {
-            // this.filterMessages();
+        this.setState({ messageWith: to })//, () => {
+        // this.filterMessages();
         // });
+    }
+
+    addGroup = (group) => {
+        this.props.addGroup(group)
+        // console.log("Add the group")
+        var json = JSON.stringify({
+            "type": "GROUP_SERVICE",
+            "contentType": "GROUP_CREATE",
+            "content": group
+        });
+
+        this.props.send(json);
     }
 
     //Add Item
     addMessage = (content) => {
-        if (this.state.groups.includes(this.state.messageWith)) {
+        if (this.props.groups.includes(this.state.messageWith)) {
             //Send group message
             var json = JSON.stringify({
                 "type": "BROADCAST_MESSAGE",
@@ -83,7 +93,7 @@ class Messenger extends Component {
                 "content": content
             });
         }
-        else if (this.state.users.includes(this.state.messageWith)) {
+        else if (this.props.users.includes(this.state.messageWith)) {
             var json = JSON.stringify({
                 "type": "BROADCAST_MESSAGE",
                 "from": this.props.username,
@@ -115,17 +125,18 @@ class Messenger extends Component {
                         <div className="column is-narrow">
                             <h1 class="title">Users</h1>
                             <React.Fragment>
-                                <Users users={this.state.users} setTo={this.setTo} username={this.props.username}/>
+                                <Users users={this.props.users} setTo={this.setTo} username={this.props.username} />
                             </React.Fragment>
                             <h1 class="title">Groups</h1>
                             <React.Fragment>
-                                <Groups groups={this.state.groups} setTo={this.setTo} />
+                                <NewGroup addGroup={this.addGroup} />
+                                <Groups groups={this.props.groups} setTo={this.setTo} />
                             </React.Fragment>
                         </div>
                         <div className="column">
                             <React.Fragment>
                                 <ToField messageWith={this.state.messageWith} />
-                                <Messages messages={this.state.messages} username={this.props.username} messageWith={this.state.messageWith} groups={this.state.groups}/>
+                                <Messages messages={this.state.messages} username={this.props.username} messageWith={this.state.messageWith} groups={this.props.groups} />
                                 <AddMessage addMessage={this.addMessage} />
                             </React.Fragment>
 

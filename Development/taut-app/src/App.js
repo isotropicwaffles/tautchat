@@ -16,7 +16,9 @@ class App extends Component {
     username: null,
     active_socket: false,
     authenticated: true,
-    queuedMessage: ''
+    queuedMessage: '',
+    users: [""],
+    groups: ["Kitty Lovers", "Science Project", "Taut Admins"]
   }
 
   componentDidMount() {
@@ -41,7 +43,10 @@ class App extends Component {
 
       ws.onopen = () => {
         console.log('Connection open!');
-        this.setState({ active_socket: true })
+        this.setState({ active_socket: true }, () => {
+          this.retrieveAllUsers();
+          // this.filterMessages();
+        });
       }
 
       ws.onclose = (code) => {
@@ -71,6 +76,19 @@ class App extends Component {
       connect();
       setTimeout(function () { ws.send(message); }, 500);
     }
+  }
+
+  retrieveAllUsers = () => {
+    var json = JSON.stringify({
+      "type": "USER_SERVICE",
+      "contentType": "SEARCH_USERS_BY_NAME",
+      "content": ""
+    });
+    this.send(json);
+  }
+
+  addGroup = (group) => {
+    this.setState({groups : [group, ...this.state.groups]})
   }
 
   generalMessageRouter = (message) => {
@@ -110,6 +128,9 @@ class App extends Component {
     if (message.contentType == "USER_CREATE") {
       this.processUserCreateResponse(message);
     }
+    if (message.contentType == "SEARCH_USERS_BY_NAME") {
+      this.processUserSearch(message);
+    }
   }
 
   processLoginResponse(message) {
@@ -126,6 +147,7 @@ class App extends Component {
 
   processUserCreateResponse(message) {
     if (message.content.includes("SUCCESS")) {
+      this.setState({users : [...this.state.users,message.]})
       alert("User successfully created. Please log in to continue")
       console.log("User Successfully Created!");
     }
@@ -135,6 +157,13 @@ class App extends Component {
     }
   }
 
+  processUserSearch(message) {
+    console.log(message.content)
+    const userList = message.content.split(',')
+    this.setState({users : userList});
+  }
+
+
   render() {
     return (
 
@@ -142,9 +171,9 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Header username={this.state.username} />
-            <Route exact path="/" render={(routeProps) => (<LoginPage {...routeProps} connect={this.connect} send={this.send} username={this.state.username} />)} />
+            <Route exact path="/" render={(routeProps) => (<LoginPage {...routeProps} connect={this.connect} send={this.send} username={this.state.username}  />)} />
             <Route path="/about" component={About} />
-            <Route path="/chat/:messageWith?" render={(routeProps) => (<Messenger {...routeProps} connect={this.connect} send={this.send} username={this.state.username} queuedMessage={this.state.queuedMessage} />)} />
+            <Route path="/chat/:messageWith?" render={(routeProps) => (<Messenger {...routeProps} connect={this.connect} send={this.send} username={this.state.username} queuedMessage={this.state.queuedMessage} users={this.state.users} groups={this.state.groups} addGroup={this.addGroup}/>)} />
           </div>
         </div>
       </Router>
