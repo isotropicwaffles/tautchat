@@ -34,11 +34,13 @@ class App extends Component {
 
       console.log('Connecting to Socket');
 
-      var host = document.location.host;
-      var pathname = document.location.pathname;
+      var host = window.location.host;
+      var pathname = window.location.pathname;
 
-      ws = new WebSocket("ws://localhost:8080/prattle/chat/");
-      // ws = new WebSocket("ws://" +host  + pathname + "chat/");
+	  console.log(host);
+	  console.log(pathname);
+      //ws = new WebSocket("ws://localhost:8080/prattle/chat/");
+      ws = new WebSocket("ws://" +host  + pathname + "chat/");
       this.setState({ ws })
 
       ws.onopen = () => {
@@ -147,7 +149,7 @@ class App extends Component {
 
   processUserCreateResponse(message) {
     if (message.content.includes("SUCCESS")) {
-      this.setState({users : [...this.state.users,message.]})
+      this.setState({users : [...this.state.users,message.to]})
       alert("User successfully created. Please log in to continue")
       console.log("User Successfully Created!");
     }

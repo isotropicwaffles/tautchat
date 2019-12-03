@@ -18,12 +18,11 @@ function connect() {
 
 		console.log('Connecting to Socket');
 
-		var host = document.location.host;
-		var pathname = document.location.pathname;
+		var host = window.location.hostname;
+		var pathname = window.location.pathname;
 
-		//Hard coded for testing purposes
-		ws = new WebSocket("ws://localhost:8080/prattle/chat/");
-		// ws = new WebSocket("ws://" +host  + pathname + "chat/");
+		ws = new WebSocket("ws://" +host  + pathname + "chat/");
+
 
 		ws.onopen = function () {
 			console.log('Connection open!');
