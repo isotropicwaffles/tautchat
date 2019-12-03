@@ -7,7 +7,7 @@ import uuid from 'uuid'
 class Messages extends Component {
     render() {
         return this.props.messages.map((message) => (
-            <MessageItem message={message} filterMessages={this.filterMessages} />
+            <MessageItem message={message} filterMessages={this.filterMessages} username={this.props.username} messageWith={this.props.messageWith}/>
         ));
     }
 }

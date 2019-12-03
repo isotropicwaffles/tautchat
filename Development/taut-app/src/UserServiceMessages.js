@@ -15,7 +15,8 @@ function sendLoginMessage(username) {
         "content": username
     });
     
-    console.log(json);
+    console.log("Logging in as %s", username)
+
     send(json);
     
 }
@@ -32,6 +33,8 @@ function sendCreateUserMessage(username) {
 		"contentType": userServiceContent.USER_CREATE,
         "content": username
    });
+
+   console.log("Creating new user: %s", username)
    send(json);
 }
 

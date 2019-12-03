@@ -10,6 +10,7 @@ export class AddMessage extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         this.props.addMessage(this.state.content);
+        this.setState({content:''})
     }
 
     render() {

@@ -62,4 +62,4 @@ function send(message) {
 	}
 }
 
-export { send };
+export { send, connect };

@@ -1,24 +1,25 @@
 
-import {userServiveMessageRouter} from './UserServiceMessageProcessing'
+import { userServiveMessageRouter } from './UserServiceMessageProcessing'
+import {chatMessageRouter} from './ChatMessageProcessing'
 
 /* Enumeration for message types service messages
  * 
  */
 const messageTypes = {
-	
+
 	USER_SERVICE: 'USER_SERVICE',
 	/**
 	* Represents Session Service Address
 	*/
-    SESSION_SERVICE: 'SESSION_SERVICE',
+	SESSION_SERVICE: 'SESSION_SERVICE',
 	/**
 	* Represents Group Service Address
 	*/
-    GROUP_SERVICE: 'GROUP_SERVICE',
+	GROUP_SERVICE: 'GROUP_SERVICE',
 	/**
 	* Represents group message address
 	*/
-    GROUP_MESSAGE: 'GROUP_MESSAGE',
+	GROUP_MESSAGE: 'GROUP_MESSAGE',
     /**
 	* Represents a direct message address
 	*/
@@ -33,16 +34,16 @@ const messageTypes = {
 
 
 const genericMessageResponses = {
-		/**
-		* Represents a Success message
-		*/
-		SUCCESS: 'SUCCESS',
-		/**
-		* Represents a Failure message
-		*/
-	    FAILURE: 'FAILURE',
+	/**
+	* Represents a Success message
+	*/
+	SUCCESS: 'SUCCESS',
+	/**
+	* Represents a Failure message
+	*/
+	FAILURE: 'FAILURE',
 
-	}
+}
 
 
 /* Routes received messages to correct logic
@@ -50,19 +51,18 @@ const genericMessageResponses = {
  * @param json message - json of message
  */
 function generalMessageRouter(message) {
-	
-	if (message.contentType == messageTypes.BROADCAST_MESSAGE) {
-	// process chat message
-	// processChatMessage(message);
+	console.log("General message router")
+	console.log(message);
+	if (message.type == messageTypes.BROADCAST_MESSAGE) {
+		// process chat message
+		console.log("I'm going to go process this broadcast")
+		chatMessageRouter(message);
 	}
-	
-	
 	if (message.from == messageTypes.USER_SERVICE) {
 		//  process user server message
 		userServiveMessageRouter(message);
 	}
-	
 }
 
 
-export {generalMessageRouter, messageTypes, genericMessageResponses};
+export { generalMessageRouter, messageTypes, genericMessageResponses };
