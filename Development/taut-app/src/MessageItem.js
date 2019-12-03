@@ -28,7 +28,6 @@ export class MessageItem extends Component {
 
     getFontStyle = (sentiment) => {
         var sentTest = sentiment.charAt(0);
-        console.log(sentTest)
 
 
         switch (sentTest) {
@@ -53,7 +52,6 @@ export class MessageItem extends Component {
     render() {
 
         const { from, to, content, sentiment } = this.props.message;
-        console.log(sentiment)
 
         return (
             <div style={this.getStyle(from)}>

@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 export class UserItem extends Component {
     render() {
 
-        const { from } = this.props.user;
+        const { chatWith } = this.props.user;
 
         return (
             <div>
                 <p>
-                    {from}
+                    {chatWith}
                 </p>
             </div >
         )
