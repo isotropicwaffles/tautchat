@@ -55,7 +55,7 @@ public class ChatEndpoint {
   /** The session. */
   private Session session;
 
-  final static Logger log = Logger.getLogger(ChatEndpoint.class.getName());
+  private static final Logger log = Logger.getLogger(ChatEndpoint.class.getName());
 
   /**
    * Logins in user
