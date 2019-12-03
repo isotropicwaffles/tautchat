@@ -1,8 +1,6 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import './App.css';
-import { generalMessageRouter } from './GeneralMessageRouter'
-import { sendLoginMessage, sendCreateUserMessage } from './UserServiceMessages'
 
 class LoginPage extends React.Component {
 
@@ -59,7 +57,7 @@ class LoginPage extends React.Component {
                     <div className="container">
                         <div className="column is-4 is-offset-4">
                             <div className="box">
-                                <form onSubmit={this.handleSubmit}>
+                                <form onSubmit={this.handleLogin}>
                                     <div className="field">
                                         <label className="label">User Name</label>
                                         <div className="control">

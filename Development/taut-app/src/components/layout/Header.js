@@ -20,14 +20,11 @@ export class Header extends Component {
         return (
             
             <header>
-
-
-
                 <h1>{this.state.display}</h1>
                 <Link to="/">Home</Link> | {' '}
-                <Link to="/about">About</Link> | {' '}
                 <Link to="/chat">Chat</Link> | {' '}
-                <Link to="/groupchat">GroupChat</Link>
+                {/* <Link to="/groupchat">GroupChat</Link>| {' '} */}
+                <Link to="/about">About</Link>
             </header>
         )
     }

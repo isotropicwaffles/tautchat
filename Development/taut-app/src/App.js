@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
-  Route,useHistory 
-} from "react-router-dom";
+  Route} from "react-router-dom";
 import './App.css';
 import LoginPage from './LoginPage';
 import Header from './components/layout/Header';
@@ -78,7 +77,6 @@ class App extends Component {
     console.log("General message router")
     console.log(message);
     if (message.type == "BROADCAST_MESSAGE") {
-      console.log("I'm going to go process this broadcast")
       this.chatMessageRouter(message);
     }
     if (message.from == "USER_SERVICE") {
@@ -119,6 +117,7 @@ class App extends Component {
       console.log("SUCCESS: User successfully logged into session.");
       this.setState({authenticated: true});
     } else if (message.content.includes("FAILURE")) {
+      alert("User Name Does not Exist. Please Create User First.");
       console.log("ERROR: User Name Does not Exist. Please Create User First.");
     }
   }
@@ -129,6 +128,7 @@ class App extends Component {
       console.log("User Successfully Created!");
     }
     else if (message.content.includes("FAILURE")) {
+      alert("Could Not Create User Name. Please Try Another Name.");
       console.log("ERROR: Could Not Create User Name. Please Try Another Name.");
     }
   }

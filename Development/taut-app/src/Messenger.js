@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from "react-router-dom";
 import AddMessage from './AddMessage';
 import Messages from './Messages';
 import ToField from './ToField';
@@ -66,14 +67,16 @@ class Messenger extends Component {
 
     render() {
 
-        return (
-            <React.Fragment>
-                <Users users={this.state.users} />
-                <ToField setTo={this.setTo} />
-                <Messages messages={this.state.messages} username={this.props.username} messageWith={this.state.messageWith} />
-                <AddMessage addMessage={this.addMessage} />
-            </React.Fragment>
-        );
+        return this.props.username === null ? (
+            <Redirect to="/" />
+        ) : (
+                <React.Fragment>
+                    <Users users={this.state.users} />
+                    <ToField setTo={this.setTo} />
+                    <Messages messages={this.state.messages} username={this.props.username} messageWith={this.state.messageWith} />
+                    <AddMessage addMessage={this.addMessage} />
+                </React.Fragment>
+            );
     }
 }
 
