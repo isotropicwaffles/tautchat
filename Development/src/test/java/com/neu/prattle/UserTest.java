@@ -189,6 +189,8 @@ public class UserTest {
     assertTrue(u.getSearchable());
   }
 
+
+
   @Test
   public void testIcon() {
     Icon icon = new Icon("testfiller");
@@ -196,6 +198,95 @@ public class UserTest {
     icon.setIconURL("changed");
     assertTrue(icon.getIconURL().equalsIgnoreCase("changed"));
   }
+  
+  	@Test
+	public void testAddFriend() {
+		User u1 = new User.UserBuilder()
+            .setName("Madeline")
+            .build();
+		User u2 = new User.UserBuilder()
+            .setName("Theo")
+            .build();
+
+		u1.addFriend(u2);
+		u2.acceptRequest(u1);
+
+		assertTrue(u1.hasFriend(u2));
+		assertTrue(u2.hasFriend(u1));
+	}
+
+	@Test
+	public void testAcceptDeclineRequests() {
+		User u1 = new User.UserBuilder()
+            .setName("You")
+            .build();
+		User u2 = new User.UserBuilder()
+            .setName("Monika")
+            .build();
+		User u3 = new User.UserBuilder()
+            .setName("Sayori")
+            .build();
+
+		u3.addFriend(u1);
+		u2.addFriend(u1);
+
+		assertTrue(u1.getRequesters().contains(u2));
+		assertTrue(u1.getRequesters().contains(u3));
+
+		u1.declineRequest(u3);
+		u1.acceptRequest(u2);
+
+		assertTrue(u1.hasFriend(u2));
+		assertFalse(u1.hasFriend(u3));
+
+		assertFalse(u1.getRequesters().contains(u2));
+		assertFalse(u1.getRequesters().contains(u3));
+	}
+
+	@Test
+	public void testRemoveFriend() {
+		User u1 = new User.UserBuilder()
+            .setName("Kaede")
+            .build();
+		User u2 = new User.UserBuilder()
+            .setName("Shuichi")
+            .build();
+		User u3 = new User.UserBuilder()
+            .setName("Kaito")
+            .build();
+
+		u1.addFriend(u2);
+		u2.addFriend(u3);
+
+		u2.acceptRequest(u1);
+		u3.acceptRequest(u2);
+
+		assertTrue(u1.hasFriend(u2));
+		assertTrue(u2.hasFriend(u3));
+
+		u2.removeFriend(u1);
+		assertFalse(u1.hasFriend(u2));
+
+		u2.removeFriend(u3);
+		assertFalse(u3.hasFriend(u2));
+	}
+
+	@Test
+	public void testFollowUnfollow() {
+		User u1 = new User.UserBuilder()
+            .setName("Mukuro")
+            .build();
+		User u2 = new User.UserBuilder()
+            .setName("Junko")
+            .build();
+
+		u1.follow(u2);
+		assertTrue(u1.isFollowing(u2));
+
+		u1.unFollow(u2);
+		assertFalse(u1.isFollowing(u2));
+	}
+
 
 }
 

@@ -1,6 +1,8 @@
 package com.neu.prattle.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /***
  * A User object represents a basic account information for a user.
@@ -34,9 +36,27 @@ public class User {
    * The searchable.
    */
   private boolean searchable;
+  
+  /**
+  * The friends of the user.
+  */
+  private Set<User> friends;
+  
+  /**
+  * The users following this user.
+  */
+  private Set<User> following;
+  /**
+  * The friend requests that were sent to this user.
+  */
+  private Set<User> requesters;
 
   private User() {
     this.isBot = false;
+	
+	this.friends = new HashSet<>();
+	this.following = new HashSet<>();
+	this.requesters = new HashSet<>();
   }
 
   public static UserBuilder userBuilder() {
@@ -94,6 +114,106 @@ public class User {
   public void setBot(boolean isBot) {
     this.isBot = isBot;
   }
+
+/**
+	 * Determines if the given user is in this user's friend list.
+	 * @param user potential friend
+	 * @return true if user is this user's friend
+	 */
+	public boolean hasFriend(User user) {
+		return user != null && this.friends.contains(user);
+	}
+
+	/**
+	 * Determines if this user follows the given user.
+	 * @param user potential followed user
+	 * @return true if this user follows given user
+	 */
+	public boolean isFollowing(User user) {
+		return user != null && this.following.contains(user);
+	}
+
+	/**
+	 * Adds the given user to this user's friend list iff
+	 * given user accepts a friend request.
+	 * @param user friend to be added
+	 */
+	public void addFriend(User user) {
+		// user calls this method on request accept, so
+		// this only occurs if the request was accepted
+		if (user.hasFriend(this)) {
+			this.friends.add(user);
+		}
+		else {
+			user.requestFriendship(this);
+		}
+	}
+
+	/**
+	 * Sends a friend request to this user from requester.
+	 * @param requester user requesting friendship
+	 */
+	public void requestFriendship(User requester) {
+		this.requesters.add(requester);
+	}
+
+	/**
+	 * Returns a set of the users who sent friend requests
+	 * to this user.
+	 * @return set of requesters
+	 */
+	public Set<User> getRequesters() {
+		return this.requesters;
+	}
+
+	/**
+	 * Accepts the friend request from the given user, if such a
+	 * request exists.
+	 * @param user requesting user
+	 */
+	public void acceptRequest(User user) {
+		if (this.requesters.contains(user)) {
+			this.friends.add(user);
+			this.requesters.remove(user);
+
+			user.addFriend(this);
+		}
+	}
+
+	/**
+	 * Denies and removes the friend request from user.
+	 * @param user sender of declined request
+	 */
+	public void declineRequest(User user) {
+		this.requesters.remove(user);
+	}
+
+	/**
+	 * Follows the given user.
+	 * @param user user to be followed
+	 */
+	public void follow(User user) {
+		if (user != null) {
+			this.following.add(user);
+		}
+	}
+
+	/**
+	 * Removes the friend connection between this user and exFriend.
+	 * @param exFriend friend to be removed
+	 */
+	public void removeFriend(User exFriend) {
+		this.friends.remove(exFriend);
+		exFriend.friends.remove(this);
+	}
+
+	/**
+	 * Removes user from this user's list of followed users.
+	 * @param user user to be unfollowed
+	 */
+	public void unFollow(User user) {
+		this.following.remove(user);
+	}
 
 
   /***
