@@ -149,8 +149,11 @@ public class GroupTest {
     // Long line, huh? Splitting it up a bit.
     Group.GroupBuilder b = new Group.GroupBuilder().setName("Felines").addModerator(midmod).addUser(user);
     b.setAlias(midmod, "Panther").setAlias(user, "Mona");
-    Group group = b.addSubGroup(sub).addSuperGroup(sup).build();
 
+	Group group = b.build();
+
+	group.addSubgroup(midmod, sub);
+	group.addSupergroup(midmod, sup);
     assertTrue(group.hasSubGroup(sub));
 
     assertFalse(group.hasMember(supermod));

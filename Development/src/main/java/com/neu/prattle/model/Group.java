@@ -445,22 +445,6 @@ public class Group {
       return this;
     }
 
-    public GroupBuilder addSubGroup(Group subgroup) {
-      if (subgroup != null) {
-        this.subgroups.add(subgroup);
-      }
-
-      return this;
-    }
-
-    public GroupBuilder addSuperGroup(Group supergroup) {
-      if (supergroup != null) {
-        this.supergroups.add(supergroup);
-      }
-
-      return this;
-    }
-
     public GroupBuilder setName(String name) {
       if (!name.isEmpty() && name.charAt(0) != '~') {
         this.groupName = name;
