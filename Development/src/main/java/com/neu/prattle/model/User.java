@@ -51,6 +51,9 @@ public class User {
   */
   private Set<User> requesters;
 
+  /**
+   *  Constructor for user 
+   */
   private User() {
     this.isBot = false;
 	
