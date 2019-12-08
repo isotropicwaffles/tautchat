@@ -70,9 +70,9 @@ public class GroupServiceManagementTest {
 
 	/***
 	 * Called up each test before invocation.
-	 * @throws EncodeException 
-	 * @throws IOException 
-	 * @throws TimeoutException 
+	 * @throws EncodeException - an encode exception
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException - a timeoutexception
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException, TimeoutException {
@@ -134,8 +134,8 @@ public class GroupServiceManagementTest {
 	
 	/***
 	 * Test create group message processing
-	 * @throws IOException 
-	 * @throws TimeoutException 
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException - a timeoutexception
 	 * 
 	 */
 	@Test
@@ -409,8 +409,8 @@ public class GroupServiceManagementTest {
 	 * @param userName - The user name to login
 	 * @param chatEndpoint - endpoint to message
 	 * @param messageArgumentCaptor - argumentCapture to wait for
-	 * @throws TimeoutException	
- 	 * @throws IOException	
+	 * @throws TimeoutException	- a timeout exception
+ 	 * @throws IOException	- an ioexception
 	 */
 	private void userCreateAndLogin(String userName, ChatEndpoint chatEndpoint, Session session, ArgumentCaptor<Message> messageArgumentCaptor) throws IOException, TimeoutException {
 
@@ -442,10 +442,10 @@ public class GroupServiceManagementTest {
 	 * 
 	 * @param session - Session to log into
 	 * @param chatEndpoint - endpoint to message
-	 * @param userName - The user name to login
+	 * @param message - a message to send
 	 * @param messageArgumentCaptor - argumentCapture to wait for
-	 * @throws TimeoutException	
- 	 * @throws IOException	
+	 * @throws TimeoutException	- a timeoutexception
+ 	 * @throws IOException	- an ioexception
 	 */
 	private void sendMessageAndWaitForResponse(Session session, ChatEndpoint chatEndpoint, Message message, ArgumentCaptor<Message> messageArgumentCaptor ) throws IOException, TimeoutException {
 		float timeOut = 1; //seconds
@@ -525,8 +525,8 @@ public class GroupServiceManagementTest {
 	 * @param messageArgumentCaptor - a message arguement capture
 	 * @param sessionID - an id to give for the session
 	 * @return session - the mock session
-	 * @throws IOException
-	 * @throws EncodeException
+	 * @throws IOException - an ioexception
+	 * @throws EncodeException - an encodeexception
 	 */
 	private Session generateMockSession(ArgumentCaptor<Message> messageArgumentCaptor, String sessionID)
 			throws IOException, EncodeException {

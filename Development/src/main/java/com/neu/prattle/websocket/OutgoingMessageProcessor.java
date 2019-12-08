@@ -60,7 +60,7 @@ public class OutgoingMessageProcessor implements IMessageProcessor {
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - Always true at this time since it will be expected to send direct message
+   * @return boolean - Always true at this time since it will be expected to send direct message
    * and be the last evaluated processor.
    */
   @Override

@@ -31,6 +31,7 @@ public enum GenericMessageResponses {
 
   /**
    * This constructor associates the string values to each enumeration
+   * @param label -enum string
    */
   GenericMessageResponses(String label) {
     this.label = label;

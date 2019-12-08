@@ -53,9 +53,8 @@ public interface GroupService {
   /***
    * Attempts to return the name of a group and throws and error if the group doesn't exist
    *
-   * @param name -> The name of the group.
+   * @param name - The name of the group.
    * @return The associated group.
-   * @throws error if group does not exist
    */
   Group protectedFindGroupByName(String name);
 

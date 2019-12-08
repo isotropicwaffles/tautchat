@@ -68,7 +68,7 @@ public interface GroupDAO {
   /**
    * Group exists boolean.
    *
-   * @param groupName the group name
+   * @param group the group name
    * @return the boolean
    */
   boolean groupExists(Group group);

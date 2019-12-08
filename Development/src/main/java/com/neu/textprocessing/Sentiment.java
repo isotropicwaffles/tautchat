@@ -19,6 +19,8 @@ public enum Sentiment {
 
 	/**
 	 * This constructor associates the string values to each enumeration
+	 * 
+     * @param label for enum
 	 */
 	Sentiment(String label) {
 	  this.label = label;

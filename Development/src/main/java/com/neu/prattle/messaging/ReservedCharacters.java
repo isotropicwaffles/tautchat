@@ -27,6 +27,8 @@ public enum ReservedCharacters {
 
   /**
    * This constructor associates the string values to each enumeration
+   * 
+   * @param label -enum string
    */
   ReservedCharacters(String label) {
     this.label = label;

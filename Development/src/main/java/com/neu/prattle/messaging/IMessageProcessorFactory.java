@@ -13,7 +13,7 @@ public interface IMessageProcessorFactory {
    * Get an IMessageProcessor instance of specified by given TypeOfMessageProcessor
    *
    * @param messageProcessor: type of message processor desired
-   * @returns iMessageProcessor: an instance o the requested messageProcessor
+   * @return iMessageProcessor: an instance o the requested messageProcessor
    */
   IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor);
 }

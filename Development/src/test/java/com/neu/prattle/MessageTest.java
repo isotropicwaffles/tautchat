@@ -84,7 +84,7 @@ public class MessageTest {
 	
 	/**
 	 * This function tests whether date setting works as expected
-	 * @throws InterruptedException
+	 * @throws InterruptedException - an interupptedexception
 	 */
 	@Test
 	public void dataSetTest() throws InterruptedException {

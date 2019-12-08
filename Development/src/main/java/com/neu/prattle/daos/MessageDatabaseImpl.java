@@ -18,7 +18,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
- * The JDBC implementation of Message<-->database connection methods.
+ * The JDBC implementation of Message--database connection methods.
  */
 public class MessageDatabaseImpl implements MessageDAO {
 

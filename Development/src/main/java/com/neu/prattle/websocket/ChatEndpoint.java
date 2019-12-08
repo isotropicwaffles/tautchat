@@ -62,7 +62,7 @@ public class ChatEndpoint {
    *
    *
    * @param userName  - the user name being logged in
-   * @param userID    - the old id that was used for the session before logging in
+   * @param userId    - the old id that was used for the session before logging in
    */
   public static void userLogin(String userName, String userId) {
     Session session = findSessionByUsername(userId);
@@ -76,7 +76,7 @@ public class ChatEndpoint {
   /**
    * Finds the session by the associated user name.
    *
-   * @param id - the associated user name to the session
+   * @param user - the associated user name to the session
    *
    * @return Session - the associated session with the user otherwise null
    */
@@ -105,7 +105,7 @@ public class ChatEndpoint {
    *
    * Send a Message to the user specified in the to field
    *
-   * @param message
+   * @param message - message to send 
    */
   public static void directedMessage(Message message) {
 	  try {
@@ -126,7 +126,7 @@ public class ChatEndpoint {
    * Message tries to be sent at the same time to the same endpoint,
    * it is blocked until this Message finishes being sent..
    *
-   * @param message
+   * @param message - a message to broadcast
    */
   public static void broadcast(Message message) {
     chatEndpoints.forEach(endpoint -> {
@@ -141,8 +141,8 @@ public class ChatEndpoint {
    *
    * Send a Message to the user specified in the to field
    *
-   * @param message
-   * @param session
+   * @param message -  message to send
+   * @param session - a session to send the message
    */
   private static void broadcastToSession(Message message, Session session) {
     try {
@@ -206,7 +206,7 @@ public class ChatEndpoint {
    *
    * @param session the session originating the message
    * @param message the text of the inbound message
-   * @throws IOException
+   * @throws IOException - an ioexception
    */
   @OnMessage
   public void onMessage(Session session, Message message) throws IOException {

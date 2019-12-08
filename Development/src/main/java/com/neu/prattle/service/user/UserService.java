@@ -53,16 +53,15 @@ public interface UserService {
    * as the parameter.
    *
    * @param partialName The partial name of the user
-   * @return List<User> which is empty if there are no partial matches
+   * @return List which is empty if there are no partial matches
    */
   Set<User> findUserByPartialName(String partialName);
 
   /***
    * Attempts to return the user associated with the name and throws and error if the user doesn't exist
    *
-   * @param name -> The name of the user.
+   * @param name - The name of the user.
    * @return The associated user.
-   * @throws error if user does not exist
    */
   User protectedfindUserByName(String name);
 

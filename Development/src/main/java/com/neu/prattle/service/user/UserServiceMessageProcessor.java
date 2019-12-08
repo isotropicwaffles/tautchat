@@ -35,7 +35,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
   /**
    * Returns singleton instance of this class
    *
-   * @returns instance - instance of this clas
+   * @return instance of this clas
    */
   public static IMessageProcessor getInstance() {
 
@@ -78,7 +78,7 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - True if the message was sent to the user services
+   * @return boolean True if the message was sent to the user services
    */
   @Override
   public boolean canProcessMessage(Message message) {
@@ -131,6 +131,8 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
    *
    * @param message - a message to be processed
    * @return a message in reponse to this request
+   * 
+   * @throws IOException - throws ioexception
    */
   private Message processUserCreation(Message message) throws IOException {
     Message response;
@@ -160,8 +162,10 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
   /**
    * This generates a response message from the user servicese
    *
-   * @param receiver - to whom the message should be sent
+   * @param contentType -content type
    * @param response - the response that is being sent
+   * 
+   * @return  - response message
    */
   private Message generateResponseMessage(String contentType, String response) {
     return Message.messageBuilder()
@@ -177,6 +181,8 @@ public class UserServiceMessageProcessor implements IMessageProcessor {
    *
    * @param userID    - current user ID
    * @param loginName - user Login Name
+   * 
+   * @return - login message
    */
   private Message generateSessionLoginRequest(String userID, String loginName) {
     return Message.messageBuilder()

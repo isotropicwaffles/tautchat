@@ -95,9 +95,9 @@ public class SendingMessagesTest {
 	String RESERVED_SEPERATOR = ",";
 	/***
 	 * Called up each test before invocation.
-	 * @throws EncodeException 
-	 * @throws IOException 
-	 * @throws TimeoutException 
+	 * @throws EncodeException  - an encodeexception
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException - a timeoutexception
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException, TimeoutException {
@@ -413,8 +413,8 @@ public class SendingMessagesTest {
 
 	/**
 	 * Tests if a user can send a group invite message
-	 * @throws IOException
-	 * @throws TimeoutException
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException - a timeoutexception
 	 */
 	
 	@Test
@@ -495,8 +495,8 @@ public class SendingMessagesTest {
 	
 	/**
 	 * Test if you can search for users by partial names
-	 * @throws IOException
-	 * @throws TimeoutException
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException - an timeout exception
 	 */
 	@Test
 	public void userSearchMessageTest() throws IOException, TimeoutException{
@@ -558,8 +558,8 @@ public class SendingMessagesTest {
 	 * @param userName - The user name to login
 	 * @param chatEndpoint - endpoint to message
 	 * @param messageArgumentCaptor - argumentCapture to wait for
-	 * @throws TimeoutException	
- 	 * @throws IOException	
+	 * @throws TimeoutException	- a timeoutexception
+ 	 * @throws IOException	- an ioexception
 	 */
 	private void userCreateAndLogin(String userName, ChatEndpoint chatEndpoint, Session session, ArgumentCaptor<Message> messageArgumentCaptor) throws IOException, TimeoutException {
 
@@ -591,10 +591,10 @@ public class SendingMessagesTest {
 	 * 
 	 * @param session - Session to log into
 	 * @param chatEndpoint - endpoint to message
-	 * @param userName - The user name to login
+	 * @param message - the message to send
 	 * @param messageArgumentCaptor - argumentCapture to wait for
-	 * @throws TimeoutException	
- 	 * @throws IOException	
+	 * @throws TimeoutException	- an timeoutexception
+ 	 * @throws IOException	- an ioexception
 	 */
 	private void sendMessageAndWaitForResponse(Session session, ChatEndpoint chatEndpoint, Message message, ArgumentCaptor<Message> messageArgumentCaptor ) throws IOException, TimeoutException {
 		float timeOut = 1; //seconds
@@ -654,8 +654,8 @@ public class SendingMessagesTest {
 	 * @param messageArgumentCaptor - a message arguement capture
 	 * @param sessionID - an id to give for the session
 	 * @return session - the mock session
-	 * @throws IOException
-	 * @throws EncodeException
+	 * @throws IOException -  an ioexception
+	 * @throws EncodeException - an encodeexception
 	 */
 	private Session generateMockSession(ArgumentCaptor<Message> messageArgumentCaptor, String sessionID)
 			throws IOException, EncodeException {

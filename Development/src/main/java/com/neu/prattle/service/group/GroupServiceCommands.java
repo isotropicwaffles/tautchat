@@ -87,6 +87,8 @@ public enum GroupServiceCommands {
 
   /**
    * This constructor associates the string values to each enumeration
+   * 
+   * @param label -enum string
    */
   GroupServiceCommands(String label) {
     this.label = label;
