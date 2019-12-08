@@ -22,9 +22,9 @@ public class DatabaseSupportFunctions {
      * <li>Inserting record</li>
      * </ul>
      * 
-     * @throws SQLException
-     * @throws SqlToolError 
-     * @throws IOException 
+     * @throws SQLException - sqlexception
+     * @throws SqlToolError  - an sqltoolerror
+     * @throws IOException - an ioexception
      */
     private static void initDatabase() throws SQLException, SqlToolError, IOException {
 		DatabaseConnection.enableDBTestMode(true);

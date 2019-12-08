@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
   /**
    * Enables/Disables userservice talking to remote DB
    *
-   * @returns instance - instance of this clas
+   * @param enable - flag to enable or disable remote db
    */
   public static void setEnableDBConnection(boolean enable) {
 
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
   /***
    *
-   * @param name -> The name of the user.
+   * @param name - The name of the user.
    * @return An optional wrapper supplying the user.
    */
   @Override
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
    * Queries partial name and returns all searchable users that names partially match
    *
    *
-   * @param partialName -> The name of the user.
+   * @param partialName - The name of the user.
    * @return Set of users with matching parital name.
    */
   @Override
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
   /***
    * Attempts to return the user associated with the name and throws and error if the user doesn't exist
    *
-   * @param name -> The name of the user.
+   * @param name - The name of the user.
    * @return The associated user.
    * @throws GroupNotPresentException if user does not exist
    */

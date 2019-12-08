@@ -31,6 +31,8 @@ public enum UserServiceCommands {
 
   /**
    * This constructor associates the string values to each enumeration
+   * 
+   * @param label for enum
    */
   UserServiceCommands(String label) {
     this.label = label;

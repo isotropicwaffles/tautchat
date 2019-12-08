@@ -35,6 +35,8 @@ public class GeneralMessageRouter extends AbstractMessageRouter {
 
   /**
    * Returns instance of this router
+   * 
+   * @return an instance of this message processor
    */
   public static IMessageProcessor getInstance() {
 

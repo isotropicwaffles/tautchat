@@ -26,9 +26,10 @@ public class SentimentAnalysis {
 	/**
 	* Parses given text into sentences and analysizes text for sentiment
 	* 
-	* @param String text- a string to perform sentiment analysis on
+	* @param text- a string to perform sentiment analysis on
 	*
-	* @return Pair<String[],Sentiment[]> - a pair of string arrays representing distinct sentences and their respective sentiments
+	* @return Pair - a pair of string arrays representing distinct sentences and their respective sentiments
+ 	* @throws IOException - an ioexception
 	*/
 	public static Pair<String[],Sentiment[]> analyzeText(String text) throws IOException {
 		
@@ -42,7 +43,7 @@ public class SentimentAnalysis {
 	/**
 	* Returns character by character sentiment content
 	* 
-	* @param String text- a string to perform sentiment analysis on
+	* @param text- a string to perform sentiment analysis on
 	*
 	* @return charSentiments - character by character sentiments of the string
 	*/
@@ -74,7 +75,7 @@ public class SentimentAnalysis {
 	/**
 	* Parses text into sentences
 	* 
-	* @param String text- a string to parse into sentences
+	* @param text- a string to parse into sentences
 	*
 	* @return String[] - a pair of string arrays representing distinct sentences
 	*/
@@ -87,9 +88,11 @@ public class SentimentAnalysis {
 	/**
 	* Determine sentiment of each elements of a string array
 	* 
-	* @param String[] sentences- a string array each element representing a sentence
+	* @param sentences- a string array each element representing a sentence
 	*
 	* @return Sentiment[] - sentiments w.r.t. each string array element
+	* 
+	* @throws IOException - an ioexception
 	*/
 	private static Sentiment[] getSentiments(String[] sentences) throws IOException{
 		
@@ -106,7 +109,7 @@ public class SentimentAnalysis {
 	/**
 	* identification of the overall compound sentiment of the polarities
 	* 
-	* @param Map<String, Float> polarity- a structure representing polarity 
+	* @param polarity- a structure representing polarity 
 	*
 	* @return Sentiment - compound sentiement of the polarities
 	*/

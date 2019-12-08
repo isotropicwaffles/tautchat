@@ -29,8 +29,8 @@ public class UserController {
   /***
    * Handles a HTTP POST request for user creation
    *
-   * @param user -> The User object decoded from the payload of POST request.
-   * @return -> A Response indicating the outcome of the requested operation.
+   * @param user - The User object decoded from the payload of POST request.
+   * @return - A Response indicating the outcome of the requested operation.
    * @throws IOException if there is an issue with addUser
    */
   @POST

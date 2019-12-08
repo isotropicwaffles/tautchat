@@ -43,7 +43,7 @@ public class GroupServiceMessageRouter extends AbstractMessageRouter {
   /**
    * Returns an instance of this message processor
    *
-   * @returns instance - an instance of this object
+   * @return instance - an instance of this object
    */
   public static IMessageProcessor getInstance() {
 
@@ -54,7 +54,7 @@ public class GroupServiceMessageRouter extends AbstractMessageRouter {
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - Returns true if it can process message
+   * @return boolean - Returns true if it can process message
    */
   @Override
   public boolean canProcessMessage(Message message) {

@@ -41,6 +41,7 @@ public interface IMessageProcessor {
    * This processes the given message
    *
    * @param message - a message to be processed
+   * @throws IOException - an ioexception
    */
   void processMessage(Message message) throws IOException;
 
@@ -48,7 +49,7 @@ public interface IMessageProcessor {
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - true if message can be processed by this processor
+   * @return boolean - true if message can be processed by this processor
    */
   boolean canProcessMessage(Message message);
 }

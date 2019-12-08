@@ -35,7 +35,7 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
   /**
    * Returns singleton instance of this class
    *
-   * @returns instance - instance of this clas
+   * @return instance - instance of this clas
    */
   public static IMessageProcessor getInstance() {
 
@@ -47,7 +47,7 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - True if the message was sent to the user services
+   * @return boolean - True if the message was sent to the user services
    */
   @Override
   public boolean canProcessMessage(Message message) {
@@ -134,6 +134,8 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
    *
    * @param message - a message to be processed
    * @return a message in reponse to this request
+   * 
+   * @throws IOException - throws ioexception
    */
   private Message processGroupCreate(Message message) throws IOException {
 
@@ -408,6 +410,8 @@ public class GroupServiceGroupManagementMessageProcessor implements IMessageProc
    *
    * @param contentType - the type of content of this message
    * @param response    - the response that is being sent
+   * 
+   * @return message - response message
    */
   private Message generateResponseMessage(String contentType, String response) {
     return Message.messageBuilder()

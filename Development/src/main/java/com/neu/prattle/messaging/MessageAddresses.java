@@ -45,6 +45,7 @@ public enum MessageAddresses {
 
   /**
    * This constructor associates the string values to each enumeration
+   * @param label -enum string
    */
   MessageAddresses(String label) {
     this.label = label;

@@ -1,0 +1,11 @@
+com.neu.prattle
+com.neu.prattle.controller
+com.neu.prattle.daos
+com.neu.prattle.exceptions
+com.neu.prattle.main
+com.neu.prattle.messaging
+com.neu.prattle.model
+com.neu.prattle.service.group
+com.neu.prattle.service.user
+com.neu.prattle.websocket
+com.neu.textprocessing

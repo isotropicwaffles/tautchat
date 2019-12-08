@@ -31,6 +31,7 @@ public class MessageProcessorFactory implements IMessageProcessorFactory {
 
   /**
    * Returns an instance of this message factory
+   * @return MessageProcessorFactor - a message processor factory instance
    */
   public static MessageProcessorFactory getInstance() {
 
@@ -41,7 +42,7 @@ public class MessageProcessorFactory implements IMessageProcessorFactory {
    * Get an IMessageProcessor instance of specified by given TypeOfMessageProcessor
    *
    * @param messageProcessor: type of message processor desired
-   * @returns iMessageProcessor: an instance o the requested messageProcessor
+   * @return iMessageProcessor: an instance o the requested messageProcessor
    */
   @Override
   public IMessageProcessor getInstanceOf(TypeOfMessageProcessor messageProcessor) {

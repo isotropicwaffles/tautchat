@@ -61,8 +61,8 @@ public class UserServiceMessageProcessorTest {
 
 	/***
 	 * Called up each test before invocation.
-	 * @throws EncodeException 
-	 * @throws IOException 
+	 * @throws EncodeException  - an encodexception
+	 * @throws IOException -  an ioexception
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException {
@@ -125,8 +125,8 @@ public class UserServiceMessageProcessorTest {
 
 	/***
 	 * Test failed login message processing
-	 * @throws IOException 
-	 * @throws TimeoutException 
+	 * @throws IOException -  an ioexception
+	 * @throws TimeoutException -  a timeoutexception
 	 * 
 	 */
 	@Test
@@ -158,8 +158,8 @@ public class UserServiceMessageProcessorTest {
 	
 	/***
 	 * Test create user and successful login message processing
-	 * @throws IOException 
-	 * @throws TimeoutException 
+	 * @throws IOException -  an ioexception
+	 * @throws TimeoutException - a timeoutexception
 	 * 
 	 */
 	@Test
@@ -216,8 +216,8 @@ public class UserServiceMessageProcessorTest {
 	
 	/***
 	 * Test failed user creation
-	 * @throws IOException 
-	 * @throws TimeoutException 
+	 * @throws IOException -  an ioexception
+	 * @throws TimeoutException - a timeoutexception
 	 * 
 	 */
 	@Test
@@ -263,8 +263,8 @@ public class UserServiceMessageProcessorTest {
 	
 	/**
 	 *  Test sending invalid message to userservice messaging processor
-	 * @throws IOException
-	 * @throws TimeoutException
+	 * @throws IOException -  an ioexception
+	 * @throws TimeoutException -  an timeoutexception
 	 */
 	@Test
 	public void testInvalidContentTypeTest() throws IOException, TimeoutException{
@@ -299,8 +299,8 @@ public class UserServiceMessageProcessorTest {
 
 	/**
 	 * This just creates and performs a login for user 1
-	 * @throws IOException
-	 * @throws TimeoutException
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException -  an timeoutexception
 	 */
 	private void createAndLoginUser1() throws IOException, TimeoutException {
 		// create User and Login User 
@@ -362,8 +362,8 @@ public class UserServiceMessageProcessorTest {
 	 * @param messageArgumentCaptor - a message arguement capture
 	 * @param sessionID - an id to give for the session
 	 * @return session - the mock session
-	 * @throws IOException
-	 * @throws EncodeException
+	 * @throws IOException -  an ioexception
+	 * @throws EncodeException - an encodeexception
 	 */
 	private Session generateMockSession(ArgumentCaptor<Message> messageArgumentCaptor, String sessionID)
 			throws IOException, EncodeException {

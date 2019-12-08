@@ -25,7 +25,7 @@ public class SessionServiceMessageProcessor implements IMessageProcessor {
   /**
    * Returns the instance of this message processor
    *
-   * @returns instance - an instance of this message processor
+   * @return instance - an instance of this message processor
    */
   public static IMessageProcessor getInstance() {
 
@@ -53,7 +53,7 @@ public class SessionServiceMessageProcessor implements IMessageProcessor {
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - True if the message was sent to the user services
+   * @return boolean - True if the message was sent to the user services
    */
   @Override
   public boolean canProcessMessage(Message message) {

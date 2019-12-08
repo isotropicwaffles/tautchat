@@ -19,6 +19,8 @@ public enum SessionServiceCommands {
 
   /**
    * This constructor associates the string values to each enumeration
+   * 
+   * @param label for enum
    */
   SessionServiceCommands(String label) {
     this.label = label;

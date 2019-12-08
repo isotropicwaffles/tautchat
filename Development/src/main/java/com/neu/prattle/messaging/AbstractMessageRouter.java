@@ -54,7 +54,7 @@ public abstract class AbstractMessageRouter implements IMessageProcessor {
    * Evaluates whether the message can be processed by this processor
    *
    * @param message - a message to be processed
-   * @returns boolean - Returns true if it can process message
+   * @return boolean - Returns true if it can process message
    */
   @Override
   public boolean canProcessMessage(Message message) {

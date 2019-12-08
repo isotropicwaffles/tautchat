@@ -16,7 +16,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
- * The JDBC implementation of User<-->database connection methods.
+ * The JDBC implementation of User--database connection methods.
  */
 public class UserDatabaseImpl extends AbstractJDBC implements UserDAO {
   

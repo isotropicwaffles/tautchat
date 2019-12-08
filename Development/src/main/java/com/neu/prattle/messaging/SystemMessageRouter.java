@@ -37,7 +37,7 @@ public class SystemMessageRouter extends AbstractMessageRouter {
   /**
    * Returns an instance of this message processor
    *
-   * @returns instance - an instance of this object
+   * @return instance - an instance of this object
    */
   public static IMessageProcessor getInstance() {
 

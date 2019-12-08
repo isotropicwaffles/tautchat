@@ -54,8 +54,8 @@ public class ChatEndpointTest {
 
 	/***
 	 * Called up each test before invocation.
-	 * @throws EncodeException 
-	 * @throws IOException 
+	 * @throws EncodeException   -an encodeexception
+	 * @throws IOException -  an ioexception
 	 */
 	@Before
 	public void setUp() throws IOException, EncodeException {
@@ -128,7 +128,7 @@ public class ChatEndpointTest {
 
 	/***
 	 *  This methods tests the broadcast message function
-	 * @throws IOException 
+	 * @throws IOException - an ioexception
 	 * 
 	 */
 	@Test
@@ -159,7 +159,7 @@ public class ChatEndpointTest {
 
 	/***
 	 *  This methods tests the direct message function
-	 * @throws IOException 
+	 * @throws IOException - an ioexception
 	 * 
 	 */
 	@Test
@@ -211,7 +211,7 @@ public class ChatEndpointTest {
 	
 	/***
 	 *  This methods tests the login of session function
-	 * @throws IOException 
+	 * @throws IOException - an ioexception
 	 * 
 	 */
 	@Test
@@ -244,7 +244,7 @@ public class ChatEndpointTest {
 	
 	/***
 	 *  This methods tests the login of session  fails function
-	 * @throws IOException 
+	 * @throws IOException - an ioexception
 	 * 
 	 */
 	@Test(expected = NullPointerException.class)
@@ -281,8 +281,8 @@ public class ChatEndpointTest {
 	 * @param messageArgumentCaptor - a message arguement capture
 	 * @param sessionID - an id to give for the session
 	 * @return session - the mock session
-	 * @throws IOException
-	 * @throws EncodeException
+	 * @throws IOException - an ioexception
+	 * @throws EncodeException - an encode exception
 	 */
 	private Session generateMockSession(ArgumentCaptor<Message> messageArgumentCaptor, String sessionID)
 			throws IOException, EncodeException {
