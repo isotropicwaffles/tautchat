@@ -1,5 +1,5 @@
-import {messageTypes} from './GeneralMessageRouter'
-import {userServiceContent} from './UserServiceMessageProcessing'
+import {messageTypes} from './components/functions/GeneralMessageRouter'
+import {userServiceContent} from './components/functions/UserServiceMessageProcessing'
 import {send} from './WebSocket'
 
 /* Sends a user login request to server

@@ -4,4 +4,6 @@ Chad Woodrow, Dayton Wilson, Alex Showalter-Bucher, & Steve Swanton respectively
 
 Link to the live system: http://www.tautchat.com/
 
-Links to System Setup video: https://youtu.be/pXIgUXMz50U
+Link to System Setup video: https://youtu.be/pXIgUXMz50U
+
+Link to Demo video: https://www.youtube.com/watch?v=W7_ScyFbTTw

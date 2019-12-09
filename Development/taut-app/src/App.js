@@ -8,7 +8,6 @@ import LoginPage from './LoginPage';
 import Header from './components/layout/Header';
 import About from './components/pages/About';
 import Messenger from './Messenger';
-import { connect, send } from './WebSocket'
 
 class App extends Component {
   state = {
@@ -39,7 +38,7 @@ class App extends Component {
 
 	  console.log(host);
 	  console.log(pathname);
-      //ws = new WebSocket("ws://localhost:8080/prattle/chat/");
+      // ws = new WebSocket("ws://localhost:8080/prattle/chat/");
       ws = new WebSocket("ws://" +host  + pathname + "chat/");
       this.setState({ ws })
 
@@ -47,6 +46,7 @@ class App extends Component {
         console.log('Connection open!');
         this.setState({ active_socket: true }, () => {
           this.retrieveAllUsers();
+          this.retrieveAllGroups();
           // this.filterMessages();
         });
       }
@@ -75,7 +75,7 @@ class App extends Component {
     if (active_socket) {
       ws.send(message)
     } else {
-      connect();
+      this.connect();
       setTimeout(function () { ws.send(message); }, 500);
     }
   }
@@ -84,6 +84,15 @@ class App extends Component {
     var json = JSON.stringify({
       "type": "USER_SERVICE",
       "contentType": "SEARCH_USERS_BY_NAME",
+      "content": ""
+    });
+    this.send(json);
+  }
+
+  retrieveAllGroups = () => {
+    var json = JSON.stringify({
+      "type": "GROUP_SERVICE",
+      "contentType": "SEARCH_GROUPS_BY_NAME",
       "content": ""
     });
     this.send(json);
@@ -100,6 +109,9 @@ class App extends Component {
     }
     if (message.from == "USER_SERVICE") {
       this.userServiveMessageRouter(message);
+    }
+    if (message.from == "GROUP_SERVICE") {
+      this.groupServiveMessageRouter(message);
     }
   }
 
@@ -135,6 +147,12 @@ class App extends Component {
     }
   }
 
+  groupServiveMessageRouter(message) {
+    if (message.contentType == "SEARCH_GROUPS_BY_NAME") {
+      this.processGroupSearch(message);
+    }
+  }
+
   processLoginResponse(message) {
     if (message.content.includes("SUCCESS")) {
       this.setState({ username: message.to })
@@ -149,7 +167,6 @@ class App extends Component {
 
   processUserCreateResponse(message) {
     if (message.content.includes("SUCCESS")) {
-      this.setState({users : [...this.state.users,message.to]})
       alert("User successfully created. Please log in to continue")
       console.log("User Successfully Created!");
     }
@@ -163,6 +180,12 @@ class App extends Component {
     console.log(message.content)
     const userList = message.content.split(',')
     this.setState({users : userList});
+  }
+
+  processGroupSearch(message) {
+    console.log(message.content)
+    const groupList = message.content.split(',')
+    this.setState({groups : groupList});
   }
 
 
