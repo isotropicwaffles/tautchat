@@ -1,5 +1,5 @@
 import { messageTypes } from "./GeneralMessageRouter";
-import Messenger from './Messenger';
+import Messenger from '../../Messenger';
 
 /* Enumeration for non-service message content types
  * 

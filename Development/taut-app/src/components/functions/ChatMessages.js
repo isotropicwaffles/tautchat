@@ -1,5 +1,5 @@
 import { messageTypes } from './GeneralMessageRouter'
-import { send } from './WebSocket'
+import { send } from '../../WebSocket'
 import { contentTypes } from './ChatMessageProcessing'
 
 /* Sends a broadcastmessage from chat

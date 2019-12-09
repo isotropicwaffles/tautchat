@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/prattle/static/css/main.85ccf949.chunk.css",
-    "main.js": "/prattle/static/js/main.75d8c092.chunk.js",
-    "main.js.map": "/prattle/static/js/main.75d8c092.chunk.js.map",
+    "main.js": "/prattle/static/js/main.41c94ba6.chunk.js",
+    "main.js.map": "/prattle/static/js/main.41c94ba6.chunk.js.map",
     "runtime-main.js": "/prattle/static/js/runtime-main.5fd5dd22.js",
     "runtime-main.js.map": "/prattle/static/js/runtime-main.5fd5dd22.js.map",
     "static/css/2.c4418c31.chunk.css": "/prattle/static/css/2.c4418c31.chunk.css",
-    "static/js/2.66e7ec05.chunk.js": "/prattle/static/js/2.66e7ec05.chunk.js",
-    "static/js/2.66e7ec05.chunk.js.map": "/prattle/static/js/2.66e7ec05.chunk.js.map",
+    "static/js/2.02a0c867.chunk.js": "/prattle/static/js/2.02a0c867.chunk.js",
+    "static/js/2.02a0c867.chunk.js.map": "/prattle/static/js/2.02a0c867.chunk.js.map",
     "index.html": "/prattle/index.html",
-    "precache-manifest.cb49d72d1c851f8c82b0e7e564e78671.js": "/prattle/precache-manifest.cb49d72d1c851f8c82b0e7e564e78671.js",
+    "precache-manifest.576c6f3c98d8ceb43e8039ab0b0f170d.js": "/prattle/precache-manifest.576c6f3c98d8ceb43e8039ab0b0f170d.js",
     "service-worker.js": "/prattle/service-worker.js",
     "static/css/2.c4418c31.chunk.css.map": "/prattle/static/css/2.c4418c31.chunk.css.map",
     "static/css/main.85ccf949.chunk.css.map": "/prattle/static/css/main.85ccf949.chunk.css.map"
@@ -17,8 +17,8 @@
   "entrypoints": [
     "static/js/runtime-main.5fd5dd22.js",
     "static/css/2.c4418c31.chunk.css",
-    "static/js/2.66e7ec05.chunk.js",
+    "static/js/2.02a0c867.chunk.js",
     "static/css/main.85ccf949.chunk.css",
-    "static/js/main.75d8c092.chunk.js"
+    "static/js/main.41c94ba6.chunk.js"
   ]
 }

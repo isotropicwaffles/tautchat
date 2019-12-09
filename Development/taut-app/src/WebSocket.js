@@ -1,5 +1,5 @@
-import { generalMessageRouter } from './GeneralMessageRouter'
-import { sendLoginMessage, sendCreateUserMessage } from './UserServiceMessages'
+import { generalMessageRouter } from './components/functions/GeneralMessageRouter'
+import { sendLoginMessage, sendCreateUserMessage } from './components/functions/UserServiceMessages'
 
 var ws;
 var username;
