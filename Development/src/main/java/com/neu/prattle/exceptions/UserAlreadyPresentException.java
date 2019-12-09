@@ -1,7 +1,5 @@
 package com.neu.prattle.exceptions;
 
-import com.neu.prattle.model.User;
-
 /***
  * An representation of an error which is thrown where a request has been made
  * for creation of a user object that already exists in the system.

@@ -1,6 +1,5 @@
 package com.neu.prattle.exceptions;
 
-import com.neu.prattle.model.Group;
 
 /***
  * An representation of an error which is thrown where a request has been made
