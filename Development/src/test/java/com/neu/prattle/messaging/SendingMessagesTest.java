@@ -4,6 +4,7 @@ package com.neu.prattle.messaging;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
@@ -596,13 +597,16 @@ public class SendingMessagesTest {
 		
 		//Query partial overlapping name
 		messageToQuery.setContent("");
-		groupNameReponses =  groupName4 + RESERVED_SEPERATOR + groupName3;
+		String groupNameReponses1 =  groupName4 + RESERVED_SEPERATOR + groupName3;
+		String groupNameReponses2 =  groupName3 + RESERVED_SEPERATOR + groupName4;
+
 		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
 		messageReceived_1 = messageArgumentCaptor1.getValue();
 		assertEquals(userName1, messageReceived_1.getTo());
 		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
 		assertEquals(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label, messageReceived_1.getContentType());
-		assertEquals(groupNameReponses, messageReceived_1.getContent());
+		assertTrue(groupNameReponses1.contentEquals(messageReceived_1.getContent()) ||
+				   groupNameReponses2.contentEquals(messageReceived_1.getContent()) );
 
 		
 	}
