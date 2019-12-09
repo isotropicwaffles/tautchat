@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
 
 /**
+* This code utilizes the vadar sentiment analyzer that is MIT licensed 
 * This class provides methods to perform sentiment analysis on a string
 * This string can be a string of one or more sentences.
 *
