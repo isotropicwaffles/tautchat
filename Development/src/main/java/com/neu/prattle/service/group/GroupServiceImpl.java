@@ -8,6 +8,7 @@ import com.neu.prattle.model.User;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -34,6 +35,10 @@ public class GroupServiceImpl implements GroupService {
    */
   private static Map<String, Group> groupMap = new HashMap<>();
 
+  /**
+   * Set of group objects
+   */
+  private static Set<Group> groupSet;
 
   /***
    * GroupServiceImpl is a Singleton class.
@@ -50,7 +55,7 @@ public class GroupServiceImpl implements GroupService {
   public static GroupService getInstance() {
 
     if (accountService == null) {
-
+      groupSet = new HashSet<>();
       groupMap = new HashMap<>();
       accountService = new GroupServiceImpl();
     }
@@ -102,6 +107,27 @@ public class GroupServiceImpl implements GroupService {
     }
   }
 
+  /***
+   * Queries partial name and returns all searchable groups that names partially match
+   *
+   *
+   * @param partialName - The name of the group.
+   * @return Set of group with matching parital name.
+   */
+  @Override
+  public Set<Group> findGroupByPartialName(String partialName) {
+
+    Set<Group> partialMatches = new LinkedHashSet<>();
+    for (Group group : groupSet) {
+
+      if (group.getName().toLowerCase().contains(partialName.toLowerCase())) {
+        partialMatches.add(group);
+      }
+    }
+
+    return partialMatches;
+  }
+  
   /**
    * Adds group to Service
    *
@@ -117,6 +143,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     groupMap.put(group.getName(), group);
+    groupSet.add(group);
 
   }
 

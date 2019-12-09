@@ -4,6 +4,7 @@ package com.neu.prattle.messaging;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
@@ -549,6 +550,65 @@ public class SendingMessagesTest {
 		assertEquals(UserServiceCommands.SEARCH_USERS_BY_NAME.label, messageReceived_1.getContentType());
 		assertEquals(userNameReponses, messageReceived_1.getContent());
 
+	}
+	
+	
+	/**
+	 * Test if you can search for group by partial names
+	 * @throws IOException - an ioexception
+	 * @throws TimeoutException - an timeout exception
+	 */
+	@Test
+	public void groupSearchMessageTest() throws IOException, TimeoutException{
+		// Create groups with a mod of user 3 and 4 respectively
+		sendMessageAndWaitForResponse(session3, chatEndpoint3, createGroup3, messageArgumentCaptor3);
+		sendMessageAndWaitForResponse(session4, chatEndpoint4, createGroup4, messageArgumentCaptor4);
+
+		
+		//Query No User from non-matching query
+		Message messageToQuery=  Message.messageBuilder()
+				.setFrom(userName1)
+				.setType(MessageAddresses.GROUP_SERVICE.label)
+				.setContentType(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label)
+				.setMessageContent(groupName6)
+				.build();
+		
+	
+		String groupNameReponses = "1";
+
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		Message messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label, messageReceived_1.getContentType());
+		assertEquals("", messageReceived_1.getContent());
+
+		
+		
+		//Query none overlapping name
+		messageToQuery.setContent(groupName3);
+		
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label, messageReceived_1.getContentType());
+		assertEquals(groupName3, messageReceived_1.getContent());
+		
+		//Query partial overlapping name
+		messageToQuery.setContent("");
+		String groupNameReponses1 =  groupName4 + RESERVED_SEPERATOR + groupName3;
+		String groupNameReponses2 =  groupName3 + RESERVED_SEPERATOR + groupName4;
+
+		sendMessageAndWaitForResponse(session1, chatEndpoint1, messageToQuery, messageArgumentCaptor1);
+		messageReceived_1 = messageArgumentCaptor1.getValue();
+		assertEquals(userName1, messageReceived_1.getTo());
+		assertEquals(MessageAddresses.GROUP_SERVICE.label, messageReceived_1.getFrom());
+		assertEquals(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label, messageReceived_1.getContentType());
+		assertTrue(groupNameReponses1.contentEquals(messageReceived_1.getContent()) ||
+				   groupNameReponses2.contentEquals(messageReceived_1.getContent()) );
+
+		
 	}
 	
 	/***

@@ -77,8 +77,11 @@ public enum GroupServiceCommands {
   /**
    * Represents a request to get the pending subgroup requests fo the group
    */
-  GET_PENDING_SUBGROUP_REQUESTS("GET_PENDING_SUBGROUP_REQUESTS");
-
+  GET_PENDING_SUBGROUP_REQUESTS("GET_PENDING_SUBGROUP_REQUESTS"),
+  /**
+   * Represents Search for Group by Name Command Command
+   */
+  SEARCH_GROUPS_BY_NAME("SEARCH_GROUPS_BY_NAME");
 
   /**
    * Variable to store string associate with enum
