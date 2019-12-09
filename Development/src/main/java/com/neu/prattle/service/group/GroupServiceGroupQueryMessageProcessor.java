@@ -56,7 +56,9 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
             message.getContentType().contentEquals(GroupServiceCommands.GET_GROUP_SUPERGROUPS.label) ||
             message.getContentType().contentEquals(GroupServiceCommands.GET_GROUP_MODERATORS.label) ||
             message.getContentType().contentEquals(GroupServiceCommands.GET_PENDING_USER_REQUESTS.label) ||
-            message.getContentType().contentEquals(GroupServiceCommands.GET_PENDING_SUBGROUP_REQUESTS.label);
+            message.getContentType().contentEquals(GroupServiceCommands.GET_PENDING_SUBGROUP_REQUESTS.label)||
+            message.getContentType().contentEquals(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label);
+    
   }
 
 
@@ -94,7 +96,10 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 
         response = processGetPendingSubgroupAddsFromGroup(message);
 
-      } else {
+      } else if (message.getContentType().equals(GroupServiceCommands.SEARCH_GROUPS_BY_NAME.label)) {
+
+          response = processSearchForGroupName(message);
+      }else {
         response = generateResponseMessage(message.getContentType(),
                 GenericMessageResponses.UNKNOWN_COMMAND.label);
 
@@ -112,6 +117,19 @@ public class GroupServiceGroupQueryMessageProcessor implements IMessageProcessor
 
   }
 
+  /**
+   * This processes the searching for group by name message
+   *
+   * @param message - a message to be processed
+   * @return a message in reponse to this request
+   */
+  private Message processSearchForGroupName(Message message) {
+
+    Set<Group> users = GroupServiceImpl.getInstance().findGroupByPartialName(message.getContent());
+
+    return generateResponseMessage(message.getContentType(), GroupService.generateGroupList(users));
+
+  }
 
   /**
    * Sends the requester a list of the users within queried group

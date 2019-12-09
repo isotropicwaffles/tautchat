@@ -58,6 +58,16 @@ public interface GroupService {
    */
   Group protectedFindGroupByName(String name);
 
+  
+  /***
+   * Queries partial name and returns all searchable groups that names partially match
+   *
+   *
+   * @param partialName - The name of the group.
+   * @return Set of group with matching parital name.
+   */
+  Set<Group> findGroupByPartialName(String partialName);
+  
   /***
    * Tries to add a group in the system
    * @param group Group object
